@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Nova OS</title>
 
 <link rel="manifest" href="manifest.json">
@@ -19,50 +14,30 @@ content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#06152f">
 
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,sans-serif;}
 
 body{
     color:white;
     min-height:100vh;
     overflow-x:hidden;
-
     background:
-    radial-gradient(circle at 82% 0%,
-    rgba(0,220,255,.38) 0%,
-    transparent 32%),
-    radial-gradient(circle at 10% 18%,
-    rgba(160,90,255,.26) 0%,
-    transparent 36%),
+    radial-gradient(circle at 82% 0%,rgba(0,220,255,.38) 0%,transparent 32%),
+    radial-gradient(circle at 10% 18%,rgba(160,90,255,.26) 0%,transparent 36%),
     linear-gradient(180deg,#071a38 0%,#020814 100%);
-
     animation:bgGlow 8s ease-in-out infinite alternate;
 }
 
 body.deep-night{
     background:
-    radial-gradient(circle at 82% 0%,
-    rgba(120,80,255,.34) 0%,
-    transparent 34%),
-    radial-gradient(circle at 10% 18%,
-    rgba(0,220,255,.22) 0%,
-    transparent 36%),
+    radial-gradient(circle at 82% 0%,rgba(120,80,255,.34) 0%,transparent 34%),
+    radial-gradient(circle at 10% 18%,rgba(0,220,255,.22) 0%,transparent 36%),
     linear-gradient(180deg,#08102c 0%,#02040d 100%);
 }
 
 body.morning{
     background:
-    radial-gradient(circle at 82% 0%,
-    rgba(0,240,255,.42) 0%,
-    transparent 32%),
-    radial-gradient(circle at 10% 18%,
-    rgba(120,190,255,.24) 0%,
-    transparent 36%),
+    radial-gradient(circle at 82% 0%,rgba(0,240,255,.42) 0%,transparent 32%),
+    radial-gradient(circle at 10% 18%,rgba(120,190,255,.24) 0%,transparent 36%),
     linear-gradient(180deg,#0a2448 0%,#020814 100%);
 }
 
@@ -77,15 +52,13 @@ body.morning{
     position:fixed;
     inset:0;
     z-index:9999;
-
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
-
     background:
+    radial-gradient(circle at center,rgba(0,220,255,.18) 0%,transparent 34%),
     radial-gradient(circle,#0b2b55 0%,#020814 100%);
-
     transition:opacity .9s ease;
 }
 
@@ -94,31 +67,87 @@ body.morning{
     pointer-events:none;
 }
 
+.boot-logo,
+.boot-dot-small,
+.boot-dot-big{
+    position:absolute;
+    object-fit:contain;
+    opacity:0;
+    filter:drop-shadow(0 0 28px rgba(0,220,255,.55));
+}
+
 .boot-logo{
     width:200px;
-    animation:
-    bootFloat 4s ease-in-out infinite,
-    bootAppear 1.1s ease;
+    animation:logoPhase 1.35s ease forwards;
+}
+
+.boot-dot-small{
+    width:120px;
+    animation:dotSmallPhase 1.15s ease forwards;
+    animation-delay:1.25s;
+}
+
+.boot-dot-big{
+    width:230px;
+    animation:dotBigPhase 1.25s ease forwards;
+    animation-delay:2.25s;
 }
 
 .boot-text{
-    margin-top:16px;
+    position:absolute;
+    margin-top:260px;
     font-size:24px;
     font-weight:800;
     letter-spacing:6px;
     color:#7de7ff;
     text-shadow:0 0 12px rgba(0,220,255,.8);
+    opacity:0;
+    animation:bootTextPhase 3.6s ease forwards;
 }
 
-@keyframes bootAppear{
-    from{opacity:0;transform:scale(.72);}
-    to{opacity:1;transform:scale(1);}
+.boot-sub{
+    position:absolute;
+    margin-top:322px;
+    font-size:12px;
+    letter-spacing:3px;
+    color:rgba(180,245,255,.85);
+    opacity:0;
+    animation:bootSubPhase 3.6s ease forwards;
 }
 
-@keyframes bootFloat{
-    0%{transform:translateY(0);}
-    50%{transform:translateY(-10px);}
-    100%{transform:translateY(0);}
+@keyframes logoPhase{
+    0%{opacity:0;transform:scale(.72) rotate(-6deg);}
+    25%{opacity:1;transform:scale(1);}
+    72%{opacity:1;transform:scale(1.04);}
+    100%{opacity:0;transform:scale(.86);}
+}
+
+@keyframes dotSmallPhase{
+    0%{opacity:0;transform:scale(.45) translateY(20px);}
+    30%{opacity:1;transform:scale(1.05) translateY(0);}
+    70%{opacity:1;transform:scale(1) translateY(-4px);}
+    100%{opacity:0;transform:scale(1.35) translateY(-8px);}
+}
+
+@keyframes dotBigPhase{
+    0%{opacity:0;transform:scale(.65) translateY(18px);}
+    28%{opacity:1;transform:scale(1.04) translateY(0);}
+    72%{opacity:1;transform:scale(1) translateY(-5px);}
+    100%{opacity:0;transform:scale(1.18) translateY(-10px);}
+}
+
+@keyframes bootTextPhase{
+    0%{opacity:0;transform:translateY(8px);}
+    20%{opacity:1;transform:translateY(0);}
+    78%{opacity:1;}
+    100%{opacity:0;transform:translateY(-6px);}
+}
+
+@keyframes bootSubPhase{
+    0%,18%{opacity:0;}
+    34%{opacity:.9;}
+    78%{opacity:.9;}
+    100%{opacity:0;}
 }
 
 /* 通知 */
@@ -128,29 +157,19 @@ body.morning{
     top:calc(12px + env(safe-area-inset-top));
     left:50%;
     transform:translate(-50%,-120%);
-
     z-index:8000;
-
     width:calc(100% - 28px);
     max-width:480px;
-
     padding:12px 16px;
     border-radius:22px;
-
     background:rgba(255,255,255,.16);
     border:1px solid rgba(255,255,255,.18);
-
     backdrop-filter:blur(18px);
     -webkit-backdrop-filter:blur(18px);
-
-    box-shadow:
-    0 14px 32px rgba(0,0,0,.32),
-    inset 0 1px 0 rgba(255,255,255,.18);
-
+    box-shadow:0 14px 32px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.18);
     display:flex;
     gap:10px;
     align-items:center;
-
     opacity:0;
     transition:.7s ease;
 }
@@ -160,24 +179,16 @@ body.morning{
     opacity:1;
 }
 
-.notice-icon{
-    font-size:24px;
-}
-
-.notice-text{
-    font-size:14px;
-    font-weight:800;
-}
+.notice-icon{font-size:24px;}
+.notice-text{font-size:14px;font-weight:800;}
 
 /* 本体 */
 
 .home{
     min-height:100vh;
-
     padding:10px;
     padding-top:calc(10px + env(safe-area-inset-top));
     padding-bottom:112px;
-
     display:flex;
     flex-direction:column;
     gap:9px;
@@ -186,23 +197,11 @@ body.morning{
 .panel{
     position:relative;
     overflow:hidden;
-
     border-radius:24px;
     padding:14px;
-
-    background:
-    linear-gradient(
-    145deg,
-    rgba(255,255,255,.16),
-    rgba(255,255,255,.05));
-
+    background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.05));
     border:1px solid rgba(160,235,255,.32);
-
-    box-shadow:
-    0 18px 40px rgba(0,0,0,.28),
-    inset 0 1px 0 rgba(255,255,255,.18),
-    inset 0 0 28px rgba(255,255,255,.04);
-
+    box-shadow:0 18px 40px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.18),inset 0 0 28px rgba(255,255,255,.04);
     backdrop-filter:blur(18px);
     -webkit-backdrop-filter:blur(18px);
 }
@@ -219,10 +218,7 @@ body.morning{
     font-weight:900;
     line-height:.95;
     letter-spacing:-1px;
-
-    text-shadow:
-    0 0 16px rgba(126,231,255,.7),
-    0 0 42px rgba(0,220,255,.38);
+    text-shadow:0 0 16px rgba(126,231,255,.7),0 0 42px rgba(0,220,255,.38);
 }
 
 .date{
@@ -237,40 +233,19 @@ body.morning{
 .weather-mini{
     width:108px;
     min-height:88px;
-
     border-radius:22px;
     padding:10px;
-
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
-
-    background:
-    linear-gradient(
-    145deg,
-    rgba(255,255,255,.18),
-    rgba(255,255,255,.06));
-
+    background:linear-gradient(145deg,rgba(255,255,255,.18),rgba(255,255,255,.06));
     border:1px solid rgba(255,255,255,.16);
-
-    box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.18),
-    0 8px 24px rgba(0,0,0,.18);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 8px 24px rgba(0,0,0,.18);
 }
 
-.weather-title{
-    font-size:12px;
-    opacity:.82;
-}
-
-.weather-temp{
-    margin-top:2px;
-    font-size:29px;
-    font-weight:900;
-    line-height:1;
-}
-
+.weather-title{font-size:12px;opacity:.82;}
+.weather-temp{margin-top:2px;font-size:29px;font-weight:900;line-height:1;}
 .weather-desc{
     margin-top:4px;
     max-width:88px;
@@ -286,11 +261,9 @@ body.morning{
 
 .nova-panel{
     min-height:205px;
-
     display:flex;
     align-items:flex-end;
     justify-content:center;
-
     padding-bottom:0;
 }
 
@@ -298,19 +271,10 @@ body.morning{
     width:100%;
     max-width:248px;
     margin-bottom:-42px;
-
     object-fit:contain;
-
-    filter:
-    drop-shadow(0 0 26px rgba(0,180,255,.36));
-
-    animation:
-    float 5s ease-in-out infinite,
-    breath 4.2s ease-in-out infinite;
-
-    transition:
-    opacity .55s ease,
-    transform .55s ease;
+    filter:drop-shadow(0 0 26px rgba(0,180,255,.36));
+    animation:float 5s ease-in-out infinite,breath 4.2s ease-in-out infinite;
+    transition:opacity .55s ease,transform .55s ease;
 }
 
 .nova.switching{
@@ -334,23 +298,16 @@ body.morning{
     position:absolute;
     bottom:7px;
     right:9px;
-
     max-width:76%;
-
     background:rgba(255,255,255,.94);
     color:#111;
-
     padding:7px 11px;
     border-radius:999px;
-
     font-size:13px;
     font-weight:800;
-
-    box-shadow:
-    0 8px 20px rgba(0,0,0,.28);
-
+    box-shadow:0 8px 20px rgba(0,0,0,.28);
     opacity:1;
-    transition:opacity .8s ease, transform .8s ease;
+    transition:opacity .8s ease,transform .8s ease;
 }
 
 .bubble.fade{
@@ -365,38 +322,21 @@ body.morning{
     left:10px;
     right:10px;
     bottom:calc(10px + env(safe-area-inset-bottom));
-
     z-index:5000;
-
     padding:8px;
-
     border-radius:26px;
-
-    background:
-    linear-gradient(
-    145deg,
-    rgba(255,255,255,.16),
-    rgba(255,255,255,.055));
-
+    background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.055));
     border:1px solid rgba(255,255,255,.16);
-
-    box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.18),
-    0 16px 40px rgba(0,0,0,.32);
-
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 16px 40px rgba(0,0,0,.32);
     backdrop-filter:blur(22px);
     -webkit-backdrop-filter:blur(22px);
-
     overflow-x:auto;
     overflow-y:hidden;
-
     -webkit-overflow-scrolling:touch;
     scrollbar-width:none;
 }
 
-.dock-wrap::-webkit-scrollbar{
-    display:none;
-}
+.dock-wrap::-webkit-scrollbar{display:none;}
 
 .dock-grid{
     display:flex;
@@ -406,40 +346,25 @@ body.morning{
 
 .app-icon{
     flex:0 0 auto;
-
     width:64px;
     height:64px;
-
     border-radius:21px;
-
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
     gap:3px;
-
     text-decoration:none;
     color:white;
-
-    background:
-    linear-gradient(
-    145deg,
-    rgba(255,255,255,.16),
-    rgba(255,255,255,.055));
-
+    background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.055));
     border:1px solid rgba(255,255,255,.14);
-
-    box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.14),
-    0 8px 20px rgba(0,0,0,.22);
-
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 8px 20px rgba(0,0,0,.22);
     transition:.22s;
 }
 
 .app-icon:active{
     transform:scale(.94);
-    box-shadow:
-    0 0 22px rgba(0,220,255,.45);
+    box-shadow:0 0 22px rgba(0,220,255,.45);
 }
 
 .app-img{
@@ -449,50 +374,19 @@ body.morning{
     border-radius:9px;
 }
 
-.app-emoji{
-    font-size:25px;
-    line-height:1;
-}
-
-.app-label{
-    font-size:9px;
-    font-weight:800;
-    opacity:.92;
-}
+.app-emoji{font-size:25px;line-height:1;}
+.app-label{font-size:9px;font-weight:800;opacity:.92;}
 
 .nova-app{
-    background:
-    linear-gradient(
-    135deg,
-    rgba(0,220,255,.42),
-    rgba(160,90,255,.30));
-
-    box-shadow:
-    0 0 20px rgba(0,220,255,.40),
-    0 0 48px rgba(0,220,255,.22),
-    inset 0 1px 0 rgba(255,255,255,.16);
-
+    background:linear-gradient(135deg,rgba(0,220,255,.42),rgba(160,90,255,.30));
+    box-shadow:0 0 20px rgba(0,220,255,.40),0 0 48px rgba(0,220,255,.22),inset 0 1px 0 rgba(255,255,255,.16);
     animation:novaPulse 3s ease-in-out infinite;
 }
 
 @keyframes novaPulse{
-    0%{
-        box-shadow:
-        0 0 18px rgba(0,220,255,.28),
-        0 0 36px rgba(0,220,255,.14);
-    }
-
-    50%{
-        box-shadow:
-        0 0 30px rgba(0,220,255,.58),
-        0 0 60px rgba(0,220,255,.30);
-    }
-
-    100%{
-        box-shadow:
-        0 0 18px rgba(0,220,255,.28),
-        0 0 36px rgba(0,220,255,.14);
-    }
+    0%{box-shadow:0 0 18px rgba(0,220,255,.28),0 0 36px rgba(0,220,255,.14);}
+    50%{box-shadow:0 0 30px rgba(0,220,255,.58),0 0 60px rgba(0,220,255,.30);}
+    100%{box-shadow:0 0 18px rgba(0,220,255,.28),0 0 36px rgba(0,220,255,.14);}
 }
 
 @media (min-width:700px){
@@ -516,27 +410,18 @@ body.morning{
 
 <div class="boot-screen" id="bootScreen">
 
-<img
-src="icon.png"
-class="boot-logo"
-alt="Nova Logo">
+<img src="icon.png" class="boot-logo" alt="Nova Logo">
+<img src="nova_dot_small.png" class="boot-dot-small" alt="Nova Dot Small">
+<img src="nova_dot_big.png" class="boot-dot-big" alt="Nova Dot Big">
 
-<div class="boot-text">
-NOVA OS
-</div>
+<div class="boot-text">NOVA OS</div>
+<div class="boot-sub">PERSONAL AI INTERFACE</div>
 
 </div>
 
 <div class="notice" id="notice">
-
-<div class="notice-icon">
-🔔
-</div>
-
-<div class="notice-text" id="noticeText">
-Nova OS 起動完了や🙄
-</div>
-
+<div class="notice-icon">🔔</div>
+<div class="notice-text" id="noticeText">Nova OS 起動完了や🙄</div>
 </div>
 
 <main class="home">
@@ -544,46 +429,23 @@ Nova OS 起動完了や🙄
 <section class="panel top-panel" id="topPanel">
 
 <div>
-
-<div class="clock" id="clock">
-00:00
-</div>
-
-<div class="date" id="date">
-2026/5/26（水）
-</div>
-
+<div class="clock" id="clock">00:00</div>
+<div class="date" id="date">2026/5/26（水）</div>
 </div>
 
 <div class="weather-mini">
-
-<div class="weather-title">
-天気
-</div>
-
-<div class="weather-temp" id="weatherTemp">
---
-</div>
-
-<div class="weather-desc" id="weatherDesc">
-取得中
-</div>
-
+<div class="weather-title">天気</div>
+<div class="weather-temp" id="weatherTemp">--</div>
+<div class="weather-desc" id="weatherDesc">取得中</div>
 </div>
 
 </section>
 
 <section class="panel nova-panel" id="novaPanel">
 
-<img
-class="nova"
-id="novaImage"
-src="./nova_normal.png"
-alt="Nova">
+<img class="nova" id="novaImage" src="./nova_normal.png" alt="Nova">
 
-<div class="bubble" id="novaBubble">
-ワイはまだまだ元気や🙄
-</div>
+<div class="bubble" id="novaBubble">ワイはまだまだ元気や🙄</div>
 
 </section>
 
@@ -593,66 +455,42 @@ alt="Nova">
 
 <div class="dock-grid">
 
-<a
-class="app-icon nova-app"
-href="https://chatgpt.com/"
-target="_blank">
+<a class="app-icon nova-app" href="https://chatgpt.com/" target="_blank">
 <img class="app-img" src="icon.png" alt="Nova">
 <div class="app-label">Nova</div>
 </a>
 
-<a
-class="app-icon"
-href="https://www.youtube.com/"
-target="_blank">
+<a class="app-icon" href="https://www.youtube.com/" target="_blank">
 <div class="app-emoji">▶️</div>
 <div class="app-label">YouTube</div>
 </a>
 
-<a
-class="app-icon"
-href="https://studio.youtube.com/"
-target="_blank">
+<a class="app-icon" href="https://studio.youtube.com/" target="_blank">
 <div class="app-emoji">🎬</div>
 <div class="app-label">Studio</div>
 </a>
 
-<a
-class="app-icon"
-href="https://x.com/hoshiyaAYATO"
-target="_blank">
+<a class="app-icon" href="https://x.com/hoshiyaAYATO" target="_blank">
 <div class="app-emoji">𝕏</div>
 <div class="app-label">X</div>
 </a>
 
-<a
-class="app-icon"
-href="https://calendar.google.com/"
-target="_blank">
+<a class="app-icon" href="https://calendar.google.com/" target="_blank">
 <div class="app-emoji">📅</div>
 <div class="app-label">Calendar</div>
 </a>
 
-<a
-class="app-icon"
-href="https://keep.google.com/"
-target="_blank">
+<a class="app-icon" href="https://keep.google.com/" target="_blank">
 <div class="app-emoji">📝</div>
 <div class="app-label">Memo</div>
 </a>
 
-<a
-class="app-icon"
-href="https://drive.google.com/"
-target="_blank">
+<a class="app-icon" href="https://drive.google.com/" target="_blank">
 <div class="app-emoji">📁</div>
 <div class="app-label">Drive</div>
 </a>
 
-<a
-class="app-icon"
-href="https://mail.google.com/"
-target="_blank">
+<a class="app-icon" href="https://mail.google.com/" target="_blank">
 <div class="app-emoji">✉️</div>
 <div class="app-label">Mail</div>
 </a>
@@ -671,37 +509,27 @@ setTimeout(()=>{
 
     showNotice("Nova OS 起動完了や🙄");
 
-},1600);
+},3900);
 
 function showNotice(text){
 
-    const notice=
-    document.getElementById("notice");
-
-    const noticeText=
-    document.getElementById("noticeText");
+    const notice=document.getElementById("notice");
+    const noticeText=document.getElementById("noticeText");
 
     noticeText.textContent=text;
-
     notice.classList.add("show");
 
     setTimeout(()=>{
-
         notice.classList.remove("show");
-
     },3200);
 
 }
 
 function setTimeTheme(){
 
-    const hour=
-    new Date().getHours();
+    const hour=new Date().getHours();
 
-    document.body.classList.remove(
-    "deep-night",
-    "morning"
-    );
+    document.body.classList.remove("deep-night","morning");
 
     if(hour>=0 && hour<5){
         document.body.classList.add("deep-night");
@@ -719,18 +547,12 @@ function updateClock(){
 
     const now=new Date();
 
-    const h=
-    String(now.getHours()).padStart(2,"0");
+    const h=String(now.getHours()).padStart(2,"0");
+    const m=String(now.getMinutes()).padStart(2,"0");
 
-    const m=
-    String(now.getMinutes()).padStart(2,"0");
+    document.getElementById("clock").textContent=`${h}:${m}`;
 
-    document.getElementById("clock").textContent=
-    `${h}:${m}`;
-
-    const days=[
-    "日","月","火","水","木","金","土"
-    ];
+    const days=["日","月","火","水","木","金","土"];
 
     document.getElementById("date").textContent=
     `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}（${days[now.getDay()]}）`;
@@ -740,61 +562,30 @@ function updateClock(){
 }
 
 updateClock();
-
 setInterval(updateClock,1000);
 
 const novaData=[
-
-{
-img:"./nova_normal.png",
-msg:"今日は何するんや？😼"
-},
-
-{
-img:"./nova_sleepy.png",
-msg:"そろそろ寝るか…😴"
-},
-
-{
-img:"./nova_smile.png",
-msg:"そのサムネ、伸びるぞ😎"
-},
-
-{
-img:"./nova_troubled.png",
-msg:"編集終わる気せーへん🙄"
-},
-
-{
-img:"./nova_analysis.png",
-msg:"配信前の作戦会議するか？😌"
-}
-
+{img:"./nova_normal.png",msg:"今日は何するんや？😼"},
+{img:"./nova_sleepy.png",msg:"そろそろ寝るか…😴"},
+{img:"./nova_smile.png",msg:"そのサムネ、伸びるぞ😎"},
+{img:"./nova_troubled.png",msg:"編集終わる気せーへん🙄"},
+{img:"./nova_analysis.png",msg:"配信前の作戦会議するか？😌"}
 ];
 
 function updateNova(){
 
-    const bubble=
-    document.getElementById("novaBubble");
-
-    const image=
-    document.getElementById("novaImage");
+    const bubble=document.getElementById("novaBubble");
+    const image=document.getElementById("novaImage");
 
     bubble.classList.add("fade");
     image.classList.add("switching");
 
     setTimeout(()=>{
 
-        const random=
-        novaData[
-        Math.floor(Math.random()*novaData.length)
-        ];
+        const random=novaData[Math.floor(Math.random()*novaData.length)];
 
-        image.src=
-        random.img;
-
-        bubble.textContent=
-        random.msg;
+        image.src=random.img;
+        bubble.textContent=random.msg;
 
         bubble.classList.remove("fade");
         image.classList.remove("switching");
@@ -807,28 +598,13 @@ setInterval(updateNova,15000);
 
 function weatherIcon(desc){
 
-    const text=
-    desc.toLowerCase();
+    const text=desc.toLowerCase();
 
-    if(text.includes("rain")){
-        return "🌧️";
-    }
-
-    if(text.includes("cloud")){
-        return "☁️";
-    }
-
-    if(text.includes("snow")){
-        return "❄️";
-    }
-
-    if(text.includes("clear") || text.includes("sun")){
-        return "☀️";
-    }
-
-    if(text.includes("mist") || text.includes("fog")){
-        return "🌫️";
-    }
+    if(text.includes("rain")) return "🌧️";
+    if(text.includes("cloud")) return "☁️";
+    if(text.includes("snow")) return "❄️";
+    if(text.includes("clear") || text.includes("sun")) return "☀️";
+    if(text.includes("mist") || text.includes("fog")) return "🌫️";
 
     return "🌤️";
 }
@@ -837,34 +613,19 @@ async function loadWeather(){
 
     try{
 
-        const res=
-        await fetch(
-        "https://wttr.in/?format=j1"
-        );
+        const res=await fetch("https://wttr.in/?format=j1");
+        const data=await res.json();
 
-        const data=
-        await res.json();
+        const temp=data.current_condition[0].temp_C;
+        const desc=data.current_condition[0].weatherDesc[0].value;
 
-        const temp=
-        data.current_condition[0].temp_C;
-
-        const desc=
-        data.current_condition[0]
-        .weatherDesc[0].value;
-
-        document.getElementById("weatherTemp")
-        .textContent=`${weatherIcon(desc)} ${temp}°`;
-
-        document.getElementById("weatherDesc")
-        .textContent=desc;
+        document.getElementById("weatherTemp").textContent=`${weatherIcon(desc)} ${temp}°`;
+        document.getElementById("weatherDesc").textContent=desc;
 
     }catch(e){
 
-        document.getElementById("weatherTemp")
-        .textContent="失敗";
-
-        document.getElementById("weatherDesc")
-        .textContent="APIエラー";
+        document.getElementById("weatherTemp").textContent="失敗";
+        document.getElementById("weatherDesc").textContent="APIエラー";
 
     }
 
@@ -872,26 +633,15 @@ async function loadWeather(){
 
 loadWeather();
 
-/* スマホ傾きパララックス */
-
 window.addEventListener("deviceorientation",event=>{
 
-    const x=
-    Math.max(-12,Math.min(12,event.gamma || 0));
+    const x=Math.max(-12,Math.min(12,event.gamma || 0));
+    const y=Math.max(-12,Math.min(12,event.beta || 0));
 
-    const y=
-    Math.max(-12,Math.min(12,event.beta || 0));
-
-    const topPanel=
-    document.getElementById("topPanel");
-
-    const novaPanel=
-    document.getElementById("novaPanel");
-
-    topPanel.style.transform=
+    document.getElementById("topPanel").style.transform=
     `translate(${x * .25}px,${y * .08}px)`;
 
-    novaPanel.style.transform=
+    document.getElementById("novaPanel").style.transform=
     `translate(${x * .35}px,${y * .10}px)`;
 
 });
