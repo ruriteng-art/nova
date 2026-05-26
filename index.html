@@ -1,9 +1,25 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
 <title>Nova OS</title>
+
+<link rel="manifest" href="manifest.json">
+
+<link rel="apple-touch-icon" href="icon.png">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<meta name="theme-color" content="#06152f">
 
 <style>
 
@@ -24,10 +40,92 @@ body{
 
     color:white;
     min-height:100vh;
-    padding:18px;
+    overflow-x:hidden;
+}
+
+/* 起動画面 */
+
+.boot-screen{
+
+    position:fixed;
+    inset:0;
+
+    z-index:9999;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    background:
+    radial-gradient(circle,
+    #0b2b55 0%,
+    #020814 100%);
+
+    transition:opacity 1s ease;
+}
+
+.boot-screen.hide{
+
+    opacity:0;
+    pointer-events:none;
+}
+
+.boot-logo{
+
+    width:220px;
+
+    animation:
+    bootFloat 4s ease-in-out infinite,
+    bootAppear 1.2s ease;
+}
+
+.boot-text{
+
+    margin-top:20px;
+
+    font-size:28px;
+    font-weight:700;
+    letter-spacing:6px;
+
+    color:#7de7ff;
+
+    text-shadow:
+    0 0 12px rgba(0,220,255,.8);
+}
+
+@keyframes bootAppear{
+
+    from{
+        opacity:0;
+        transform:scale(.7);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+@keyframes bootFloat{
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-10px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
 }
 
 .home{
+
+    padding:18px;
+
     display:flex;
     flex-direction:column;
     gap:18px;
@@ -90,7 +188,6 @@ body{
 .weather-title{
 
     font-size:20px;
-    opacity:.9;
 }
 
 .weather-temp{
@@ -116,8 +213,6 @@ body{
     display:flex;
     align-items:flex-end;
     justify-content:center;
-
-    position:relative;
 }
 
 .nova{
@@ -205,6 +300,16 @@ body{
     border:1px solid rgba(255,255,255,.12);
 
     backdrop-filter:blur(10px);
+
+    transition:.25s;
+}
+
+.app-button:active{
+
+    transform:scale(.96);
+
+    box-shadow:
+    0 0 25px rgba(0,220,255,.45);
 }
 
 .nova-button{
@@ -220,6 +325,20 @@ body{
 </head>
 
 <body>
+
+<!-- 起動画面 -->
+
+<div class="boot-screen" id="bootScreen">
+
+<img
+src="icon.png"
+class="boot-logo">
+
+<div class="boot-text">
+NOVA OS
+</div>
+
+</div>
 
 <main class="home">
 
@@ -256,8 +375,7 @@ body{
 <img
 class="nova"
 id="novaImage"
-src="./nova_normal.png"
-alt="Nova">
+src="./nova_normal.png">
 
 <div class="bubble" id="novaBubble">
 
@@ -291,6 +409,18 @@ alt="Nova">
 
 <script>
 
+/* 起動演出 */
+
+setTimeout(()=>{
+
+    document
+    .getElementById("bootScreen")
+    .classList.add("hide");
+
+},2200);
+
+/* 時計 */
+
 function updateClock(){
 
     const now=new Date();
@@ -316,6 +446,8 @@ function updateClock(){
 updateClock();
 
 setInterval(updateClock,1000);
+
+/* ノヴァ切り替え */
 
 const novaData=[
 
@@ -362,6 +494,8 @@ function updateNova(){
 }
 
 setInterval(updateNova,15000);
+
+/* 天気 */
 
 async function loadWeather(){
 
