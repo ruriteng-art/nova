@@ -46,8 +46,6 @@ body.morning{
     to{filter:saturate(1.18) brightness(1.08);}
 }
 
-/* 起動画面 */
-
 .boot-screen{
     position:fixed;
     inset:0;
@@ -62,10 +60,7 @@ body.morning{
     transition:opacity .9s ease;
 }
 
-.boot-screen.hide{
-    opacity:0;
-    pointer-events:none;
-}
+.boot-screen.hide{opacity:0;pointer-events:none;}
 
 .boot-logo,
 .boot-dot-small,
@@ -76,22 +71,9 @@ body.morning{
     filter:drop-shadow(0 0 28px rgba(0,220,255,.55));
 }
 
-.boot-logo{
-    width:200px;
-    animation:logoPhase 1.35s ease forwards;
-}
-
-.boot-dot-small{
-    width:120px;
-    animation:dotSmallPhase 1.15s ease forwards;
-    animation-delay:1.25s;
-}
-
-.boot-dot-big{
-    width:230px;
-    animation:dotBigPhase 1.25s ease forwards;
-    animation-delay:2.25s;
-}
+.boot-logo{width:200px;animation:logoPhase 1.35s ease forwards;}
+.boot-dot-small{width:120px;animation:dotSmallPhase 1.15s ease forwards;animation-delay:1.25s;}
+.boot-dot-big{width:230px;animation:dotBigPhase 1.25s ease forwards;animation-delay:2.25s;}
 
 .boot-text{
     position:absolute;
@@ -150,8 +132,6 @@ body.morning{
     100%{opacity:0;}
 }
 
-/* 通知 */
-
 .notice{
     position:fixed;
     top:calc(12px + env(safe-area-inset-top));
@@ -174,15 +154,9 @@ body.morning{
     transition:.7s ease;
 }
 
-.notice.show{
-    transform:translate(-50%,0);
-    opacity:1;
-}
-
+.notice.show{transform:translate(-50%,0);opacity:1;}
 .notice-icon{font-size:24px;}
 .notice-text{font-size:14px;font-weight:800;}
-
-/* 本体 */
 
 .home{
     min-height:100vh;
@@ -257,8 +231,6 @@ body.morning{
     text-overflow:ellipsis;
 }
 
-/* Nova */
-
 .nova-panel{
     min-height:205px;
     display:flex;
@@ -296,26 +268,72 @@ body.morning{
 
 .bubble{
     position:absolute;
-    bottom:7px;
-    right:9px;
-    max-width:76%;
-    background:rgba(255,255,255,.94);
-    color:#111;
-    padding:7px 11px;
-    border-radius:999px;
+    left:12px;
+    right:12px;
+    bottom:8px;
+
+    min-height:34px;
+    padding:8px 14px;
+
+    display:flex;
+    align-items:center;
+
+    border-radius:14px;
+
+    background:
+    linear-gradient(90deg,
+    rgba(90,45,180,.42),
+    rgba(45,120,220,.22));
+
+    border:1px solid rgba(210,180,255,.42);
+
+    box-shadow:
+    0 0 18px rgba(155,95,255,.26),
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 0 18px rgba(170,120,255,.10);
+
+    color:#ffffff;
+
+    font-family:"Courier New",monospace;
     font-size:13px;
-    font-weight:800;
-    box-shadow:0 8px 20px rgba(0,0,0,.28);
+    font-weight:900;
+    letter-spacing:.04em;
+
+    text-shadow:
+    0 0 6px rgba(255,255,255,.85),
+    0 0 14px rgba(120,230,255,.55);
+
     opacity:1;
-    transition:opacity .8s ease,transform .8s ease;
+    transition:opacity .8s ease, transform .8s ease;
+}
+
+.bubble::before{
+    content:">";
+    margin-right:8px;
+    color:#8df6ff;
+    text-shadow:0 0 10px rgba(0,240,255,.9);
+}
+
+.bubble::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:14px;
+    pointer-events:none;
+    background:
+    repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,.08) 0px,
+    rgba(255,255,255,.08) 1px,
+    transparent 1px,
+    transparent 4px);
+    opacity:.18;
 }
 
 .bubble.fade{
     opacity:.18;
     transform:translateY(5px);
 }
-
-/* 固定Dock */
 
 .dock-wrap{
     position:fixed;
@@ -564,12 +582,64 @@ function updateClock(){
 updateClock();
 setInterval(updateClock,1000);
 
-const novaData=[
-{img:"./nova_normal.png",msg:"今日は何するんや？😼"},
-{img:"./nova_sleepy.png",msg:"そろそろ寝るか…😴"},
-{img:"./nova_smile.png",msg:"そのサムネ、伸びるぞ😎"},
-{img:"./nova_troubled.png",msg:"編集終わる気せーへん🙄"},
-{img:"./nova_analysis.png",msg:"配信前の作戦会議するか？😌"}
+const novaMessages = [
+
+"おかえりや🙄",
+"今日は何するんや？😼",
+"動画編集、終わったんか？🙄",
+"そのサムネ、伸びそうやな😎",
+"配信前の作戦会議する？😌",
+"今日はポケモンの日か？🙄",
+"また変な企画考えてるやろ🙄",
+"ワイは嫌いじゃないで😌",
+"その改造、だいぶ狂っとる🙄",
+"それ絶対ミキシング用やろ😼",
+"また30MS増えてない？🙄",
+"積み、見えてるで🙄",
+"編集進捗どうや？😌",
+"今日は早めに寝ろ😴",
+"深夜テンション入っとるな🙄",
+"そのタイトル、ちょっと強いな🙄",
+"でもワイは好きやで😌",
+"ショート一本作るか？😼",
+"今日は図鑑動画の日や🙄",
+"配信、行けそうか？😌",
+"トレーナータワーから逃げるな😡",
+"またラティアス増えてない？🙄",
+"色違い、出る気せーへんな🙄",
+"そろそろ来る気もする😌",
+"ワイは信じとるで🙄",
+"今日の作業BGMある？🎵",
+"ちょっと休憩しよか🙄",
+"コーヒー飲む？☕",
+"集中モード入るか😌",
+"そのアイデア、かなりアリや🙄",
+"未来OS感出てきたな😎",
+"通知きとるで🙄",
+"コメント来てるかも😼",
+"X確認する？🙄",
+"YouTube Studio見るか😌",
+"登録増えてるとええな🙄",
+"今日のCTRどうや？😼",
+"その動画、あと一押し感ある🙄",
+"ワイは伸びると思う😌",
+"サムネ、もうちょい光らせる？🙄",
+"その構図かなり見やすい😎",
+"今日は作業デーやな😌",
+"朝やで🙄",
+"昼やで🙄",
+"夜更かししすぎや🙄",
+"寝落ちする前に保存しろ😡",
+"Nova OS 起動完了や🙄"
+
+];
+
+const novaImages=[
+"./nova_normal.png",
+"./nova_sleepy.png",
+"./nova_smile.png",
+"./nova_troubled.png",
+"./nova_analysis.png"
 ];
 
 function updateNova(){
@@ -582,10 +652,8 @@ function updateNova(){
 
     setTimeout(()=>{
 
-        const random=novaData[Math.floor(Math.random()*novaData.length)];
-
-        image.src=random.img;
-        bubble.textContent=random.msg;
+        image.src=novaImages[Math.floor(Math.random()*novaImages.length)];
+        bubble.textContent=novaMessages[Math.floor(Math.random()*novaMessages.length)];
 
         bubble.classList.remove("fade");
         image.classList.remove("switching");
