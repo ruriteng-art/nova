@@ -11,14 +11,11 @@ content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Nova OS</title>
 
 <link rel="manifest" href="manifest.json">
-
 <link rel="apple-touch-icon" href="icon.png">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
 <meta name="theme-color" content="#06152f">
 
 <style>
@@ -31,7 +28,6 @@ content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 }
 
 body{
-
     background:
     radial-gradient(circle at top,
     #0d4d6d 0%,
@@ -43,13 +39,9 @@ body{
     overflow-x:hidden;
 }
 
-/* 起動画面 */
-
 .boot-screen{
-
     position:fixed;
     inset:0;
-
     z-index:9999;
 
     display:flex;
@@ -66,41 +58,31 @@ body{
 }
 
 .boot-screen.hide{
-
     opacity:0;
     pointer-events:none;
 }
 
 .boot-logo{
-
-    width:220px;
-
+    width:210px;
     animation:
     bootFloat 4s ease-in-out infinite,
     bootAppear 1.2s ease;
 }
 
 .boot-text{
-
-    margin-top:20px;
-
-    font-size:28px;
+    margin-top:18px;
+    font-size:26px;
     font-weight:700;
     letter-spacing:6px;
-
     color:#7de7ff;
-
-    text-shadow:
-    0 0 12px rgba(0,220,255,.8);
+    text-shadow:0 0 12px rgba(0,220,255,.8);
 }
 
 @keyframes bootAppear{
-
     from{
         opacity:0;
         transform:scale(.7);
     }
-
     to{
         opacity:1;
         transform:scale(1);
@@ -108,36 +90,23 @@ body{
 }
 
 @keyframes bootFloat{
-
-    0%{
-        transform:translateY(0px);
-    }
-
-    50%{
-        transform:translateY(-10px);
-    }
-
-    100%{
-        transform:translateY(0px);
-    }
+    0%{transform:translateY(0px);}
+    50%{transform:translateY(-10px);}
+    100%{transform:translateY(0px);}
 }
 
 .home{
-
-    padding:18px;
-
+    padding:14px;
     display:flex;
     flex-direction:column;
-    gap:18px;
+    gap:12px;
 }
 
 .panel{
-
     position:relative;
     overflow:hidden;
-
-    border-radius:28px;
-    padding:24px;
+    border-radius:24px;
+    padding:18px;
 
     background:
     linear-gradient(
@@ -148,35 +117,28 @@ body{
     border:1px solid rgba(126,231,255,.35);
 
     box-shadow:
-    0 0 30px rgba(0,180,255,.15),
-    inset 0 0 30px rgba(255,255,255,.03);
+    0 0 24px rgba(0,180,255,.14),
+    inset 0 0 24px rgba(255,255,255,.03);
 }
 
 .clock{
-
-    font-size:72px;
+    font-size:62px;
     font-weight:900;
     line-height:1;
 }
 
 .date{
-
-    margin-top:8px;
-
+    margin-top:6px;
     color:#79d8ff;
-
-    font-size:24px;
+    font-size:20px;
     font-weight:700;
-
     line-height:1;
 }
 
 .weather{
-
-    margin-top:20px;
-
-    border-radius:22px;
-    padding:18px;
+    margin-top:14px;
+    border-radius:18px;
+    padding:14px;
 
     background:
     linear-gradient(
@@ -186,100 +148,69 @@ body{
 }
 
 .weather-title{
-
-    font-size:20px;
+    font-size:16px;
 }
 
 .weather-temp{
-
-    margin-top:8px;
-
-    font-size:52px;
+    margin-top:4px;
+    font-size:42px;
     font-weight:900;
 }
 
 .weather-desc{
-
-    margin-top:4px;
-
-    font-size:18px;
+    margin-top:2px;
+    font-size:15px;
     opacity:.8;
 }
 
 .nova-panel{
-
-    min-height:420px;
-
+    min-height:310px;
     display:flex;
     align-items:flex-end;
     justify-content:center;
 }
 
 .nova{
-
     width:100%;
-    max-width:320px;
-
+    max-width:250px;
     object-fit:contain;
-
-    filter:
-    drop-shadow(0 0 30px rgba(0,180,255,.25));
-
+    filter:drop-shadow(0 0 24px rgba(0,180,255,.25));
     animation:float 5s ease-in-out infinite;
 }
 
 @keyframes float{
-
-    0%{
-        transform:translateY(0px);
-    }
-
-    50%{
-        transform:translateY(-8px);
-    }
-
-    100%{
-        transform:translateY(0px);
-    }
+    0%{transform:translateY(0px);}
+    50%{transform:translateY(-7px);}
+    100%{transform:translateY(0px);}
 }
 
 .bubble{
-
     position:absolute;
+    bottom:12px;
+    right:12px;
 
-    bottom:18px;
-    right:16px;
-
-    max-width:72%;
-
+    max-width:76%;
     background:rgba(255,255,255,.96);
     color:black;
 
-    padding:12px 18px;
-
+    padding:9px 14px;
     border-radius:999px;
 
-    font-size:18px;
+    font-size:15px;
     font-weight:700;
 
-    box-shadow:
-    0 10px 24px rgba(0,0,0,.28);
+    box-shadow:0 8px 18px rgba(0,0,0,.28);
 }
 
 .launcher{
-
     display:grid;
-
     grid-template-columns:repeat(2,1fr);
-
-    gap:14px;
+    gap:10px;
 }
 
 .app-button{
-
-    min-height:82px;
-
-    border-radius:22px;
+    min-height:66px;
+    border-radius:18px;
 
     display:flex;
     align-items:center;
@@ -288,7 +219,7 @@ body{
     text-decoration:none;
     color:white;
 
-    font-size:20px;
+    font-size:18px;
     font-weight:800;
 
     background:
@@ -298,22 +229,17 @@ body{
     rgba(255,255,255,.04));
 
     border:1px solid rgba(255,255,255,.12);
-
     backdrop-filter:blur(10px);
 
     transition:.25s;
 }
 
 .app-button:active{
-
     transform:scale(.96);
-
-    box-shadow:
-    0 0 25px rgba(0,220,255,.45);
+    box-shadow:0 0 25px rgba(0,220,255,.45);
 }
 
 .nova-button{
-
     background:
     linear-gradient(
     135deg,
@@ -321,18 +247,26 @@ body{
     rgba(160,90,255,.22));
 }
 
+@media (min-width:700px){
+
+    .home{
+        max-width:520px;
+        margin:0 auto;
+    }
+
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- 起動画面 -->
-
 <div class="boot-screen" id="bootScreen">
 
 <img
 src="icon.png"
-class="boot-logo">
+class="boot-logo"
+alt="Nova Logo">
 
 <div class="boot-text">
 NOVA OS
@@ -375,31 +309,42 @@ NOVA OS
 <img
 class="nova"
 id="novaImage"
-src="./nova_normal.png">
+src="./nova_normal.png"
+alt="Nova">
 
 <div class="bubble" id="novaBubble">
-
 ワイはまだまだ元気や🙄
-
 </div>
 
 </section>
 
 <section class="launcher">
 
-<a class="app-button nova-button" href="#">
+<a
+class="app-button nova-button"
+href="https://chatgpt.com/"
+target="_blank">
 ✨ Nova
 </a>
 
-<a class="app-button" href="#">
+<a
+class="app-button"
+href="https://www.youtube.com/"
+target="_blank">
 ▶️ YouTube
 </a>
 
-<a class="app-button" href="#">
+<a
+class="app-button"
+href="https://x.com/hoshiyaAYATO"
+target="_blank">
 𝕏
 </a>
 
-<a class="app-button" href="#">
+<a
+class="app-button"
+href="https://calendar.google.com/"
+target="_blank">
 📅 Calendar
 </a>
 
@@ -409,17 +354,13 @@ src="./nova_normal.png">
 
 <script>
 
-/* 起動演出 */
-
 setTimeout(()=>{
 
     document
     .getElementById("bootScreen")
     .classList.add("hide");
 
-},2200);
-
-/* 時計 */
+},1800);
 
 function updateClock(){
 
@@ -446,8 +387,6 @@ function updateClock(){
 updateClock();
 
 setInterval(updateClock,1000);
-
-/* ノヴァ切り替え */
 
 const novaData=[
 
@@ -494,8 +433,6 @@ function updateNova(){
 }
 
 setInterval(updateNova,15000);
-
-/* 天気 */
 
 async function loadWeather(){
 
