@@ -28,6 +28,10 @@ content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 }
 
 body{
+    color:white;
+    min-height:100vh;
+    overflow-x:hidden;
+
     background:
     radial-gradient(circle at 82% 0%,
     rgba(0,220,255,.38) 0%,
@@ -37,21 +41,37 @@ body{
     transparent 36%),
     linear-gradient(180deg,#071a38 0%,#020814 100%);
 
-    color:white;
-    min-height:100vh;
-    overflow-x:hidden;
-
     animation:bgGlow 8s ease-in-out infinite alternate;
 }
 
-@keyframes bgGlow{
-    from{
-        filter:saturate(1) brightness(1);
-    }
-    to{
-        filter:saturate(1.18) brightness(1.08);
-    }
+body.deep-night{
+    background:
+    radial-gradient(circle at 82% 0%,
+    rgba(120,80,255,.34) 0%,
+    transparent 34%),
+    radial-gradient(circle at 10% 18%,
+    rgba(0,220,255,.22) 0%,
+    transparent 36%),
+    linear-gradient(180deg,#08102c 0%,#02040d 100%);
 }
+
+body.morning{
+    background:
+    radial-gradient(circle at 82% 0%,
+    rgba(0,240,255,.42) 0%,
+    transparent 32%),
+    radial-gradient(circle at 10% 18%,
+    rgba(120,190,255,.24) 0%,
+    transparent 36%),
+    linear-gradient(180deg,#0a2448 0%,#020814 100%);
+}
+
+@keyframes bgGlow{
+    from{filter:saturate(1) brightness(1);}
+    to{filter:saturate(1.18) brightness(1.08);}
+}
+
+/* 起動画面 */
 
 .boot-screen{
     position:fixed;
@@ -64,9 +84,7 @@ body{
     justify-content:center;
 
     background:
-    radial-gradient(circle,
-    #0b2b55 0%,
-    #020814 100%);
+    radial-gradient(circle,#0b2b55 0%,#020814 100%);
 
     transition:opacity .9s ease;
 }
@@ -103,12 +121,62 @@ body{
     100%{transform:translateY(0);}
 }
 
+/* 通知 */
+
+.notice{
+    position:fixed;
+    top:calc(12px + env(safe-area-inset-top));
+    left:50%;
+    transform:translate(-50%,-120%);
+
+    z-index:8000;
+
+    width:calc(100% - 28px);
+    max-width:480px;
+
+    padding:12px 16px;
+    border-radius:22px;
+
+    background:rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.18);
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    box-shadow:
+    0 14px 32px rgba(0,0,0,.32),
+    inset 0 1px 0 rgba(255,255,255,.18);
+
+    display:flex;
+    gap:10px;
+    align-items:center;
+
+    opacity:0;
+    transition:.7s ease;
+}
+
+.notice.show{
+    transform:translate(-50%,0);
+    opacity:1;
+}
+
+.notice-icon{
+    font-size:24px;
+}
+
+.notice-text{
+    font-size:14px;
+    font-weight:800;
+}
+
+/* 本体 */
+
 .home{
     min-height:100vh;
 
     padding:10px;
     padding-top:calc(10px + env(safe-area-inset-top));
-    padding-bottom:calc(10px + env(safe-area-inset-bottom));
+    padding-bottom:112px;
 
     display:flex;
     flex-direction:column;
@@ -214,6 +282,8 @@ body{
     text-overflow:ellipsis;
 }
 
+/* Nova */
+
 .nova-panel{
     min-height:205px;
 
@@ -234,8 +304,13 @@ body{
     filter:
     drop-shadow(0 0 26px rgba(0,180,255,.36));
 
-    animation:float 5s ease-in-out infinite;
-    transition:opacity .55s ease, transform .55s ease;
+    animation:
+    float 5s ease-in-out infinite,
+    breath 4.2s ease-in-out infinite;
+
+    transition:
+    opacity .55s ease,
+    transform .55s ease;
 }
 
 .nova.switching{
@@ -244,9 +319,15 @@ body{
 }
 
 @keyframes float{
-    0%{transform:translateY(0);}
-    50%{transform:translateY(-7px);}
-    100%{transform:translateY(0);}
+    0%{translate:0 0;}
+    50%{translate:0 -7px;}
+    100%{translate:0 0;}
+}
+
+@keyframes breath{
+    0%{scale:1;}
+    50%{scale:1.018;}
+    100%{scale:1;}
 }
 
 .bubble{
@@ -277,25 +358,34 @@ body{
     transform:translateY(5px);
 }
 
+/* 固定Dock */
+
 .dock-wrap{
+    position:fixed;
+    left:10px;
+    right:10px;
+    bottom:calc(10px + env(safe-area-inset-bottom));
+
+    z-index:5000;
+
     padding:8px;
 
-    border-radius:24px;
+    border-radius:26px;
 
     background:
     linear-gradient(
     145deg,
-    rgba(255,255,255,.14),
-    rgba(255,255,255,.045));
+    rgba(255,255,255,.16),
+    rgba(255,255,255,.055));
 
-    border:1px solid rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.16);
 
     box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.16),
-    0 12px 30px rgba(0,0,0,.24);
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 16px 40px rgba(0,0,0,.32);
 
-    backdrop-filter:blur(16px);
-    -webkit-backdrop-filter:blur(16px);
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
 
     overflow-x:auto;
     overflow-y:hidden;
@@ -410,6 +500,13 @@ body{
         max-width:520px;
         margin:0 auto;
     }
+
+    .dock-wrap{
+        left:50%;
+        right:auto;
+        width:500px;
+        transform:translateX(-50%);
+    }
 }
 
 </style>
@@ -430,9 +527,21 @@ NOVA OS
 
 </div>
 
+<div class="notice" id="notice">
+
+<div class="notice-icon">
+🔔
+</div>
+
+<div class="notice-text" id="noticeText">
+Nova OS 起動完了や🙄
+</div>
+
+</div>
+
 <main class="home">
 
-<section class="panel top-panel">
+<section class="panel top-panel" id="topPanel">
 
 <div>
 
@@ -464,7 +573,7 @@ NOVA OS
 
 </section>
 
-<section class="panel nova-panel">
+<section class="panel nova-panel" id="novaPanel">
 
 <img
 class="nova"
@@ -477,6 +586,8 @@ alt="Nova">
 </div>
 
 </section>
+
+</main>
 
 <section class="dock-wrap">
 
@@ -550,8 +661,6 @@ target="_blank">
 
 </section>
 
-</main>
-
 <script>
 
 setTimeout(()=>{
@@ -560,7 +669,51 @@ setTimeout(()=>{
     .getElementById("bootScreen")
     .classList.add("hide");
 
+    showNotice("Nova OS 起動完了や🙄");
+
 },1600);
+
+function showNotice(text){
+
+    const notice=
+    document.getElementById("notice");
+
+    const noticeText=
+    document.getElementById("noticeText");
+
+    noticeText.textContent=text;
+
+    notice.classList.add("show");
+
+    setTimeout(()=>{
+
+        notice.classList.remove("show");
+
+    },3200);
+
+}
+
+function setTimeTheme(){
+
+    const hour=
+    new Date().getHours();
+
+    document.body.classList.remove(
+    "deep-night",
+    "morning"
+    );
+
+    if(hour>=0 && hour<5){
+        document.body.classList.add("deep-night");
+    }
+
+    if(hour>=5 && hour<10){
+        document.body.classList.add("morning");
+    }
+
+}
+
+setTimeTheme();
 
 function updateClock(){
 
@@ -581,6 +734,8 @@ function updateClock(){
 
     document.getElementById("date").textContent=
     `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}（${days[now.getDay()]}）`;
+
+    setTimeTheme();
 
 }
 
@@ -716,6 +871,30 @@ async function loadWeather(){
 }
 
 loadWeather();
+
+/* スマホ傾きパララックス */
+
+window.addEventListener("deviceorientation",event=>{
+
+    const x=
+    Math.max(-12,Math.min(12,event.gamma || 0));
+
+    const y=
+    Math.max(-12,Math.min(12,event.beta || 0));
+
+    const topPanel=
+    document.getElementById("topPanel");
+
+    const novaPanel=
+    document.getElementById("novaPanel");
+
+    topPanel.style.transform=
+    `translate(${x * .25}px,${y * .08}px)`;
+
+    novaPanel.style.transform=
+    `translate(${x * .35}px,${y * .10}px)`;
+
+});
 
 </script>
 
