@@ -254,8 +254,6 @@ opacity:0;
 
 }
 
-/* 全体 */
-
 .home{
 
 min-height:100vh;
@@ -270,8 +268,6 @@ flex-direction:column;
 gap:6px;
 
 }
-
-/* パネル */
 
 .panel{
 
@@ -547,8 +543,6 @@ box-shadow:
 
 }
 
-/* Nova */
-
 .nova-panel{
 
 min-height:188px;
@@ -626,7 +620,10 @@ hudPulse 6s ease-in-out infinite;
 
 }
 
-@keyframes hudRotate{
+.app-emoji{
+font-size:25px;
+line-height:1;
+}@keyframes hudRotate{
 
 from{
 transform:translate(-50%,-52%) rotate(0deg);
@@ -694,13 +691,8 @@ transform .55s ease;
 }
 
 .nova.switching{
-
 opacity:.35;
-
-transform:
-translateY(8px)
-scale(.98);
-
+transform:translateY(8px) scale(.98);
 }
 
 @keyframes float{
@@ -734,8 +726,6 @@ scale:1;
 }
 
 }
-
-/* 吹き出し */
 
 .bubble{
 
@@ -812,8 +802,6 @@ opacity:.18;
 transform:translateY(5px);
 
 }
-
-/* Dock */
 
 .dock-wrap{
 
@@ -1079,10 +1067,12 @@ src="./nova_normal.png">
 </a>
 
 <a class="app-icon" href="https://studio.youtube.com/" target="_blank">
+<div class="app-emoji">🎬</div>
 <div class="app-label">Studio</div>
 </a>
 
 <a class="app-icon" href="https://mail.google.com/" target="_blank">
+<div class="app-emoji">✉️</div>
 <div class="app-label">Mail</div>
 </a>
 
@@ -1092,61 +1082,48 @@ src="./nova_normal.png">
 </a>
 
 <a class="app-icon" href="https://www.amazon.co.jp/" target="_blank">
+<div class="app-emoji">📦</div>
 <div class="app-label">Amazon</div>
 </a>
 
 <a class="app-icon" href="https://www.dmm.com/" target="_blank">
+<div class="app-emoji">🟣</div>
 <div class="app-label">DMM</div>
 </a>
 
 <a class="app-icon" href="https://bandai-hobby.net/" target="_blank">
+<div class="app-emoji">🤖</div>
 <div class="app-label">Bandai</div>
 </a>
 
 </div>
 
-</section><script>
+</section>
+
+<script>
 
 const bootScreen = document.querySelector(".boot-screen");
 
 setTimeout(() => {
-    bootScreen.classList.add("hide");
+bootScreen.classList.add("hide");
 }, 3900);
-
-function setTimeTheme(){
-
-    const hour = new Date().getHours();
-
-    document.body.classList.remove("deep-night","morning");
-
-    if(hour >= 0 && hour < 5){
-        document.body.classList.add("deep-night");
-    }
-
-    if(hour >= 5 && hour < 10){
-        document.body.classList.add("morning");
-    }
-
-}
 
 function updateClock(){
 
-    const now = new Date();
+const now = new Date();
 
-    const h = String(now.getHours()).padStart(2,"0");
-    const m = String(now.getMinutes()).padStart(2,"0");
+const h = String(now.getHours()).padStart(2,"0");
+const m = String(now.getMinutes()).padStart(2,"0");
 
-    const days = [
-        "日","月","火","水","木","金","土"
-    ];
+const days = [
+"日","月","火","水","木","金","土"
+];
 
-    document.getElementById("clock").textContent =
-    `${h}:${m}`;
+document.getElementById("clock").textContent =
+`${h}:${m}`;
 
-    document.getElementById("date").textContent =
-    `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}（${days[now.getDay()]}）`;
-
-    setTimeTheme();
+document.getElementById("date").textContent =
+`${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}（${days[now.getDay()]}）`;
 
 }
 
@@ -1205,33 +1182,33 @@ const novaMessages = [
 ];
 
 const novaImages = [
-    "./nova_normal.png",
-    "./nova_sleepy.png",
-    "./nova_smile.png",
-    "./nova_troubled.png",
-    "./nova_analysis.png"
+"./nova_normal.png",
+"./nova_sleepy.png",
+"./nova_smile.png",
+"./nova_troubled.png",
+"./nova_analysis.png"
 ];
 
 function updateNova(){
 
-    const bubble = document.getElementById("novaBubble");
-    const image = document.getElementById("novaImage");
+const bubble = document.getElementById("novaBubble");
+const image = document.getElementById("novaImage");
 
-    bubble.classList.add("fade");
-    image.classList.add("switching");
+bubble.classList.add("fade");
+image.classList.add("switching");
 
-    setTimeout(() => {
+setTimeout(() => {
 
-        image.src =
-        novaImages[Math.floor(Math.random()*novaImages.length)];
+image.src =
+novaImages[Math.floor(Math.random()*novaImages.length)];
 
-        bubble.textContent =
-        novaMessages[Math.floor(Math.random()*novaMessages.length)];
+bubble.textContent =
+novaMessages[Math.floor(Math.random()*novaMessages.length)];
 
-        bubble.classList.remove("fade");
-        image.classList.remove("switching");
+bubble.classList.remove("fade");
+image.classList.remove("switching");
 
-    },500);
+},500);
 
 }
 
@@ -1239,48 +1216,48 @@ setInterval(updateNova,15000);
 
 function weatherIcon(desc){
 
-    const text = desc.toLowerCase();
+const text = desc.toLowerCase();
 
-    if(text.includes("rain")) return "🌧️";
-    if(text.includes("cloud")) return "☁️";
-    if(text.includes("snow")) return "❄️";
-    if(text.includes("clear") || text.includes("sun")) return "☀️";
-    if(text.includes("mist") || text.includes("fog")) return "🌫️";
+if(text.includes("rain")) return "🌧️";
+if(text.includes("cloud")) return "☁️";
+if(text.includes("snow")) return "❄️";
+if(text.includes("clear") || text.includes("sun")) return "☀️";
+if(text.includes("mist") || text.includes("fog")) return "🌫️";
 
-    return "🌤️";
+return "🌤️";
 }
 
 async function loadWeather(){
 
-    try{
+try{
 
-        const res =
-        await fetch("https://wttr.in/?format=j1");
+const res =
+await fetch("https://wttr.in/?format=j1");
 
-        const data =
-        await res.json();
+const data =
+await res.json();
 
-        const temp =
-        data.current_condition[0].temp_C;
+const temp =
+data.current_condition[0].temp_C;
 
-        const desc =
-        data.current_condition[0].weatherDesc[0].value;
+const desc =
+data.current_condition[0].weatherDesc[0].value;
 
-        document.getElementById("weatherTemp").textContent =
-        `${weatherIcon(desc)} ${temp}°`;
+document.getElementById("weatherTemp").textContent =
+`${weatherIcon(desc)} ${temp}°`;
 
-        document.getElementById("weatherDesc").textContent =
-        desc;
+document.getElementById("weatherDesc").textContent =
+desc;
 
-    }catch(e){
+}catch(e){
 
-        document.getElementById("weatherTemp").textContent =
-        "失敗";
+document.getElementById("weatherTemp").textContent =
+"失敗";
 
-        document.getElementById("weatherDesc").textContent =
-        "APIエラー";
+document.getElementById("weatherDesc").textContent =
+"APIエラー";
 
-    }
+}
 
 }
 
@@ -1291,50 +1268,24 @@ const searchInput = document.getElementById("searchInput");
 
 searchForm.addEventListener("submit", function(e){
 
-    e.preventDefault();
+e.preventDefault();
 
-    const query =
-    searchInput.value.trim();
+const query =
+searchInput.value.trim();
 
-    if(!query){
-        searchInput.placeholder = "検索ワード入れてや🙄";
-        return;
-    }
+if(!query){
+searchInput.placeholder = "検索ワード入れてや🙄";
+return;
+}
 
-    const url =
-    "https://www.google.com/search?q=" +
-    encodeURIComponent(query);
+const url =
+"https://www.google.com/search?q=" +
+encodeURIComponent(query);
 
-    window.open(url,"_blank");
+window.open(url,"_blank");
 
-    searchInput.value = "";
-    searchInput.placeholder = "NOVAに聞く...";
-
-});
-
-window.addEventListener("deviceorientation", event => {
-
-    const x =
-    Math.max(-12,Math.min(12,event.gamma || 0));
-
-    const y =
-    Math.max(-12,Math.min(12,event.beta || 0));
-
-    const novaPanel =
-    document.querySelector(".nova-panel");
-
-    const topPanel =
-    document.querySelector(".top-panel");
-
-    if(novaPanel){
-        novaPanel.style.transform =
-        `translate(${x * .25}px,${y * .08}px)`;
-    }
-
-    if(topPanel){
-        topPanel.style.transform =
-        `translate(${x * .12}px,${y * .05}px)`;
-    }
+searchInput.value = "";
+searchInput.placeholder = "NOVAに聞く...";
 
 });
 
