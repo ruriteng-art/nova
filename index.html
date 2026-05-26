@@ -165,7 +165,7 @@ body.morning{
     padding-bottom:112px;
     display:flex;
     flex-direction:column;
-    gap:9px;
+    gap:8px;
 }
 
 .panel{
@@ -231,6 +231,57 @@ body.morning{
     text-overflow:ellipsis;
 }
 
+.search-panel{
+    padding:9px 12px;
+    border-radius:22px;
+}
+
+.search-box{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.search-label{
+    flex:0 0 auto;
+    font-family:"Courier New",monospace;
+    font-size:11px;
+    font-weight:900;
+    color:#8df6ff;
+    letter-spacing:.12em;
+    text-shadow:0 0 10px rgba(0,240,255,.8);
+}
+
+.search-input{
+    flex:1;
+    min-width:0;
+    border:none;
+    outline:none;
+    background:rgba(255,255,255,.08);
+    color:white;
+    padding:9px 10px;
+    border-radius:14px;
+    font-size:14px;
+    font-weight:700;
+    box-shadow:inset 0 0 12px rgba(0,220,255,.12);
+}
+
+.search-input::placeholder{
+    color:rgba(255,255,255,.55);
+}
+
+.search-button{
+    flex:0 0 auto;
+    width:38px;
+    height:38px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(135deg,rgba(0,220,255,.34),rgba(160,90,255,.24));
+    color:white;
+    font-size:17px;
+    box-shadow:0 0 18px rgba(0,220,255,.22);
+}
+
 .nova-panel{
     min-height:205px;
     display:flex;
@@ -271,38 +322,20 @@ body.morning{
     left:12px;
     right:12px;
     bottom:8px;
-
     min-height:34px;
     padding:8px 14px;
-
     display:flex;
     align-items:center;
-
     border-radius:14px;
-
-    background:
-    linear-gradient(90deg,
-    rgba(90,45,180,.42),
-    rgba(45,120,220,.22));
-
+    background:linear-gradient(90deg,rgba(90,45,180,.42),rgba(45,120,220,.22));
     border:1px solid rgba(210,180,255,.42);
-
-    box-shadow:
-    0 0 18px rgba(155,95,255,.26),
-    inset 0 1px 0 rgba(255,255,255,.16),
-    inset 0 0 18px rgba(170,120,255,.10);
-
+    box-shadow:0 0 18px rgba(155,95,255,.26),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 18px rgba(170,120,255,.10);
     color:#ffffff;
-
     font-family:"Courier New",monospace;
     font-size:13px;
     font-weight:900;
     letter-spacing:.04em;
-
-    text-shadow:
-    0 0 6px rgba(255,255,255,.85),
-    0 0 14px rgba(120,230,255,.55);
-
+    text-shadow:0 0 6px rgba(255,255,255,.85),0 0 14px rgba(120,230,255,.55);
     opacity:1;
     transition:opacity .8s ease, transform .8s ease;
 }
@@ -320,13 +353,7 @@ body.morning{
     inset:0;
     border-radius:14px;
     pointer-events:none;
-    background:
-    repeating-linear-gradient(
-    to bottom,
-    rgba(255,255,255,.08) 0px,
-    rgba(255,255,255,.08) 1px,
-    transparent 1px,
-    transparent 4px);
+    background:repeating-linear-gradient(to bottom,rgba(255,255,255,.08) 0px,rgba(255,255,255,.08) 1px,transparent 1px,transparent 4px);
     opacity:.18;
 }
 
@@ -386,8 +413,8 @@ body.morning{
 }
 
 .app-img{
-    width:30px;
-    height:30px;
+    width:32px;
+    height:32px;
     object-fit:contain;
     border-radius:9px;
 }
@@ -420,21 +447,17 @@ body.morning{
         transform:translateX(-50%);
     }
 }
-
 </style>
 </head>
 
 <body>
 
 <div class="boot-screen" id="bootScreen">
-
 <img src="icon.png" class="boot-logo" alt="Nova Logo">
 <img src="nova_dot_small.png" class="boot-dot-small" alt="Nova Dot Small">
 <img src="nova_dot_big.png" class="boot-dot-big" alt="Nova Dot Big">
-
 <div class="boot-text">NOVA OS</div>
 <div class="boot-sub">PERSONAL AI INTERFACE</div>
-
 </div>
 
 <div class="notice" id="notice">
@@ -445,7 +468,6 @@ body.morning{
 <main class="home">
 
 <section class="panel top-panel" id="topPanel">
-
 <div>
 <div class="clock" id="clock">00:00</div>
 <div class="date" id="date">2026/5/26（水）</div>
@@ -456,21 +478,24 @@ body.morning{
 <div class="weather-temp" id="weatherTemp">--</div>
 <div class="weather-desc" id="weatherDesc">取得中</div>
 </div>
+</section>
 
+<section class="panel search-panel">
+<form class="search-box" id="searchForm">
+<div class="search-label">NOVA SEARCH</div>
+<input class="search-input" id="searchInput" type="text" placeholder="Googleで検索..." autocomplete="off">
+<button class="search-button" type="submit">🔍</button>
+</form>
 </section>
 
 <section class="panel nova-panel" id="novaPanel">
-
 <img class="nova" id="novaImage" src="./nova_normal.png" alt="Nova">
-
 <div class="bubble" id="novaBubble">ワイはまだまだ元気や🙄</div>
-
 </section>
 
 </main>
 
 <section class="dock-wrap">
-
 <div class="dock-grid">
 
 <a class="app-icon nova-app" href="https://chatgpt.com/" target="_blank">
@@ -478,8 +503,13 @@ body.morning{
 <div class="app-label">Nova</div>
 </a>
 
+<a class="app-icon" href="https://x.com/hoshiyaAYATO" target="_blank">
+<img class="app-img" src="X.png" alt="X">
+<div class="app-label">X</div>
+</a>
+
 <a class="app-icon" href="https://www.youtube.com/" target="_blank">
-<div class="app-emoji">▶️</div>
+<img class="app-img" src="Youtube.png" alt="YouTube">
 <div class="app-label">YouTube</div>
 </a>
 
@@ -488,9 +518,29 @@ body.morning{
 <div class="app-label">Studio</div>
 </a>
 
-<a class="app-icon" href="https://x.com/hoshiyaAYATO" target="_blank">
-<div class="app-emoji">𝕏</div>
-<div class="app-label">X</div>
+<a class="app-icon" href="https://mail.google.com/" target="_blank">
+<div class="app-emoji">✉️</div>
+<div class="app-label">Mail</div>
+</a>
+
+<a class="app-icon" href="https://jp.mercari.com/" target="_blank">
+<img class="app-img" src="merukari.png" alt="Mercari">
+<div class="app-label">Mercari</div>
+</a>
+
+<a class="app-icon" href="https://www.amazon.co.jp/" target="_blank">
+<div class="app-emoji">📦</div>
+<div class="app-label">Amazon</div>
+</a>
+
+<a class="app-icon" href="https://www.dmm.com/" target="_blank">
+<div class="app-emoji">🟣</div>
+<div class="app-label">DMM</div>
+</a>
+
+<a class="app-icon" href="https://bandai-hobby.net/" target="_blank">
+<div class="app-emoji">🤖</div>
+<div class="app-label">Bandai</div>
 </a>
 
 <a class="app-icon" href="https://calendar.google.com/" target="_blank">
@@ -508,16 +558,8 @@ body.morning{
 <div class="app-label">Drive</div>
 </a>
 
-<a class="app-icon" href="https://mail.google.com/" target="_blank">
-<div class="app-emoji">✉️</div>
-<div class="app-label">Mail</div>
-</a>
-
 </div>
-
-</section>
-
-<script>
+</section><script>
 
 setTimeout(()=>{
 
@@ -614,7 +656,6 @@ const novaMessages = [
 "コーヒー飲む？☕",
 "集中モード入るか😌",
 "そのアイデア、かなりアリや🙄",
-"未来OS感出てきたな😎",
 "通知きとるで🙄",
 "コメント来てるかも😼",
 "X確認する？🙄",
@@ -700,6 +741,30 @@ async function loadWeather(){
 }
 
 loadWeather();
+
+document.getElementById("searchForm").addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const input=document.getElementById("searchInput");
+    const query=input.value.trim();
+
+    if(!query){
+        showNotice("検索ワード入れてや🙄");
+        return;
+    }
+
+    showNotice(`検索するで：${query}`);
+
+    const url=
+    "https://www.google.com/search?q="+
+    encodeURIComponent(query);
+
+    window.open(url,"_blank");
+
+    input.value="";
+
+});
 
 window.addEventListener("deviceorientation",event=>{
 
