@@ -24,13 +24,13 @@ body{
 
     color:white;
     min-height:100vh;
-    padding:28px;
+    padding:18px;
 }
 
 .home{
     display:flex;
     flex-direction:column;
-    gap:28px;
+    gap:18px;
 }
 
 .panel{
@@ -38,8 +38,8 @@ body{
     position:relative;
     overflow:hidden;
 
-    border-radius:34px;
-    padding:34px;
+    border-radius:28px;
+    padding:24px;
 
     background:
     linear-gradient(
@@ -50,33 +50,35 @@ body{
     border:1px solid rgba(126,231,255,.35);
 
     box-shadow:
-    0 0 40px rgba(0,180,255,.15),
-    inset 0 0 40px rgba(255,255,255,.03);
+    0 0 30px rgba(0,180,255,.15),
+    inset 0 0 30px rgba(255,255,255,.03);
 }
 
 .clock{
 
-    font-size:92px;
+    font-size:72px;
     font-weight:900;
     line-height:1;
 }
 
 .date{
 
-    margin-top:18px;
+    margin-top:8px;
 
     color:#79d8ff;
 
-    font-size:36px;
+    font-size:24px;
     font-weight:700;
+
+    line-height:1;
 }
 
 .weather{
 
-    margin-top:32px;
+    margin-top:20px;
 
-    border-radius:28px;
-    padding:26px;
+    border-radius:22px;
+    padding:18px;
 
     background:
     linear-gradient(
@@ -87,29 +89,29 @@ body{
 
 .weather-title{
 
-    font-size:28px;
+    font-size:20px;
     opacity:.9;
 }
 
 .weather-temp{
 
-    margin-top:12px;
+    margin-top:8px;
 
-    font-size:72px;
+    font-size:52px;
     font-weight:900;
 }
 
 .weather-desc{
 
-    margin-top:6px;
+    margin-top:4px;
 
-    font-size:24px;
+    font-size:18px;
     opacity:.8;
 }
 
 .nova-panel{
 
-    min-height:720px;
+    min-height:420px;
 
     display:flex;
     align-items:flex-end;
@@ -121,12 +123,12 @@ body{
 .nova{
 
     width:100%;
-    max-width:520px;
+    max-width:320px;
 
     object-fit:contain;
 
     filter:
-    drop-shadow(0 0 40px rgba(0,180,255,.25));
+    drop-shadow(0 0 30px rgba(0,180,255,.25));
 
     animation:float 5s ease-in-out infinite;
 }
@@ -138,7 +140,7 @@ body{
     }
 
     50%{
-        transform:translateY(-10px);
+        transform:translateY(-8px);
     }
 
     100%{
@@ -150,23 +152,23 @@ body{
 
     position:absolute;
 
-    bottom:34px;
-    right:24px;
+    bottom:18px;
+    right:16px;
 
-    max-width:78%;
+    max-width:72%;
 
     background:rgba(255,255,255,.96);
     color:black;
 
-    padding:18px 26px;
+    padding:12px 18px;
 
     border-radius:999px;
 
-    font-size:28px;
+    font-size:18px;
     font-weight:700;
 
     box-shadow:
-    0 10px 30px rgba(0,0,0,.35);
+    0 10px 24px rgba(0,0,0,.28);
 }
 
 .launcher{
@@ -175,14 +177,14 @@ body{
 
     grid-template-columns:repeat(2,1fr);
 
-    gap:18px;
+    gap:14px;
 }
 
 .app-button{
 
-    min-height:120px;
+    min-height:82px;
 
-    border-radius:28px;
+    border-radius:22px;
 
     display:flex;
     align-items:center;
@@ -191,7 +193,7 @@ body{
     text-decoration:none;
     color:white;
 
-    font-size:28px;
+    font-size:20px;
     font-weight:800;
 
     background:
@@ -228,7 +230,7 @@ body{
 </div>
 
 <div class="date" id="date">
-2026/5/26
+2026/5/26（火）
 </div>
 
 <div class="weather">
