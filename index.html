@@ -29,11 +29,11 @@ content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 body{
     background:
-    radial-gradient(circle at 80% 0%,
-    rgba(0,220,255,.34) 0%,
+    radial-gradient(circle at 82% 0%,
+    rgba(0,220,255,.38) 0%,
     transparent 32%),
-    radial-gradient(circle at 12% 20%,
-    rgba(160,90,255,.24) 0%,
+    radial-gradient(circle at 10% 18%,
+    rgba(160,90,255,.26) 0%,
     transparent 36%),
     linear-gradient(180deg,#071a38 0%,#020814 100%);
 
@@ -104,13 +104,15 @@ body{
 }
 
 .home{
-    padding:12px;
-    padding-top:calc(12px + env(safe-area-inset-top));
-    padding-bottom:calc(12px + env(safe-area-inset-bottom));
+    min-height:100vh;
+
+    padding:10px;
+    padding-top:calc(10px + env(safe-area-inset-top));
+    padding-bottom:calc(10px + env(safe-area-inset-bottom));
 
     display:flex;
     flex-direction:column;
-    gap:10px;
+    gap:9px;
 }
 
 .panel{
@@ -118,7 +120,7 @@ body{
     overflow:hidden;
 
     border-radius:24px;
-    padding:16px;
+    padding:14px;
 
     background:
     linear-gradient(
@@ -140,36 +142,36 @@ body{
 .top-panel{
     display:grid;
     grid-template-columns:1fr auto;
-    gap:12px;
+    gap:10px;
     align-items:center;
 }
 
 .clock{
-    font-size:56px;
+    font-size:52px;
     font-weight:900;
     line-height:.95;
     letter-spacing:-1px;
 
     text-shadow:
-    0 0 12px rgba(126,231,255,.55),
-    0 0 34px rgba(0,220,255,.28);
+    0 0 16px rgba(126,231,255,.7),
+    0 0 42px rgba(0,220,255,.38);
 }
 
 .date{
-    margin-top:7px;
+    margin-top:6px;
     color:#79d8ff;
-    font-size:18px;
+    font-size:17px;
     font-weight:800;
     line-height:1;
     white-space:nowrap;
 }
 
 .weather-mini{
-    width:118px;
-    min-height:94px;
+    width:108px;
+    min-height:88px;
 
     border-radius:22px;
-    padding:12px;
+    padding:10px;
 
     display:flex;
     flex-direction:column;
@@ -190,21 +192,21 @@ body{
 }
 
 .weather-title{
-    font-size:13px;
+    font-size:12px;
     opacity:.82;
 }
 
 .weather-temp{
     margin-top:2px;
-    font-size:32px;
+    font-size:29px;
     font-weight:900;
     line-height:1;
 }
 
 .weather-desc{
     margin-top:4px;
-    max-width:96px;
-    font-size:12px;
+    max-width:88px;
+    font-size:11px;
     opacity:.78;
     text-align:center;
     white-space:nowrap;
@@ -213,7 +215,7 @@ body{
 }
 
 .nova-panel{
-    min-height:215px;
+    min-height:205px;
 
     display:flex;
     align-items:flex-end;
@@ -224,15 +226,21 @@ body{
 
 .nova{
     width:100%;
-    max-width:245px;
-    margin-bottom:-34px;
+    max-width:248px;
+    margin-bottom:-42px;
 
     object-fit:contain;
 
     filter:
-    drop-shadow(0 0 24px rgba(0,180,255,.32));
+    drop-shadow(0 0 26px rgba(0,180,255,.36));
 
     animation:float 5s ease-in-out infinite;
+    transition:opacity .55s ease, transform .55s ease;
+}
+
+.nova.switching{
+    opacity:.35;
+    transform:translateY(8px) scale(.98);
 }
 
 @keyframes float{
@@ -243,8 +251,8 @@ body{
 
 .bubble{
     position:absolute;
-    bottom:8px;
-    right:10px;
+    bottom:7px;
+    right:9px;
 
     max-width:76%;
 
@@ -265,15 +273,14 @@ body{
 }
 
 .bubble.fade{
-    opacity:.22;
-    transform:translateY(4px);
+    opacity:.18;
+    transform:translateY(5px);
 }
 
 .dock-wrap{
     padding:8px;
-    margin-top:-2px;
 
-    border-radius:26px;
+    border-radius:24px;
 
     background:
     linear-gradient(
@@ -302,26 +309,24 @@ body{
 }
 
 .dock-grid{
-    display:grid;
-    grid-auto-flow:column;
-    grid-template-rows:repeat(2,72px);
-    grid-auto-columns:72px;
+    display:flex;
     gap:10px;
-
     width:max-content;
 }
 
 .app-icon{
-    width:72px;
-    height:72px;
+    flex:0 0 auto;
 
-    border-radius:22px;
+    width:64px;
+    height:64px;
+
+    border-radius:21px;
 
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:4px;
+    gap:3px;
 
     text-decoration:none;
     color:white;
@@ -348,33 +353,33 @@ body{
 }
 
 .app-img{
-    width:34px;
-    height:34px;
+    width:30px;
+    height:30px;
     object-fit:contain;
-    border-radius:10px;
+    border-radius:9px;
 }
 
 .app-emoji{
-    font-size:28px;
+    font-size:25px;
     line-height:1;
 }
 
 .app-label{
-    font-size:10px;
+    font-size:9px;
     font-weight:800;
-    opacity:.9;
+    opacity:.92;
 }
 
 .nova-app{
     background:
     linear-gradient(
     135deg,
-    rgba(0,220,255,.38),
-    rgba(160,90,255,.28));
+    rgba(0,220,255,.42),
+    rgba(160,90,255,.30));
 
     box-shadow:
-    0 0 18px rgba(0,220,255,.35),
-    0 0 40px rgba(0,220,255,.18),
+    0 0 20px rgba(0,220,255,.40),
+    0 0 48px rgba(0,220,255,.22),
     inset 0 1px 0 rgba(255,255,255,.16);
 
     animation:novaPulse 3s ease-in-out infinite;
@@ -382,21 +387,18 @@ body{
 
 @keyframes novaPulse{
     0%{
-        transform:scale(1);
         box-shadow:
         0 0 18px rgba(0,220,255,.28),
         0 0 36px rgba(0,220,255,.14);
     }
 
     50%{
-        transform:scale(1.03);
         box-shadow:
-        0 0 28px rgba(0,220,255,.55),
-        0 0 54px rgba(0,220,255,.28);
+        0 0 30px rgba(0,220,255,.58),
+        0 0 60px rgba(0,220,255,.30);
     }
 
     100%{
-        transform:scale(1);
         box-shadow:
         0 0 18px rgba(0,220,255,.28),
         0 0 36px rgba(0,220,255,.14);
@@ -439,7 +441,7 @@ NOVA OS
 </div>
 
 <div class="date" id="date">
-2026/5/26（火）
+2026/5/26（水）
 </div>
 
 </div>
@@ -558,7 +560,7 @@ setTimeout(()=>{
     .getElementById("bootScreen")
     .classList.add("hide");
 
-},1700);
+},1600);
 
 function updateClock(){
 
@@ -620,7 +622,11 @@ function updateNova(){
     const bubble=
     document.getElementById("novaBubble");
 
+    const image=
+    document.getElementById("novaImage");
+
     bubble.classList.add("fade");
+    image.classList.add("switching");
 
     setTimeout(()=>{
 
@@ -629,13 +635,14 @@ function updateNova(){
         Math.floor(Math.random()*novaData.length)
         ];
 
-        document.getElementById("novaImage").src=
+        image.src=
         random.img;
 
         bubble.textContent=
         random.msg;
 
         bubble.classList.remove("fade");
+        image.classList.remove("switching");
 
     },500);
 
