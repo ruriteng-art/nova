@@ -6,6 +6,7 @@
 <title>Nova OS</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -14,8 +15,13 @@
 }
 
 body{
+
     background:
-    radial-gradient(circle at top,#0d4d6d 0%,#06152f 45%,#020814 100%);
+    radial-gradient(circle at top,
+    #0d4d6d 0%,
+    #06152f 45%,
+    #020814 100%);
+
     color:white;
     min-height:100vh;
     padding:28px;
@@ -28,13 +34,16 @@ body{
 }
 
 .panel{
+
     position:relative;
-    border-radius:34px;
-    padding:34px;
     overflow:hidden;
 
+    border-radius:34px;
+    padding:34px;
+
     background:
-    linear-gradient(145deg,
+    linear-gradient(
+    145deg,
     rgba(20,40,80,.92),
     rgba(5,10,30,.94));
 
@@ -46,76 +55,111 @@ body{
 }
 
 .clock{
+
     font-size:92px;
     font-weight:900;
     line-height:1;
 }
 
 .date{
+
     margin-top:18px;
+
     color:#79d8ff;
+
     font-size:36px;
     font-weight:700;
 }
 
 .weather{
+
     margin-top:32px;
+
     border-radius:28px;
     padding:26px;
 
     background:
-    linear-gradient(145deg,
+    linear-gradient(
+    145deg,
     rgba(255,255,255,.10),
     rgba(255,255,255,.04));
 }
 
 .weather-title{
+
     font-size:28px;
     opacity:.9;
 }
 
 .weather-temp{
+
     margin-top:12px;
+
     font-size:72px;
     font-weight:900;
 }
 
 .weather-desc{
+
     margin-top:6px;
+
     font-size:24px;
     opacity:.8;
 }
 
 .nova-panel{
+
     min-height:720px;
+
     display:flex;
     align-items:flex-end;
     justify-content:center;
+
     position:relative;
 }
 
 .nova{
+
     width:100%;
-    max-width:560px;
+    max-width:520px;
+
     object-fit:contain;
+
+    filter:
+    drop-shadow(0 0 40px rgba(0,180,255,.25));
+
     animation:float 5s ease-in-out infinite;
 }
 
 @keyframes float{
-    0%{transform:translateY(0px);}
-    50%{transform:translateY(-10px);}
-    100%{transform:translateY(0px);}
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-10px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
 }
 
 .bubble{
-    position:absolute;
-    bottom:34px;
-    right:28px;
 
-    background:rgba(255,255,255,.95);
+    position:absolute;
+
+    bottom:34px;
+    right:24px;
+
+    max-width:78%;
+
+    background:rgba(255,255,255,.96);
     color:black;
 
     padding:18px 26px;
+
     border-radius:999px;
 
     font-size:28px;
@@ -126,13 +170,18 @@ body{
 }
 
 .launcher{
+
     display:grid;
+
     grid-template-columns:repeat(2,1fr);
+
     gap:18px;
 }
 
 .app-button{
+
     min-height:120px;
+
     border-radius:28px;
 
     display:flex;
@@ -146,7 +195,8 @@ body{
     font-weight:800;
 
     background:
-    linear-gradient(145deg,
+    linear-gradient(
+    145deg,
     rgba(255,255,255,.10),
     rgba(255,255,255,.04));
 
@@ -156,11 +206,14 @@ body{
 }
 
 .nova-button{
+
     background:
-    linear-gradient(135deg,
+    linear-gradient(
+    135deg,
     rgba(0,220,255,.28),
     rgba(160,90,255,.22));
 }
+
 </style>
 </head>
 
@@ -170,27 +223,44 @@ body{
 
 <section class="panel">
 
-<div class="clock" id="clock">00:00</div>
-<div class="date" id="date">2026/05/26</div>
+<div class="clock" id="clock">
+00:00
+</div>
+
+<div class="date" id="date">
+2026/5/26
+</div>
 
 <div class="weather">
-<div class="weather-title">天気</div>
-<div class="weather-temp" id="weatherTemp">取得中</div>
-<div class="weather-desc" id="weatherDesc">天気データ確認中</div>
+
+<div class="weather-title">
+天気
+</div>
+
+<div class="weather-temp" id="weatherTemp">
+取得中
+</div>
+
+<div class="weather-desc" id="weatherDesc">
+天気データ確認中
+</div>
+
 </div>
 
 </section>
 
 <section class="panel nova-panel">
 
-<!-- ここにBase64画像を貼る -->
 <img
 class="nova"
 id="novaImage"
-src="data:image/png;base64,ここにBase64文字列を貼る">
+src="./nova_normal.png"
+alt="Nova">
 
 <div class="bubble" id="novaBubble">
+
 ワイはまだまだ元気や🙄
+
 </div>
 
 </section>
@@ -221,75 +291,110 @@ src="data:image/png;base64,ここにBase64文字列を貼る">
 
 function updateClock(){
 
-const now=new Date();
+    const now=new Date();
 
-const h=String(now.getHours()).padStart(2,"0");
-const m=String(now.getMinutes()).padStart(2,"0");
+    const h=
+    String(now.getHours()).padStart(2,"0");
 
-document.getElementById("clock").textContent=
-`${h}:${m}`;
+    const m=
+    String(now.getMinutes()).padStart(2,"0");
 
-const days=["日","月","火","水","木","金","土"];
+    document.getElementById("clock").textContent=
+    `${h}:${m}`;
 
-document.getElementById("date").textContent=
-`${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}（${days[now.getDay()]}）`;
+    const days=[
+    "日","月","火","水","木","金","土"
+    ];
+
+    document.getElementById("date").textContent=
+    `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}（${days[now.getDay()]}）`;
 
 }
 
 updateClock();
+
 setInterval(updateClock,1000);
 
-const messages=[
-"ノヴァ起動や🙄",
-"配信前の作戦会議するか？😌",
-"ワイはまだまだ元気や🙄",
-"今日は何するんや？😼",
-"そろそろ動画編集や🙄",
-"そのサムネ、伸びるぞ😎"
+const novaData=[
+
+{
+img:"./nova_normal.png",
+msg:"今日は何するんや？😼"
+},
+
+{
+img:"./nova_sleepy.png",
+msg:"そろそろ寝るか…😴"
+},
+
+{
+img:"./nova_smile.png",
+msg:"そのサムネ、伸びるぞ😎"
+},
+
+{
+img:"./nova_troubled.png",
+msg:"編集終わる気せーへん🙄"
+},
+
+{
+img:"./nova_analysis.png",
+msg:"配信前の作戦会議するか？😌"
+}
+
 ];
 
 function updateNova(){
 
-const msg=
-messages[Math.floor(Math.random()*messages.length)];
+    const random=
+    novaData[
+    Math.floor(Math.random()*novaData.length)
+    ];
 
-document.getElementById("novaBubble").textContent=
-msg;
+    document.getElementById("novaImage").src=
+    random.img;
+
+    document.getElementById("novaBubble").textContent=
+    random.msg;
 
 }
 
-updateNova();
-setInterval(updateNova,20000);
+setInterval(updateNova,15000);
 
 async function loadWeather(){
 
-try{
+    try{
 
-const res=await fetch(
-"https://wttr.in/?format=j1"
-);
+        const res=
+        await fetch(
+        "https://wttr.in/?format=j1"
+        );
 
-const data=await res.json();
+        const data=
+        await res.json();
 
-const temp=data.current_condition[0].temp_C;
-const desc=data.current_condition[0]
-.weatherDesc[0].value;
+        const temp=
+        data.current_condition[0].temp_C;
 
-document.getElementById("weatherTemp")
-.textContent=`${temp}°`;
+        const desc=
+        data.current_condition[0]
+        .weatherDesc[0].value;
 
-document.getElementById("weatherDesc")
-.textContent=desc;
+        document.getElementById("weatherTemp")
+        .textContent=`${temp}°`;
 
-}catch(e){
+        document.getElementById("weatherDesc")
+        .textContent=desc;
 
-document.getElementById("weatherTemp")
-.textContent="取得失敗";
+    }catch(e){
 
-document.getElementById("weatherDesc")
-.textContent="天気APIエラー";
+        document.getElementById("weatherTemp")
+        .textContent="取得失敗";
 
-}
+        document.getElementById("weatherDesc")
+        .textContent="天気APIエラー";
+
+    }
 
 }
 
