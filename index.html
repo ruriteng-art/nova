@@ -1266,7 +1266,7 @@ loadWeather();
 const searchForm = document.getElementById("searchForm");
 const searchInput = document.getElementById("searchInput");
 
-searchForm.addEventListener("submit", function(e){
+searchForm.addEventListener("submit", async function(e){
 
 e.preventDefault();
 
@@ -1278,14 +1278,47 @@ searchInput.placeholder = "検索ワード入れてや🙄";
 return;
 }
 
-const url =
-"https://www.google.com/search?q=" +
-encodeURIComponent(query);
+const bubble =
+document.getElementById("novaBubble");
 
-window.open(url,"_blank");
+bubble.textContent =
+"PCへ送信中や…🙄";
+
+try{
+
+const res =
+await fetch("http://192.168.0.117:3000/message",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+message:query
+})
+
+});
+
+const data =
+await res.json();
+
+bubble.textContent =
+data.reply || "PCに届いたで🙄";
 
 searchInput.value = "";
 searchInput.placeholder = "NOVAに聞く...";
+
+}catch(err){
+
+bubble.textContent =
+"PCに接続できへんかった😢";
+
+searchInput.placeholder =
+"PCサーバー確認してや🙄";
+
+}
 
 });
 
