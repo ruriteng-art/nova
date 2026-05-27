@@ -1637,6 +1637,94 @@ box-shadow:
 
 }
 
+/* Mode Transition */
+
+.mode-transition{
+position:fixed;
+inset:0;
+z-index:9500;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:16px;
+background:
+radial-gradient(circle at center,rgba(0,220,255,.18),transparent 42%),
+linear-gradient(180deg,rgba(2,8,20,.92),rgba(2,8,20,.98));
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+opacity:0;
+pointer-events:none;
+transition:opacity .26s ease;
+}
+
+.mode-transition.show{
+opacity:1;
+pointer-events:auto;
+}
+
+.mode-transition.local{
+background:
+radial-gradient(circle at center,rgba(255,60,40,.20),transparent 42%),
+linear-gradient(180deg,rgba(20,2,8,.92),rgba(2,8,20,.98));
+}
+
+.mode-transition-logo{
+width:118px;
+height:118px;
+object-fit:contain;
+filter:
+drop-shadow(0 0 20px rgba(0,220,255,.72))
+drop-shadow(0 0 48px rgba(255,255,255,.22));
+animation:modeTransitionSpin .86s cubic-bezier(.18,.78,.18,1) infinite;
+}
+
+.mode-transition.local .mode-transition-logo{
+filter:
+drop-shadow(0 0 22px rgba(255,70,40,.82))
+drop-shadow(0 0 54px rgba(255,160,120,.24));
+}
+
+.mode-transition-text{
+font-family:"Courier New",monospace;
+font-size:15px;
+font-weight:900;
+letter-spacing:.18em;
+color:#dffbff;
+text-shadow:
+0 0 10px rgba(255,255,255,.88),
+0 0 24px rgba(0,220,255,.86);
+}
+
+.mode-transition.local .mode-transition-text{
+text-shadow:
+0 0 10px rgba(255,255,255,.88),
+0 0 24px rgba(255,60,40,.88);
+}
+
+.mode-transition-sub{
+font-family:"Courier New",monospace;
+font-size:10px;
+font-weight:800;
+letter-spacing:.14em;
+color:rgba(210,245,255,.72);
+}
+
+@keyframes modeTransitionSpin{
+0%{
+transform:scale(.86) rotate(0deg);
+opacity:.62;
+}
+55%{
+transform:scale(1.04) rotate(520deg);
+opacity:1;
+}
+100%{
+transform:scale(.96) rotate(720deg);
+opacity:.72;
+}
+}
+
 </style>
 </head>
 
@@ -1683,6 +1771,12 @@ autocomplete="off">
 <div class="timer-finish" id="timerFinish">
 <div class="timer-finish-text">TIMER COMPLETE</div>
 <button class="timer-stop-big" type="button" onclick="resetTimer()">STOP</button>
+</div>
+
+<div class="mode-transition" id="modeTransition">
+<img class="mode-transition-logo" id="modeTransitionLogo" src="icon.png">
+<div class="mode-transition-text" id="modeTransitionText">MODE CHANGE</div>
+<div class="mode-transition-sub" id="modeTransitionSub">NOVA SYSTEM LINK</div>
 </div>
 
 <main class="home">
@@ -1828,12 +1922,19 @@ const bootScreen = document.querySelector(".boot-screen");
 let bootStarted = false;
 
 const LOCAL_SERVER = "http://192.168.0.117:3000";
-let novaMode = "web";
+const WEB_SERVER = "https://ruriteng-art.github.io/nova/";
 
 const NOVA_ICON_LOCAL = "ICON_red.png";
 const NOVA_ICON_WEB = "icon.png";
 const NOVA_IMAGE_LOCAL = "./nova_normal.png";
 const NOVA_IMAGE_WEB = "./nova_dot_small.png";
+
+function isLocalPage(){
+const host = location.hostname;
+return host === "192.168.0.117" || host === "localhost" || host === "127.0.0.1";
+}
+
+let novaMode = isLocalPage() ? "local" : "web";
 
 function apiUrl(path){
 return `${LOCAL_SERVER}${path}`;
@@ -1863,121 +1964,83 @@ novaButton.classList.toggle("web-mode", novaMode !== "local");
 
 }
 
-async function fetchWithTimeout(url,options={},timeout=900){
+function applyNovaMode(){
 
-const controller = new AbortController();
-const timer = setTimeout(() => controller.abort(),timeout);
-
-try{
-
-const res =
-await fetch(url,{
-...options,
-signal:controller.signal,
-cache:"no-store"
-});
-
-clearTimeout(timer);
-return res;
-
-}catch(e){
-
-clearTimeout(timer);
-throw e;
-
-}
-
-}
-
-async function canReachLocal(){
-
-try{
-
-const res =
-await fetchWithTimeout(apiUrl("/reply"),{},900);
-
-return res.ok;
-
-}catch(e){
-
-return false;
-
-}
-
-}
-
-async function detectNovaMode(){
-
-const ok =
-await canReachLocal();
-
-novaMode =
-ok ? "local" : "web";
+novaMode = isLocalPage() ? "local" : "web";
 
 updateModeBadge();
 
+if(novaMode === "local"){
+setNovaImage(NOVA_IMAGE_LOCAL);
+}else{
+setNovaImage(NOVA_IMAGE_WEB);
 }
 
-async function toggleNovaMode(){
+}
+
+function showModeTransition(target){
+
+const overlay = document.getElementById("modeTransition");
+const logo = document.getElementById("modeTransitionLogo");
+const text = document.getElementById("modeTransitionText");
+const sub = document.getElementById("modeTransitionSub");
+
+if(!overlay){
+return;
+}
+
+overlay.classList.remove("local","web");
+overlay.classList.add(target === "local" ? "local" : "web");
+
+if(logo){
+logo.src = target === "local" ? NOVA_ICON_LOCAL : NOVA_ICON_WEB;
+}
+
+if(text){
+text.textContent = target === "local" ? "LOCAL CONNECT" : "SAFE MODE";
+}
+
+if(sub){
+sub.textContent = target === "local" ? "FULL POWER LINK" : "WEB SAFE SYSTEM";
+}
+
+overlay.classList.add("show");
+
+}
+
+function toggleNovaMode(){
 
 playSound("uiSound");
 
 if(novaMode === "local"){
 
-novaMode = "web";
-waitingReply = false;
-updateModeBadge();
-
-setNovaImage(NOVA_IMAGE_WEB);
+showModeTransition("web");
 
 setNovaState(
 "normal",
-"セーフモードや🙄"
+"セーフモードへ移行するで🙄"
 );
+
+setTimeout(() => {
+location.href = WEB_SERVER;
+},720);
 
 return;
 
 }
 
-const ok =
-await canReachLocal();
-
-if(ok){
-
-novaMode = "local";
-updateModeBadge();
-
-setNovaImage(NOVA_IMAGE_LOCAL);
+showModeTransition("local");
 
 setNovaState(
-"happy",
-"LOCAL同期完了や😌"
+"normal",
+"LOCALへ接続するで😌"
 );
 
-initializeReplyCache();
-
-}else{
-
-novaMode = "web";
-waitingReply = false;
-updateModeBadge();
-
-setNovaImage(NOVA_IMAGE_WEB);
-
-setNovaState(
-"confused",
-"家のPCが見つからん🙄"
-);
+setTimeout(() => {
+location.href = LOCAL_SERVER;
+},720);
 
 }
-
-}
-
-detectNovaMode().then(() => {
-if(novaMode !== "local"){
-setNovaImage(NOVA_IMAGE_WEB);
-}
-});
 
 
 function playSound(id){
@@ -2571,6 +2634,8 @@ image.classList.remove("switching");
 }
 
 }
+
+applyNovaMode();
 
 function getTimeBucket(){
 
