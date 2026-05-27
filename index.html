@@ -1,0 +1,2959 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+<title>Nova OS</title>
+
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.png">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#06152f">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+}
+
+body{
+color:white;
+min-height:100vh;
+overflow-x:hidden;
+
+background:
+radial-gradient(circle at 82% 0%,rgba(0,220,255,.38) 0%,transparent 32%),
+radial-gradient(circle at 10% 18%,rgba(160,90,255,.26) 0%,transparent 36%),
+linear-gradient(180deg,#071a38 0%,#020814 100%);
+
+animation:bgGlow 8s ease-in-out infinite alternate;
+}
+
+@keyframes bgGlow{
+
+from{
+filter:saturate(1) brightness(1);
+}
+
+to{
+filter:saturate(1.18) brightness(1.08);
+}
+
+}
+
+/* 起動 */
+
+.boot-screen{
+
+position:fixed;
+inset:0;
+z-index:9999;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:
+radial-gradient(circle at center,rgba(0,220,255,.18) 0%,transparent 34%),
+radial-gradient(circle,#0b2b55 0%,#020814 100%);
+
+transition:opacity .9s ease;
+
+}
+
+
+.boot-screen:not(.boot-started) .boot-logo,
+.boot-screen:not(.boot-started) .boot-dot-small,
+.boot-screen:not(.boot-started) .boot-dot-big,
+.boot-screen:not(.boot-started) .boot-text,
+.boot-screen:not(.boot-started) .boot-sub{
+animation:none;
+opacity:0;
+}
+
+.boot-screen:not(.boot-started) .boot-logo{
+opacity:.92;
+transform:scale(.92);
+filter:
+drop-shadow(0 0 20px rgba(255,255,255,.46))
+drop-shadow(0 0 42px rgba(0,220,255,.55));
+animation:idleBootLogo 3.2s ease-in-out infinite;
+}
+
+.boot-prompt{
+position:absolute;
+margin-top:270px;
+
+padding:9px 18px;
+
+border-radius:999px;
+
+border:
+1px solid rgba(180,245,255,.55);
+
+background:
+linear-gradient(
+90deg,
+rgba(255,255,255,.10),
+rgba(0,220,255,.12),
+rgba(255,255,255,.08)
+);
+
+font-family:"Courier New",monospace;
+font-size:13px;
+font-weight:900;
+letter-spacing:.22em;
+
+color:#dffbff;
+
+text-shadow:
+0 0 8px rgba(255,255,255,.9),
+0 0 18px rgba(0,220,255,.9);
+
+box-shadow:
+0 0 22px rgba(0,220,255,.22),
+inset 0 1px 0 rgba(255,255,255,.20);
+
+animation:bootPromptPulse 1.8s ease-in-out infinite;
+transition:none;
+}
+
+.boot-prompt-sub{
+position:absolute;
+margin-top:322px;
+
+font-family:"Courier New",monospace;
+font-size:10px;
+font-weight:800;
+letter-spacing:.18em;
+
+color:rgba(185,245,255,.78);
+
+text-shadow:
+0 0 10px rgba(0,220,255,.55);
+
+animation:bootPromptSub 2.4s ease-in-out infinite;
+transition:none;
+}
+
+.boot-screen.boot-started .boot-prompt,
+.boot-screen.boot-started .boot-prompt-sub{
+opacity:0;
+visibility:hidden;
+transform:translateY(-6px);
+pointer-events:none;
+}
+
+@keyframes idleBootLogo{
+0%{
+opacity:.76;
+transform:scale(.88) rotate(-2deg);
+}
+50%{
+opacity:1;
+transform:scale(.94) rotate(2deg);
+}
+100%{
+opacity:.76;
+transform:scale(.88) rotate(-2deg);
+}
+}
+
+@keyframes bootPromptPulse{
+0%{
+opacity:.64;
+box-shadow:
+0 0 14px rgba(0,220,255,.16),
+inset 0 1px 0 rgba(255,255,255,.18);
+}
+50%{
+opacity:1;
+box-shadow:
+0 0 30px rgba(0,220,255,.46),
+0 0 58px rgba(255,255,255,.16),
+inset 0 1px 0 rgba(255,255,255,.28);
+}
+100%{
+opacity:.64;
+box-shadow:
+0 0 14px rgba(0,220,255,.16),
+inset 0 1px 0 rgba(255,255,255,.18);
+}
+}
+
+@keyframes bootPromptSub{
+0%{opacity:.42;}
+50%{opacity:.86;}
+100%{opacity:.42;}
+}
+
+.boot-screen.hide{
+opacity:0;
+pointer-events:none;
+}
+
+.boot-logo,
+.boot-dot-small,
+.boot-dot-big{
+
+position:absolute;
+opacity:0;
+object-fit:contain;
+
+filter:
+drop-shadow(0 0 28px rgba(0,220,255,.55));
+
+}
+
+.boot-logo{
+width:230px;
+animation:logoPhase 1.55s cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+.boot-dot-small{
+width:120px;
+animation:dotSmallPhase 1.15s ease forwards;
+animation-delay:1.45s;
+}
+
+.boot-dot-big{
+width:230px;
+animation:dotBigPhase 1.25s ease forwards;
+animation-delay:2.45s;
+}
+
+.boot-text{
+
+position:absolute;
+margin-top:260px;
+
+font-size:24px;
+font-weight:800;
+letter-spacing:6px;
+
+color:#7de7ff;
+
+text-shadow:
+0 0 12px rgba(0,220,255,.8);
+
+opacity:0;
+
+animation:bootTextPhase 3.6s ease forwards;
+
+}
+
+.boot-sub{
+
+position:absolute;
+margin-top:322px;
+
+font-size:12px;
+letter-spacing:3px;
+
+color:rgba(180,245,255,.85);
+
+opacity:0;
+
+animation:bootSubPhase 3.6s ease forwards;
+
+}
+
+@keyframes logoPhase{
+
+0%{
+opacity:0;
+transform:scale(.60) rotate(-45deg);
+}
+
+22%{
+opacity:1;
+transform:scale(1.06) rotate(420deg);
+}
+
+70%{
+opacity:1;
+transform:scale(1.10) rotate(900deg);
+}
+
+100%{
+opacity:0;
+transform:scale(.82) rotate(1125deg);
+}
+
+}
+
+@keyframes dotSmallPhase{
+
+0%{
+opacity:0;
+transform:scale(.45) translateY(20px);
+}
+
+30%{
+opacity:1;
+transform:scale(1.05) translateY(0);
+}
+
+70%{
+opacity:1;
+transform:scale(1) translateY(-4px);
+}
+
+100%{
+opacity:0;
+transform:scale(1.35) translateY(-8px);
+}
+
+}
+
+@keyframes dotBigPhase{
+
+0%{
+opacity:0;
+transform:scale(.65) translateY(18px);
+}
+
+28%{
+opacity:1;
+transform:scale(1.04) translateY(0);
+}
+
+72%{
+opacity:1;
+transform:scale(1) translateY(-5px);
+}
+
+100%{
+opacity:0;
+transform:scale(1.18) translateY(-10px);
+}
+
+}
+
+@keyframes bootTextPhase{
+
+0%{
+opacity:0;
+transform:translateY(8px);
+}
+
+20%{
+opacity:1;
+transform:translateY(0);
+}
+
+78%{
+opacity:1;
+}
+
+100%{
+opacity:0;
+transform:translateY(-6px);
+}
+
+}
+
+@keyframes bootSubPhase{
+
+0%,18%{
+opacity:0;
+}
+
+34%{
+opacity:.9;
+}
+
+78%{
+opacity:.9;
+}
+
+100%{
+opacity:0;
+}
+
+}
+
+.home{
+
+min-height:100vh;
+
+padding:8px;
+padding-top:calc(8px + env(safe-area-inset-top));
+padding-bottom:108px;
+
+display:flex;
+flex-direction:column;
+
+gap:6px;
+
+}
+
+.panel{
+
+position:relative;
+overflow:hidden;
+
+border-radius:24px;
+
+padding:11px;
+
+background:
+linear-gradient(
+145deg,
+rgba(255,255,255,.16),
+rgba(255,255,255,.05)
+);
+
+border:
+1px solid rgba(160,235,255,.32);
+
+box-shadow:
+0 18px 40px rgba(0,0,0,.28),
+inset 0 1px 0 rgba(255,255,255,.18),
+inset 0 0 28px rgba(255,255,255,.04);
+
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+
+}
+
+/* 時計 */
+
+.top-panel{
+
+display:grid;
+grid-template-columns:1fr auto auto;
+
+gap:10px;
+align-items:center;
+
+min-height:86px;
+
+}
+
+.clock{
+
+font-size:46px;
+font-weight:900;
+
+line-height:.9;
+letter-spacing:-1px;
+
+text-shadow:
+0 0 16px rgba(126,231,255,.7),
+0 0 42px rgba(0,220,255,.38);
+
+}
+
+.date{
+
+margin-top:4px;
+
+color:#79d8ff;
+
+font-size:15px;
+font-weight:800;
+
+line-height:1;
+
+white-space:nowrap;
+
+}
+
+
+.clock-area{
+
+cursor:pointer;
+border-radius:18px;
+padding:4px 6px;
+margin:-4px -6px;
+transition:background .22s ease, box-shadow .22s ease;
+
+}
+
+.clock-area:active{
+background:rgba(255,255,255,.08);
+box-shadow:0 0 18px rgba(0,220,255,.22);
+}
+
+.timer-controls{
+width:80px;
+min-height:74px;
+
+display:none;
+flex-direction:row;
+gap:6px;
+justify-content:center;
+align-items:center;
+}
+
+.timer-controls.show{
+display:flex;
+}
+
+.timer-mini-btn{
+width:36px;
+height:36px;
+
+border:none;
+border-radius:12px;
+
+background:
+linear-gradient(
+135deg,
+rgba(0,220,255,.32),
+rgba(160,90,255,.28)
+);
+
+color:white;
+font-family:"Courier New",monospace;
+font-size:8px;
+font-weight:900;
+letter-spacing:.02em;
+
+box-shadow:
+0 0 16px rgba(0,220,255,.22),
+inset 0 1px 0 rgba(255,255,255,.16);
+}
+
+.timer-mini-btn.resume{
+display:none;
+}
+
+.timer-controls.paused .timer-mini-btn.resume{
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.timer-controls.paused{
+width:80px;
+}
+
+.timer-modal{
+position:fixed;
+inset:0;
+z-index:9000;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:
+radial-gradient(circle at center,rgba(0,220,255,.14),transparent 44%),
+rgba(2,8,20,.68);
+
+backdrop-filter:blur(14px);
+-webkit-backdrop-filter:blur(14px);
+
+opacity:0;
+pointer-events:none;
+transition:opacity .25s ease;
+}
+
+.timer-modal.show{
+opacity:1;
+pointer-events:auto;
+}
+
+.timer-card{
+width:min(330px,calc(100vw - 34px));
+
+border-radius:28px;
+padding:18px;
+
+background:
+linear-gradient(
+145deg,
+rgba(255,255,255,.18),
+rgba(255,255,255,.06)
+);
+
+border:1px solid rgba(160,235,255,.38);
+
+box-shadow:
+0 24px 60px rgba(0,0,0,.42),
+0 0 44px rgba(0,220,255,.18),
+inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+.timer-title{
+font-family:"Courier New",monospace;
+font-size:13px;
+font-weight:900;
+letter-spacing:.18em;
+color:#8df6ff;
+text-shadow:0 0 12px rgba(0,240,255,.85);
+}
+
+.timer-input{
+width:100%;
+margin-top:16px;
+padding:12px 14px;
+
+border:none;
+outline:none;
+border-radius:20px;
+
+background:rgba(255,255,255,.09);
+color:white;
+
+font-family:"Courier New",monospace;
+font-size:48px;
+font-weight:900;
+text-align:center;
+letter-spacing:.06em;
+
+box-shadow:
+inset 0 0 18px rgba(0,220,255,.12);
+}
+
+.timer-input::placeholder{
+color:rgba(255,255,255,.35);
+}
+
+.timer-actions{
+margin-top:14px;
+display:flex;
+gap:10px;
+}
+
+.timer-action-btn{
+flex:1;
+height:44px;
+
+border:none;
+border-radius:16px;
+
+background:
+linear-gradient(
+135deg,
+rgba(0,220,255,.34),
+rgba(160,90,255,.28)
+);
+
+color:white;
+font-size:13px;
+font-weight:900;
+letter-spacing:.08em;
+
+box-shadow:
+0 0 18px rgba(0,220,255,.24),
+inset 0 1px 0 rgba(255,255,255,.16);
+}
+
+.timer-action-btn.cancel{
+background:rgba(255,255,255,.10);
+}
+
+.timer-finish{
+position:fixed;
+inset:0;
+z-index:9100;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:18px;
+
+background:
+radial-gradient(circle at center,rgba(0,220,255,.22),transparent 42%),
+rgba(2,8,20,.78);
+
+backdrop-filter:blur(16px);
+-webkit-backdrop-filter:blur(16px);
+
+opacity:0;
+pointer-events:none;
+transition:opacity .22s ease;
+}
+
+.timer-finish.show{
+opacity:1;
+pointer-events:auto;
+}
+
+.timer-finish-text{
+font-family:"Courier New",monospace;
+font-size:22px;
+font-weight:900;
+letter-spacing:.16em;
+color:#dffbff;
+text-shadow:
+0 0 12px rgba(255,255,255,.9),
+0 0 26px rgba(0,220,255,.9);
+}
+
+.timer-stop-big{
+width:178px;
+height:58px;
+
+border:none;
+border-radius:22px;
+
+background:
+linear-gradient(
+135deg,
+rgba(0,220,255,.42),
+rgba(160,90,255,.34)
+);
+
+color:white;
+font-family:"Courier New",monospace;
+font-size:16px;
+font-weight:900;
+letter-spacing:.14em;
+
+box-shadow:
+0 0 30px rgba(0,220,255,.34),
+inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+
+
+.mode-pill{
+width:58px;
+height:30px;
+
+border:none;
+border-radius:999px;
+
+background:
+linear-gradient(
+135deg,
+rgba(255,255,255,.12),
+rgba(0,220,255,.14)
+);
+
+border:
+1px solid rgba(160,235,255,.28);
+
+color:#dffbff;
+
+font-family:"Courier New",monospace;
+font-size:9px;
+font-weight:900;
+letter-spacing:.08em;
+
+text-shadow:
+0 0 8px rgba(0,240,255,.75);
+
+box-shadow:
+0 0 16px rgba(0,220,255,.18),
+inset 0 1px 0 rgba(255,255,255,.16);
+
+transition:
+transform .18s ease,
+box-shadow .22s ease,
+background .22s ease;
+}
+
+.mode-pill:active{
+transform:scale(.94);
+}
+
+.mode-pill.local{
+background:
+linear-gradient(
+135deg,
+rgba(0,220,255,.34),
+rgba(80,180,255,.18)
+);
+box-shadow:
+0 0 20px rgba(0,220,255,.34),
+inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+.mode-pill.web{
+background:
+linear-gradient(
+135deg,
+rgba(160,90,255,.26),
+rgba(255,255,255,.08)
+);
+box-shadow:
+0 0 18px rgba(160,90,255,.24),
+inset 0 1px 0 rgba(255,255,255,.14);
+}
+
+.mode-pill.checking{
+opacity:.62;
+}
+
+/* 天気 */
+
+.weather-mini{
+
+width:100px;
+min-height:74px;
+
+border-radius:20px;
+
+padding:8px;
+
+display:flex;
+flex-direction:column;
+
+justify-content:center;
+align-items:center;
+
+background:
+linear-gradient(
+145deg,
+rgba(255,255,255,.18),
+rgba(255,255,255,.06)
+);
+
+border:
+1px solid rgba(255,255,255,.16);
+
+box-shadow:
+inset 0 1px 0 rgba(255,255,255,.18),
+0 8px 24px rgba(0,0,0,.18);
+
+}
+
+.weather-title{
+font-size:11px;
+opacity:.82;
+}
+
+.weather-temp{
+
+margin-top:1px;
+
+font-size:24px;
+font-weight:900;
+
+line-height:1;
+
+}
+
+.weather-desc{
+
+margin-top:3px;
+
+max-width:80px;
+
+font-size:10px;
+
+opacity:.78;
+
+text-align:center;
+
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+
+}
+
+/* Search */
+
+.search-panel{
+
+padding:8px 10px;
+
+}
+
+.search-box{
+
+position:relative;
+
+display:flex;
+align-items:center;
+
+gap:8px;
+
+overflow:hidden;
+
+}
+
+.search-box::before{
+
+content:"";
+
+position:absolute;
+top:0;
+bottom:0;
+left:-120px;
+
+width:120px;
+
+background:
+linear-gradient(
+90deg,
+transparent,
+rgba(120,240,255,.18),
+transparent
+);
+
+transform:skewX(-22deg);
+
+animation:searchScan 4s linear infinite;
+
+pointer-events:none;
+
+}
+
+@keyframes searchScan{
+
+0%{
+left:-120px;
+}
+
+100%{
+left:120%;
+}
+
+}
+
+.search-label{
+
+flex:0 0 auto;
+
+font-family:"Courier New",monospace;
+
+font-size:11px;
+font-weight:900;
+
+letter-spacing:.12em;
+
+color:#8df6ff;
+
+text-shadow:
+0 0 10px rgba(0,240,255,.8);
+
+}
+
+.search-input{
+
+flex:1;
+min-width:0;
+
+border:none;
+outline:none;
+
+background:rgba(255,255,255,.08);
+
+color:white;
+
+padding:9px 10px;
+
+border-radius:14px;
+
+font-size:16px;
+font-weight:700;
+
+box-shadow:
+inset 0 0 12px rgba(0,220,255,.12);
+
+}
+
+.search-input::placeholder{
+
+color:rgba(255,255,255,.55);
+
+}
+
+.search-button{
+
+flex:0 0 auto;
+
+width:38px;
+height:38px;
+
+border:none;
+
+border-radius:14px;
+
+background:
+linear-gradient(
+135deg,
+rgba(0,220,255,.34),
+rgba(160,90,255,.24)
+);
+
+color:white;
+
+font-size:17px;
+
+box-shadow:
+0 0 18px rgba(0,220,255,.22);
+
+}
+
+.nova-panel{
+
+min-height:188px;
+
+display:flex;
+align-items:flex-end;
+justify-content:center;
+
+padding-bottom:0;
+
+}
+
+/* HUD */
+
+.nova-panel::before{
+
+content:"";
+
+position:absolute;
+inset:0;
+
+pointer-events:none;
+
+background:
+
+radial-gradient(
+circle at center,
+rgba(0,220,255,.08) 0%,
+transparent 58%
+),
+
+repeating-linear-gradient(
+to bottom,
+rgba(120,220,255,.075) 0px,
+rgba(120,220,255,.075) 1px,
+transparent 1px,
+transparent 24px
+);
+
+opacity:.72;
+
+animation:
+hudFloat 8s ease-in-out infinite alternate;
+
+}
+
+.nova-panel::after{
+
+content:"";
+
+position:absolute;
+
+width:240px;
+height:240px;
+
+left:50%;
+top:50%;
+
+transform:translate(-50%,-52%);
+
+border-radius:50%;
+
+border:
+1px solid rgba(120,240,255,.12);
+
+box-shadow:
+0 0 24px rgba(0,220,255,.10),
+inset 0 0 24px rgba(0,220,255,.05);
+
+pointer-events:none;
+
+animation:
+hudRotate 28s linear infinite,
+hudPulse 6s ease-in-out infinite;
+
+}
+
+.app-emoji{
+font-size:25px;
+line-height:1;
+}@keyframes hudRotate{
+
+from{
+transform:translate(-50%,-52%) rotate(0deg);
+}
+
+to{
+transform:translate(-50%,-52%) rotate(360deg);
+}
+
+}
+
+@keyframes hudPulse{
+
+0%{
+opacity:.22;
+}
+
+50%{
+opacity:.42;
+}
+
+100%{
+opacity:.22;
+}
+
+}
+
+@keyframes hudFloat{
+
+from{
+opacity:.35;
+transform:translateY(0px);
+}
+
+to{
+opacity:.62;
+transform:translateY(-2px);
+}
+
+}
+
+.nova{
+
+position:relative;
+z-index:2;
+
+width:100%;
+max-width:238px;
+
+margin-bottom:-46px;
+
+object-fit:contain;
+
+filter:
+drop-shadow(0 0 26px rgba(0,180,255,.36));
+
+animation:
+float 5s ease-in-out infinite,
+breath 4.2s ease-in-out infinite;
+
+transition:
+opacity .55s ease,
+transform .55s ease;
+
+}
+
+.nova.switching{
+opacity:.35;
+transform:translateY(8px) scale(.98);
+}
+
+@keyframes float{
+
+0%{
+translate:0 0;
+}
+
+50%{
+translate:0 -7px;
+}
+
+100%{
+translate:0 0;
+}
+
+}
+
+@keyframes breath{
+
+0%{
+scale:1;
+}
+
+50%{
+scale:1.018;
+}
+
+100%{
+scale:1;
+}
+
+}
+
+.bubble{
+
+position:absolute;
+
+left:12px;
+right:12px;
+bottom:8px;
+
+z-index:3;
+
+min-height:34px;
+
+padding:8px 14px;
+
+display:flex;
+align-items:center;
+
+border-radius:14px;
+
+background:
+linear-gradient(
+90deg,
+rgba(90,45,180,.58),
+rgba(45,120,220,.34)
+);
+
+border:
+1px solid rgba(210,180,255,.42);
+
+box-shadow:
+0 0 18px rgba(155,95,255,.26),
+inset 0 1px 0 rgba(255,255,255,.16),
+inset 0 0 18px rgba(170,120,255,.10);
+
+color:#ffffff;
+
+font-family:"Courier New",monospace;
+
+font-size:13px;
+font-weight:900;
+
+letter-spacing:.04em;
+
+text-shadow:
+0 0 6px rgba(255,255,255,.85),
+0 0 14px rgba(120,230,255,.55);
+
+opacity:1;
+
+transition:
+opacity .8s ease,
+transform .8s ease;
+
+}
+
+.bubble::before{
+
+content:">";
+
+margin-right:8px;
+
+color:#8df6ff;
+
+text-shadow:
+0 0 10px rgba(0,240,255,.9);
+
+}
+
+.bubble.fade{
+
+opacity:.18;
+
+transform:translateY(5px);
+
+}
+
+
+.bubble-text{
+flex:1;
+min-width:0;
+overflow:hidden;
+white-space:nowrap;
+text-overflow:ellipsis;
+}
+
+.bubble-open{
+margin-left:8px;
+
+width:30px;
+height:30px;
+
+border:none;
+border-radius:11px;
+
+background:
+linear-gradient(
+135deg,
+rgba(0,220,255,.34),
+rgba(160,90,255,.28)
+);
+
+color:white;
+
+font-size:15px;
+font-weight:900;
+
+box-shadow:
+0 0 14px rgba(0,220,255,.28);
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+flex:0 0 auto;
+}
+
+.nova-panel.reader-open .nova{
+opacity:0;
+transform:translateY(14px) scale(.96);
+pointer-events:none;
+}
+
+.reader-panel{
+position:absolute;
+inset:10px;
+
+z-index:10;
+
+border-radius:20px;
+
+background:
+linear-gradient(
+145deg,
+rgba(36,16,86,.86),
+rgba(14,38,92,.72)
+);
+
+border:
+1px solid rgba(180,150,255,.42);
+
+box-shadow:
+0 0 28px rgba(120,80,255,.34),
+inset 0 1px 0 rgba(255,255,255,.14),
+inset 0 0 22px rgba(0,220,255,.10);
+
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+
+opacity:0;
+transform:translateY(10px) scale(.98);
+pointer-events:none;
+
+transition:
+opacity .32s ease,
+transform .32s ease;
+
+overflow:hidden;
+}
+
+.reader-panel.show{
+opacity:1;
+transform:translateY(0) scale(1);
+pointer-events:auto;
+}
+
+.reader-panel::before{
+content:"";
+position:absolute;
+inset:0;
+
+background:
+repeating-linear-gradient(
+to bottom,
+rgba(255,255,255,.07) 0px,
+rgba(255,255,255,.07) 1px,
+transparent 1px,
+transparent 5px
+);
+
+opacity:.13;
+pointer-events:none;
+}
+
+.reader-head{
+position:relative;
+z-index:2;
+
+height:46px;
+
+display:flex;
+align-items:center;
+
+padding:8px 10px;
+
+border-bottom:
+1px solid rgba(255,255,255,.12);
+}
+
+.reader-dot{
+width:34px;
+height:34px;
+
+object-fit:contain;
+
+filter:
+drop-shadow(0 0 12px rgba(0,220,255,.55));
+}
+
+.reader-title{
+margin-left:9px;
+
+font-family:"Courier New",monospace;
+
+font-size:12px;
+font-weight:900;
+letter-spacing:.14em;
+
+color:#8df6ff;
+
+text-shadow:
+0 0 10px rgba(0,240,255,.8);
+}
+
+.reader-close{
+margin-left:auto;
+
+width:32px;
+height:32px;
+
+border:none;
+border-radius:11px;
+
+background:
+rgba(255,255,255,.10);
+
+color:white;
+
+font-size:18px;
+font-weight:900;
+
+box-shadow:
+inset 0 1px 0 rgba(255,255,255,.14);
+}
+
+.reader-body{
+position:relative;
+z-index:2;
+
+height:calc(100% - 46px);
+
+padding:13px 14px 16px;
+
+overflow-y:auto;
+
+font-family:"Courier New",monospace;
+
+font-size:14px;
+font-weight:800;
+line-height:1.7;
+
+color:#ffffff;
+
+text-shadow:
+0 0 6px rgba(255,255,255,.55),
+0 0 14px rgba(120,230,255,.42);
+
+white-space:pre-wrap;
+}
+
+.reader-body::-webkit-scrollbar{
+width:0;
+}
+
+.dock-wrap{
+
+position:fixed;
+
+left:10px;
+right:10px;
+
+bottom:calc(10px + env(safe-area-inset-bottom));
+
+z-index:5000;
+
+padding:8px;
+
+border-radius:26px;
+
+background:
+linear-gradient(
+145deg,
+rgba(255,255,255,.16),
+rgba(255,255,255,.055)
+);
+
+border:
+1px solid rgba(255,255,255,.16);
+
+box-shadow:
+inset 0 1px 0 rgba(255,255,255,.18),
+0 16px 40px rgba(0,0,0,.32);
+
+backdrop-filter:blur(22px);
+-webkit-backdrop-filter:blur(22px);
+
+overflow-x:auto;
+overflow-y:hidden;
+
+-webkit-overflow-scrolling:touch;
+
+scroll-behavior:smooth;
+
+scrollbar-width:none;
+
+}
+
+.dock-wrap::-webkit-scrollbar{
+display:none;
+}
+
+.dock-grid{
+
+display:flex;
+
+gap:10px;
+
+width:max-content;
+
+}
+
+.app-icon{
+
+flex:0 0 auto;
+border:none;
+cursor:pointer;
+
+width:64px;
+height:64px;
+
+border-radius:21px;
+
+display:flex;
+flex-direction:column;
+
+align-items:center;
+justify-content:center;
+
+gap:3px;
+
+text-decoration:none;
+
+color:white;
+
+background:
+linear-gradient(
+145deg,
+rgba(255,255,255,.16),
+rgba(255,255,255,.055)
+);
+
+border:
+1px solid rgba(255,255,255,.14);
+
+box-shadow:
+inset 0 1px 0 rgba(255,255,255,.14),
+0 8px 20px rgba(0,0,0,.22);
+
+transition:.22s;
+
+}
+
+.app-icon:active{
+
+transform:scale(.94);
+
+box-shadow:
+0 0 22px rgba(0,220,255,.45);
+
+}
+
+.app-img{
+
+width:32px;
+height:32px;
+
+object-fit:contain;
+
+border-radius:9px;
+
+}
+
+.app-label{
+
+font-size:9px;
+font-weight:800;
+
+opacity:.92;
+
+}
+
+.nova-app{
+
+background:
+linear-gradient(
+135deg,
+rgba(0,220,255,.42),
+rgba(160,90,255,.30)
+);
+
+box-shadow:
+0 0 20px rgba(0,220,255,.40),
+0 0 48px rgba(0,220,255,.22),
+inset 0 1px 0 rgba(255,255,255,.16);
+
+animation:novaPulse 3s ease-in-out infinite;
+
+}
+
+
+.nova-app.local-mode{
+background:
+linear-gradient(
+135deg,
+rgba(255,60,40,.42),
+rgba(120,0,0,.28)
+);
+box-shadow:
+0 0 20px rgba(255,60,40,.48),
+0 0 48px rgba(255,40,20,.28),
+inset 0 1px 0 rgba(255,255,255,.16);
+}
+
+.nova-app.web-mode{
+background:
+linear-gradient(
+135deg,
+rgba(0,220,255,.42),
+rgba(160,90,255,.30)
+);
+}
+
+@keyframes novaPulse{
+
+0%{
+box-shadow:
+0 0 18px rgba(0,220,255,.28),
+0 0 36px rgba(0,220,255,.14);
+}
+
+50%{
+box-shadow:
+0 0 30px rgba(0,220,255,.58),
+0 0 60px rgba(0,220,255,.30);
+}
+
+100%{
+box-shadow:
+0 0 18px rgba(0,220,255,.28),
+0 0 36px rgba(0,220,255,.14);
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="boot-screen" id="bootScreen">
+
+<img src="ICON_start.png" class="boot-logo">
+<img src="nova_dot_small.png" class="boot-dot-small">
+<img src="nova_dot_big.png" class="boot-dot-big">
+
+<div class="boot-text">NOVA OS</div>
+<div class="boot-sub">PERSONAL AI INTERFACE</div>
+
+<div class="boot-prompt">TAP TO BOOT</div>
+<div class="boot-prompt-sub">NOVA SYSTEM STANDBY</div>
+
+<audio id="bootSound" src="nova_boot.wav" preload="auto"></audio>
+<audio id="uiSound" src="nova_ui.wav" preload="auto"></audio>
+<audio id="readySound" src="nova_ready.wav" preload="auto"></audio>
+<audio id="errorSound" src="nova_error.wav" preload="auto"></audio>
+<audio id="timerSound" src="nova_timer.wav" preload="auto" loop></audio>
+
+</div>
+
+<div class="timer-modal" id="timerModal">
+<div class="timer-card">
+<div class="timer-title">KITCHEN TIMER</div>
+<input
+class="timer-input"
+id="timerInput"
+type="text"
+inputmode="numeric"
+maxlength="5"
+placeholder="00:00"
+autocomplete="off">
+<div class="timer-actions">
+<button class="timer-action-btn" type="button" onclick="startTimerFromInput()">START</button>
+<button class="timer-action-btn cancel" type="button" onclick="closeTimerSetup()">CANCEL</button>
+</div>
+</div>
+</div>
+
+<div class="timer-finish" id="timerFinish">
+<div class="timer-finish-text">TIMER COMPLETE</div>
+<button class="timer-stop-big" type="button" onclick="resetTimer()">STOP</button>
+</div>
+
+<main class="home">
+
+<section class="panel top-panel">
+
+<div class="clock-area" id="clockArea" onclick="openTimerSetup()">
+<div class="clock" id="clock">00:00</div>
+<div class="date" id="date">2026/5/26（水）</div>
+</div>
+
+<div class="timer-controls" id="timerControls">
+<button class="timer-mini-btn" id="timerStopBtn" type="button" onclick="pauseOrResetTimer()">STOP</button>
+<button class="timer-mini-btn resume" id="timerRestartBtn" type="button" onclick="resumeTimer()">RESTART</button>
+</div>
+
+
+<div class="weather-mini">
+
+<div class="weather-title">天気</div>
+
+<div class="weather-temp" id="weatherTemp">
+--
+</div>
+
+<div class="weather-desc" id="weatherDesc">
+取得中
+</div>
+
+</div>
+
+</section>
+
+<section class="panel search-panel">
+
+<form class="search-box" id="searchForm">
+
+<div class="search-label">
+NOVA SEARCH
+</div>
+
+<input
+class="search-input"
+id="searchInput"
+type="text"
+placeholder="NOVAに聞く..."
+autocomplete="off">
+
+<button class="search-button" type="submit">
+🔍
+</button>
+
+</form>
+
+</section>
+
+<section class="panel nova-panel">
+
+<img
+class="nova"
+id="novaImage"
+src="./nova_normal.png">
+
+<div class="bubble" id="novaBubble">
+<span class="bubble-text" id="novaBubbleText">ワイはまだまだ元気や🙄</span>
+<button class="bubble-open" type="button" onclick="openReader()">💬</button>
+</div>
+
+<div class="reader-panel" id="readerPanel">
+
+<div class="reader-head">
+<img class="reader-dot" src="nova_dot_small.png">
+<div class="reader-title">NOVA MESSAGE</div>
+<button class="reader-close" type="button" onclick="closeReader()">×</button>
+</div>
+
+<div class="reader-body" id="readerBody">
+ワイはまだまだ元気や🙄
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+<section class="dock-wrap">
+
+<div class="dock-grid">
+
+<button class="app-icon nova-app" id="novaModeButton" type="button" onclick="toggleNovaMode()">
+<img class="app-img" id="novaDockIcon" src="icon.png">
+<div class="app-label">Nova</div>
+</button>
+
+<a class="app-icon" href="https://x.com/hoshiyaAYATO" target="_blank">
+<img class="app-img" src="X.png">
+<div class="app-label">X</div>
+</a>
+
+<a class="app-icon" href="https://www.youtube.com/" target="_blank">
+<img class="app-img" src="Youtube.png">
+<div class="app-label">YouTube</div>
+</a>
+
+<a class="app-icon" href="https://studio.youtube.com/" target="_blank">
+<img class="app-img" src="studio.png">
+<div class="app-label">Studio</div>
+</a>
+
+<a class="app-icon" href="https://mail.google.com/" target="_blank">
+<img class="app-img" src="mail.png">
+<div class="app-label">Mail</div>
+</a>
+
+<a class="app-icon" href="https://jp.mercari.com/" target="_blank">
+<img class="app-img" src="merukari.png">
+<div class="app-label">Mercari</div>
+</a>
+
+<a class="app-icon" href="https://www.amazon.co.jp/" target="_blank">
+<div class="app-emoji">📦</div>
+<div class="app-label">Amazon</div>
+</a>
+
+<a class="app-icon" href="https://www.dmm.com/" target="_blank">
+<div class="app-emoji">🟣</div>
+<div class="app-label">DMM</div>
+</a>
+
+<a class="app-icon" href="https://bandai-hobby.net/" target="_blank">
+<div class="app-emoji">🤖</div>
+<div class="app-label">Bandai</div>
+</a>
+
+</div>
+
+</section>
+
+<script>
+
+const bootScreen = document.querySelector(".boot-screen");
+let bootStarted = false;
+
+const LOCAL_SERVER = "http://192.168.0.117:3000";
+let novaMode = "web";
+
+const NOVA_ICON_LOCAL = "ICON_red.png";
+const NOVA_ICON_WEB = "icon.png";
+const NOVA_IMAGE_LOCAL = "./nova_normal.png";
+const NOVA_IMAGE_WEB = "./nova_dot_small.png";
+
+function apiUrl(path){
+return `${LOCAL_SERVER}${path}`;
+}
+
+function updateModeBadge(){
+
+const novaDockIcon = document.getElementById("novaDockIcon");
+const searchInput = document.getElementById("searchInput");
+const novaButton = document.getElementById("novaModeButton");
+
+if(novaDockIcon){
+novaDockIcon.src = novaMode === "local" ? NOVA_ICON_LOCAL : NOVA_ICON_WEB;
+}
+
+if(searchInput){
+searchInput.placeholder =
+novaMode === "local"
+? "Novaに聞く…"
+: "Novaセーフモードが検索…";
+}
+
+if(novaButton){
+novaButton.classList.toggle("local-mode", novaMode === "local");
+novaButton.classList.toggle("web-mode", novaMode !== "local");
+}
+
+}
+
+async function fetchWithTimeout(url,options={},timeout=900){
+
+const controller = new AbortController();
+const timer = setTimeout(() => controller.abort(),timeout);
+
+try{
+
+const res =
+await fetch(url,{
+...options,
+signal:controller.signal,
+cache:"no-store"
+});
+
+clearTimeout(timer);
+return res;
+
+}catch(e){
+
+clearTimeout(timer);
+throw e;
+
+}
+
+}
+
+async function canReachLocal(){
+
+try{
+
+const res =
+await fetchWithTimeout(apiUrl("/reply"),{},900);
+
+return res.ok;
+
+}catch(e){
+
+return false;
+
+}
+
+}
+
+async function detectNovaMode(){
+
+const ok =
+await canReachLocal();
+
+novaMode =
+ok ? "local" : "web";
+
+updateModeBadge();
+
+}
+
+async function toggleNovaMode(){
+
+playSound("uiSound");
+
+if(novaMode === "local"){
+
+novaMode = "web";
+waitingReply = false;
+updateModeBadge();
+
+setNovaImage(NOVA_IMAGE_WEB);
+
+setNovaState(
+"normal",
+"セーフモードや🙄"
+);
+
+return;
+
+}
+
+const ok =
+await canReachLocal();
+
+if(ok){
+
+novaMode = "local";
+updateModeBadge();
+
+setNovaImage(NOVA_IMAGE_LOCAL);
+
+setNovaState(
+"happy",
+"LOCAL同期完了や😌"
+);
+
+initializeReplyCache();
+
+}else{
+
+novaMode = "web";
+waitingReply = false;
+updateModeBadge();
+
+setNovaImage(NOVA_IMAGE_WEB);
+
+setNovaState(
+"confused",
+"家のPCが見つからん🙄"
+);
+
+}
+
+}
+
+detectNovaMode().then(() => {
+if(novaMode !== "local"){
+setNovaImage(NOVA_IMAGE_WEB);
+}
+});
+
+
+function playSound(id){
+
+const audio = document.getElementById(id);
+
+if(!audio){
+return;
+}
+
+try{
+audio.currentTime = 0;
+audio.play().catch(()=>{});
+}catch(e){}
+
+}
+
+let novaAudioContext = null;
+let timerBeepLoop = null;
+
+function initNovaAudio(){
+
+try{
+const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+if(AudioContextClass && !novaAudioContext){
+novaAudioContext = new AudioContextClass();
+}
+if(novaAudioContext && novaAudioContext.state === "suspended"){
+novaAudioContext.resume().catch(()=>{});
+}
+}catch(e){}
+
+const sounds = [
+"uiSound",
+"readySound",
+"errorSound",
+"timerSound"
+];
+
+sounds.forEach((id)=>{
+const audio = document.getElementById(id);
+if(!audio){
+return;
+}
+try{
+const oldMuted = audio.muted;
+audio.muted = true;
+audio.currentTime = 0;
+audio.play()
+.then(()=>{
+audio.pause();
+audio.currentTime = 0;
+audio.muted = oldMuted;
+})
+.catch(()=>{
+audio.muted = oldMuted;
+});
+}catch(e){}
+});
+
+}
+
+function beepOnce(){
+
+try{
+if(!novaAudioContext){
+return;
+}
+if(novaAudioContext.state === "suspended"){
+novaAudioContext.resume().catch(()=>{});
+}
+
+const osc = novaAudioContext.createOscillator();
+const gain = novaAudioContext.createGain();
+
+osc.type = "square";
+osc.frequency.setValueAtTime(920,novaAudioContext.currentTime);
+osc.frequency.setValueAtTime(1240,novaAudioContext.currentTime + .09);
+
+gain.gain.setValueAtTime(0.0001,novaAudioContext.currentTime);
+gain.gain.exponentialRampToValueAtTime(0.16,novaAudioContext.currentTime + .018);
+gain.gain.exponentialRampToValueAtTime(0.0001,novaAudioContext.currentTime + .18);
+
+osc.connect(gain);
+gain.connect(novaAudioContext.destination);
+
+osc.start();
+osc.stop(novaAudioContext.currentTime + .2);
+}catch(e){}
+
+}
+
+function startTimerAlarm(){
+
+stopTimerAlarm();
+
+const audio = document.getElementById("timerSound");
+
+if(audio){
+try{
+audio.loop = true;
+audio.currentTime = 0;
+audio.volume = .9;
+audio.play().catch(()=>{});
+}catch(e){}
+}
+
+beepOnce();
+timerBeepLoop = setInterval(beepOnce,850);
+
+}
+
+function stopTimerAlarm(){
+
+if(timerBeepLoop){
+clearInterval(timerBeepLoop);
+timerBeepLoop = null;
+}
+
+const audio = document.getElementById("timerSound");
+
+if(audio){
+try{
+audio.pause();
+audio.currentTime = 0;
+}catch(e){}
+}
+
+}
+
+function startBoot(){
+
+if(bootStarted){
+return;
+}
+
+bootStarted = true;
+
+initNovaAudio();
+
+bootScreen.classList.add("boot-started");
+playSound("bootSound");
+
+setTimeout(() => {
+bootScreen.classList.add("hide");
+}, 4300);
+
+}
+
+bootScreen.addEventListener("pointerdown",startBoot);
+window.addEventListener("keydown",startBoot,{once:true});
+
+let timerActive = false;
+let timerPaused = false;
+let timerEndTime = 0;
+let timerRemainingMs = 0;
+let timerInterval = null;
+
+function updateClock(){
+
+const now = new Date();
+
+const h = String(now.getHours()).padStart(2,"0");
+const m = String(now.getMinutes()).padStart(2,"0");
+
+const days = [
+"日","月","火","水","木","金","土"
+];
+
+document.getElementById("clock").textContent =
+`${h}:${m}`;
+
+document.getElementById("date").textContent =
+`${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}（${days[now.getDay()]}）`;
+
+}
+
+updateClock();
+setInterval(() => {
+if(!timerActive && !timerPaused){
+updateClock();
+}
+},1000);
+
+
+/* ===== Kitchen Timer ===== */
+
+function formatTimer(ms){
+
+const total = Math.max(0,Math.ceil(ms / 1000));
+const minutes = Math.floor(total / 60);
+const seconds = total % 60;
+
+return `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
+
+}
+
+function parseTimerValue(value){
+
+const raw = value.replace(/[^0-9]/g,"").slice(0,4);
+
+if(!raw){
+return 0;
+}
+
+let minutes = 0;
+let seconds = 0;
+
+if(raw.length <= 2){
+seconds = Number(raw);
+}else{
+minutes = Number(raw.slice(0,-2));
+seconds = Number(raw.slice(-2));
+}
+
+minutes = Math.min(99,minutes);
+seconds = Math.min(59,seconds);
+
+return (minutes * 60 + seconds) * 1000;
+
+}
+
+function openTimerSetup(){
+
+if(timerActive || timerPaused){
+return;
+}
+
+playSound("uiSound");
+
+const modal = document.getElementById("timerModal");
+const input = document.getElementById("timerInput");
+
+input.value = "";
+modal.classList.add("show");
+
+setTimeout(() => {
+input.focus();
+},180);
+
+}
+
+function closeTimerSetup(){
+
+document.getElementById("timerModal").classList.remove("show");
+
+}
+
+function updateTimerDisplay(){
+
+if(!timerActive){
+return;
+}
+
+timerRemainingMs = timerEndTime - Date.now();
+
+document.getElementById("clock").textContent =
+formatTimer(timerRemainingMs);
+
+document.getElementById("date").textContent =
+"TIMER ACTIVE";
+
+if(timerRemainingMs <= 0){
+finishTimer();
+}
+
+}
+
+function startTimerFromInput(){
+
+const input = document.getElementById("timerInput");
+const duration = parseTimerValue(input.value);
+
+if(duration <= 0){
+input.placeholder = "00:10";
+return;
+}
+
+closeTimerSetup();
+
+timerActive = true;
+timerPaused = false;
+timerRemainingMs = duration;
+timerEndTime = Date.now() + duration;
+
+const controls = document.getElementById("timerControls");
+controls.classList.add("show");
+controls.classList.remove("paused");
+document.getElementById("timerStopBtn").textContent = "STOP";
+
+playSound("uiSound");
+
+updateTimerDisplay();
+
+clearInterval(timerInterval);
+timerInterval = setInterval(updateTimerDisplay,250);
+
+}
+
+function finishTimer(){
+
+clearInterval(timerInterval);
+timerInterval = null;
+timerActive = false;
+timerPaused = false;
+
+document.getElementById("clock").textContent = "00:00";
+document.getElementById("date").textContent = "TIME UP";
+document.getElementById("timerControls").classList.remove("show");
+document.getElementById("timerControls").classList.remove("paused");
+document.getElementById("timerFinish").classList.add("show");
+
+startTimerAlarm();
+
+setNovaState(
+"happy",
+"時間やで🙄"
+);
+
+}
+
+function pauseOrResetTimer(){
+
+if(timerActive){
+pauseTimer();
+return;
+}
+
+resetTimer();
+
+}
+
+function pauseTimer(){
+
+if(!timerActive){
+return;
+}
+
+timerRemainingMs = Math.max(0,timerEndTime - Date.now());
+
+clearInterval(timerInterval);
+timerInterval = null;
+timerActive = false;
+timerPaused = true;
+
+const controls = document.getElementById("timerControls");
+controls.classList.add("show");
+controls.classList.add("paused");
+
+document.getElementById("timerStopBtn").textContent = "RESET";
+document.getElementById("clock").textContent = formatTimer(timerRemainingMs);
+document.getElementById("date").textContent = "TIMER PAUSE";
+
+playSound("uiSound");
+setNovaState(
+"normal",
+"タイマー止めとくで🙄"
+);
+
+}
+
+function resumeTimer(){
+
+if(!timerPaused || timerRemainingMs <= 0){
+return;
+}
+
+timerActive = true;
+timerPaused = false;
+timerEndTime = Date.now() + timerRemainingMs;
+
+const controls = document.getElementById("timerControls");
+controls.classList.add("show");
+controls.classList.remove("paused");
+
+document.getElementById("timerStopBtn").textContent = "STOP";
+
+playSound("uiSound");
+setNovaState(
+"normal",
+"タイマー再開や🙄"
+);
+
+updateTimerDisplay();
+clearInterval(timerInterval);
+timerInterval = setInterval(updateTimerDisplay,250);
+
+}
+
+function resetTimer(){
+
+clearInterval(timerInterval);
+timerInterval = null;
+timerActive = false;
+timerPaused = false;
+timerRemainingMs = 0;
+timerEndTime = 0;
+
+const controls = document.getElementById("timerControls");
+controls.classList.remove("show");
+controls.classList.remove("paused");
+document.getElementById("timerFinish").classList.remove("show");
+
+stopTimerAlarm();
+
+updateClock();
+setNovaState(
+"normal",
+"タイマー止めたで🙄"
+);
+
+}
+
+const timerInput = document.getElementById("timerInput");
+if(timerInput){
+timerInput.addEventListener("input",() => {
+const raw = timerInput.value.replace(/[^0-9]/g,"").slice(0,4);
+if(raw.length <= 2){
+timerInput.value = raw;
+}else{
+timerInput.value = `${raw.slice(0,-2)}:${raw.slice(-2)}`;
+}
+});
+
+timerInput.addEventListener("keydown",(e) => {
+if(e.key === "Enter"){
+startTimerFromInput();
+}
+if(e.key === "Escape"){
+closeTimerSetup();
+}
+});
+}
+
+const commonNovaMessages = [
+
+"おかえりや🙄",
+"今日は何するんや？😼",
+"動画編集、終わったんか？🙄",
+"そのサムネ、伸びそうやな😎",
+"配信前の作戦会議する？😌",
+"今日はポケモンの日か？🙄",
+"また変な企画考えてるやろ🙄",
+"ワイは嫌いじゃないで😌",
+"その改造、だいぶ狂っとる🙄",
+"それ絶対ミキシング用やろ😼",
+"また30MS増えてない？🙄",
+"積み、見えてるで🙄",
+"編集進捗どうや？😌",
+"そのタイトル、ちょっと強いな🙄",
+"でもワイは好きやで😌",
+"ショート一本作るか？😼",
+"今日は図鑑動画の日や🙄",
+"配信、行けそうか？😌",
+"トレーナータワーから逃げるな😡",
+"またラティアス増えてない？🙄",
+"色違い、出る気せーへんな🙄",
+"そろそろ来る気もする😌",
+"ワイは信じとるで🙄",
+"今日の作業BGMある？🎵",
+"ちょっと休憩しよか🙄",
+"コーヒー飲む？☕",
+"集中モード入るか😌",
+"そのアイデア、かなりアリや🙄",
+"通知きとるで🙄",
+"コメント来てるかも😼",
+"X確認する？🙄",
+"YouTube Studio見るか😌",
+"登録増えてるとええな🙄",
+"今日のCTRどうや？😼",
+"その動画、あと一押し感ある🙄",
+"ワイは伸びると思う😌",
+"サムネ、もうちょい光らせる？🙄",
+"その構図かなり見やすい😎",
+"今日は作業デーやな😌",
+"Nova OS 起動完了や🙄"
+
+];
+
+const timeNovaMessages = {
+
+morning:[
+"朝やで🙄",
+"朝のうちに一本進めるか😌"
+],
+
+day:[
+"昼やで🙄",
+"昼の作業、何から行く？😼"
+],
+
+evening:[
+"夕方やで🙄",
+"そろそろ夜の作戦会議やな😌"
+],
+
+night:[
+"夜やで🙄",
+"夜の作業、無理せず行こか😌"
+],
+
+lateNight:[
+"夜更かししすぎや🙄",
+"寝落ちする前に保存しろ😡"
+],
+
+earlyMorning:[
+"早朝やで🙄",
+"起きとるんか寝てないんかどっちや🙄"
+]
+
+};
+
+const novaImages = [
+"./nova_normal.png",
+"./nova_sleepy.png",
+"./nova_happy.png",
+"./nova_analysis.png"
+];
+
+const novaStateImages = {
+normal:"./nova_normal.png",
+thinking:"./nova_thinking.png",
+happy:"./nova_happy.png",
+confused:"./nova_confused.png"
+};
+
+const thinkingMessages = [
+"Nova考え中や…🌀",
+"んー…😶",
+"ちょっと待ってや🙄"
+];
+
+const replyReadyMessages = [
+"そうやな😌",
+"えーっとな🙄"
+];
+
+const errorMessages = [
+"ボーッとする🙄",
+"頭働かん😶"
+];
+
+let lastKnownReply = "";
+let waitingReply = false;
+let replyCheckTimer = null;
+
+let latestNovaText = "ワイはまだまだ元気や🙄";
+let readerOpen = false;
+
+function setNovaText(text){
+
+latestNovaText = text;
+
+const bubbleText =
+document.getElementById("novaBubbleText");
+
+const readerBody =
+document.getElementById("readerBody");
+
+if(bubbleText){
+bubbleText.textContent = text;
+}
+
+if(readerBody){
+readerBody.textContent = text;
+}
+
+}
+
+function setNovaImage(src){
+
+if(novaMode !== "local"){
+src = NOVA_IMAGE_WEB;
+}
+
+const image =
+document.getElementById("novaImage");
+
+if(image){
+
+image.classList.add("switching");
+
+setTimeout(() => {
+
+image.src = src;
+image.classList.remove("switching");
+
+},220);
+
+}
+
+}
+
+function getTimeBucket(){
+
+const hour = new Date().getHours();
+
+if(hour >= 6 && hour < 10) return "morning";
+if(hour >= 10 && hour < 16) return "day";
+if(hour >= 16 && hour < 19) return "evening";
+if(hour >= 19 && hour < 23) return "night";
+if(hour >= 23 || hour < 4) return "lateNight";
+return "earlyMorning";
+
+}
+
+function getIdleMessages(){
+
+const bucket = getTimeBucket();
+return [
+...commonNovaMessages,
+...(timeNovaMessages[bucket] || [])
+];
+
+}
+
+function randomFrom(list){
+
+return list[Math.floor(Math.random()*list.length)];
+
+}
+
+function setNovaState(state,text){
+
+if(novaStateImages[state]){
+setNovaImage(novaStateImages[state]);
+}
+
+setNovaText(text);
+
+}
+
+async function initializeReplyCache(){
+
+if(novaMode !== "local"){
+lastKnownReply = "";
+return;
+}
+
+try{
+
+const res =
+await fetch(apiUrl("/reply"));
+
+const data =
+await res.json();
+
+lastKnownReply =
+data.reply || "";
+
+}catch(e){
+
+lastKnownReply = "";
+
+}
+
+}
+
+async function checkReplyReady(){
+
+if(!waitingReply || novaMode !== "local"){
+return;
+}
+
+try{
+
+const res =
+await fetch(apiUrl("/reply"));
+
+const data =
+await res.json();
+
+const reply =
+data.reply || "";
+
+if(reply &&
+reply !== lastKnownReply &&
+!reply.includes("まだ返答は受け取ってない")){
+
+lastKnownReply = reply;
+waitingReply = false;
+
+setNovaState(
+"happy",
+randomFrom(replyReadyMessages)
+);
+playSound("readySound");
+
+}
+
+}catch(e){
+
+waitingReply = false;
+
+setNovaState(
+"confused",
+randomFrom(errorMessages)
+);
+playSound("errorSound");
+
+}
+
+}
+
+initializeReplyCache();
+
+replyCheckTimer =
+setInterval(checkReplyReady,2500);
+
+async function openReader(){
+
+readerOpen = true;
+
+document
+.querySelector(".nova-panel")
+.classList.add("reader-open");
+
+document
+.getElementById("readerPanel")
+.classList.add("show");
+
+const readerBody =
+document.getElementById("readerBody");
+
+readerBody.textContent =
+novaMode === "local"
+? "保存済みの返答を表示するで…🙄"
+: "WEBモードやからPC返答は読めへんで🙄";
+
+if(novaMode !== "local"){
+
+setNovaState(
+"normal",
+"セーフモード中や🙄"
+);
+
+return;
+
+}
+
+try{
+
+const res =
+await fetch(apiUrl("/reply"));
+
+const data =
+await res.json();
+
+const reply =
+data.reply || "返答が空やった🙄\nPC側ChatGPTで Ctrl + Alt + J を押してから、もう一回💬を押してや。";
+
+lastKnownReply = reply;
+waitingReply = false;
+
+setNovaState(
+"happy",
+randomFrom(replyReadyMessages)
+);
+playSound("readySound");
+
+readerBody.textContent =
+reply;
+
+}catch(err){
+
+setNovaState(
+"confused",
+randomFrom(errorMessages)
+);
+playSound("errorSound");
+
+readerBody.textContent =
+"返答取得に失敗したわ😭\nPC側のserver.jsとNova Reply Captureを確認してや🙄";
+
+}
+
+}
+
+function closeReader(){
+
+readerOpen = false;
+
+document
+.querySelector(".nova-panel")
+.classList.remove("reader-open");
+
+document
+.getElementById("readerPanel")
+.classList.remove("show");
+
+}
+
+function updateNova(){
+
+if(readerOpen || waitingReply){
+return;
+}
+
+const bubble = document.getElementById("novaBubble");
+const image = document.getElementById("novaImage");
+
+bubble.classList.add("fade");
+image.classList.add("switching");
+
+setTimeout(() => {
+
+image.src =
+novaMode === "local"
+? novaImages[Math.floor(Math.random()*novaImages.length)]
+: NOVA_IMAGE_WEB;
+
+setNovaText(
+randomFrom(getIdleMessages())
+);
+
+bubble.classList.remove("fade");
+image.classList.remove("switching");
+
+},500);
+
+}
+
+setInterval(updateNova,15000);
+
+function weatherIcon(desc){
+
+const text = desc.toLowerCase();
+
+if(text.includes("rain")) return "🌧️";
+if(text.includes("cloud")) return "☁️";
+if(text.includes("snow")) return "❄️";
+if(text.includes("clear") || text.includes("sun")) return "☀️";
+if(text.includes("mist") || text.includes("fog")) return "🌫️";
+
+return "🌤️";
+}
+
+async function loadWeather(){
+
+try{
+
+const res =
+await fetch("https://wttr.in/?format=j1");
+
+const data =
+await res.json();
+
+const temp =
+data.current_condition[0].temp_C;
+
+const desc =
+data.current_condition[0].weatherDesc[0].value;
+
+document.getElementById("weatherTemp").textContent =
+`${weatherIcon(desc)} ${temp}°`;
+
+document.getElementById("weatherDesc").textContent =
+desc;
+
+}catch(e){
+
+document.getElementById("weatherTemp").textContent =
+"失敗";
+
+document.getElementById("weatherDesc").textContent =
+"APIエラー";
+
+}
+
+}
+
+loadWeather();
+
+const searchForm = document.getElementById("searchForm");
+const searchInput = document.getElementById("searchInput");
+
+searchForm.addEventListener("submit", async function(e){
+
+e.preventDefault();
+
+const query =
+searchInput.value.trim();
+
+if(!query){
+searchInput.placeholder = "検索ワード入れてや🙄";
+return;
+}
+
+const bubble =
+document.getElementById("novaBubble");
+
+if(novaMode !== "local"){
+
+playSound("uiSound");
+
+setNovaState(
+"normal",
+"Novaセーフモードや🙄"
+);
+
+window.open(
+"https://www.google.com/search?q=" + encodeURIComponent(query),
+"_blank"
+);
+
+searchInput.value = "";
+searchInput.placeholder = "Novaセーフモードが検索…";
+
+return;
+
+}
+
+setNovaState(
+"normal",
+"なるほどね〜🙄"
+);
+playSound("uiSound");
+
+try{
+
+const res =
+await fetch(apiUrl("/message"),{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+message:query
+})
+
+});
+
+await res.json();
+
+setNovaState(
+"normal",
+"そうやね😌"
+);
+
+setTimeout(() => {
+
+waitingReply = true;
+
+setNovaState(
+"thinking",
+randomFrom(thinkingMessages)
+);
+playSound("uiSound");
+
+},2000);
+
+searchInput.value = "";
+searchInput.placeholder = "NOVAに聞く...";
+
+}catch(err){
+
+waitingReply = false;
+
+setNovaState(
+"confused",
+randomFrom(errorMessages)
+);
+playSound("errorSound");
+
+searchInput.placeholder =
+"PCサーバー確認してや🙄";
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
