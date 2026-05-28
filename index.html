@@ -26,7 +26,8 @@ font-family:-apple-system,BlinkMacSystemFont,sans-serif;
 body{
 color:white;
 min-height:100vh;
-overflow-x:hidden;
+height:100dvh;
+overflow:hidden;
 
 background:
 radial-gradient(circle at 82% 0%,rgba(0,220,255,.38) 0%,transparent 32%),
@@ -107,7 +108,7 @@ rgba(255,255,255,.08)
 );
 
 font-family:"Courier New",monospace;
-font-size:13px;
+font-size:12px;
 font-weight:900;
 letter-spacing:.22em;
 
@@ -382,16 +383,17 @@ opacity:0;
 
 .home{
 
-min-height:100vh;
+height:100dvh;
+min-height:0;
 
-padding:8px;
-padding-top:calc(8px + env(safe-area-inset-top));
-padding-bottom:108px;
+padding:7px;
+padding-top:calc(6px + env(safe-area-inset-top));
+padding-bottom:calc(100px + env(safe-area-inset-bottom));
 
 display:flex;
 flex-direction:column;
 
-gap:6px;
+gap:3px;
 
 }
 
@@ -402,7 +404,7 @@ overflow:hidden;
 
 border-radius:24px;
 
-padding:11px;
+padding:10px;
 
 background:
 linear-gradient(
@@ -427,20 +429,16 @@ backdrop-filter:blur(18px);
 /* 時計 */
 
 .top-panel{
-
 display:grid;
-grid-template-columns:1fr auto auto;
-
+grid-template-columns:minmax(0,1fr) 96px 104px;
 gap:10px;
 align-items:center;
-
-min-height:86px;
+min-height:66px;
 
 }
 
 .clock{
-
-font-size:46px;
+font-size:39px;
 font-weight:900;
 
 line-height:.9;
@@ -454,11 +452,11 @@ text-shadow:
 
 .date{
 
-margin-top:4px;
+margin-top:1px;
 
 color:#79d8ff;
 
-font-size:15px;
+font-size:14px;
 font-weight:800;
 
 line-height:1;
@@ -472,8 +470,8 @@ white-space:nowrap;
 
 cursor:pointer;
 border-radius:18px;
-padding:4px 6px;
-margin:-4px -6px;
+padding:2px 5px;
+margin:-2px -5px;
 transition:background .22s ease, box-shadow .22s ease;
 
 }
@@ -484,10 +482,13 @@ box-shadow:0 0 18px rgba(0,220,255,.22);
 }
 
 .timer-controls{
-width:80px;
-min-height:74px;
+width:96px;
+min-height:54px;
 
-display:none;
+display:flex;
+visibility:hidden;
+opacity:0;
+pointer-events:none;
 flex-direction:row;
 gap:6px;
 justify-content:center;
@@ -496,11 +497,14 @@ align-items:center;
 
 .timer-controls.show{
 display:flex;
+visibility:visible;
+opacity:1;
+pointer-events:auto;
 }
 
 .timer-mini-btn{
-width:36px;
-height:36px;
+width:31px;
+height:31px;
 
 border:none;
 border-radius:12px;
@@ -514,9 +518,9 @@ rgba(160,90,255,.28)
 
 color:white;
 font-family:"Courier New",monospace;
-font-size:8px;
+font-size:6px;
 font-weight:900;
-letter-spacing:.02em;
+letter-spacing:.01em;
 
 box-shadow:
 0 0 16px rgba(0,220,255,.22),
@@ -534,7 +538,7 @@ justify-content:center;
 }
 
 .timer-controls.paused{
-width:80px;
+width:96px;
 }
 
 .timer-modal{
@@ -586,7 +590,7 @@ inset 0 1px 0 rgba(255,255,255,.18);
 
 .timer-title{
 font-family:"Courier New",monospace;
-font-size:13px;
+font-size:12px;
 font-weight:900;
 letter-spacing:.18em;
 color:#8df6ff;
@@ -640,7 +644,7 @@ rgba(160,90,255,.28)
 );
 
 color:white;
-font-size:13px;
+font-size:12px;
 font-weight:900;
 letter-spacing:.08em;
 
@@ -788,16 +792,32 @@ inset 0 1px 0 rgba(255,255,255,.14);
 opacity:.62;
 }
 
+
+/* top console fixed layout */
+.top-panel .clock-area{
+grid-column:1;
+min-width:0;
+}
+
+.top-panel .timer-controls{
+grid-column:2;
+justify-self:center;
+}
+
+.top-panel .weather-mini{
+grid-column:3;
+justify-self:end;
+}
+
 /* 天気 */
 
 .weather-mini{
-
-width:100px;
-min-height:74px;
+width:104px;
+min-height:56px;
 
 border-radius:20px;
 
-padding:8px;
+padding:5px 6px;
 
 display:flex;
 flex-direction:column;
@@ -822,15 +842,31 @@ inset 0 1px 0 rgba(255,255,255,.18),
 }
 
 .weather-title{
-font-size:11px;
-opacity:.82;
+display:none;
+}
+
+.weather-main{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:6px;
+margin-top:0;
+}
+
+.weather-icon{
+width:52px;
+height:52px;
+object-fit:contain;
+filter:
+drop-shadow(0 0 8px rgba(255,255,255,.32))
+drop-shadow(0 0 12px rgba(0,220,255,.20));
 }
 
 .weather-temp{
 
-margin-top:1px;
+margin-top:0;
 
-font-size:24px;
+font-size:21px;
 font-weight:900;
 
 line-height:1;
@@ -838,21 +874,7 @@ line-height:1;
 }
 
 .weather-desc{
-
-margin-top:3px;
-
-max-width:80px;
-
-font-size:10px;
-
-opacity:.78;
-
-text-align:center;
-
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
-
+display:none;
 }
 
 /* Search */
@@ -921,7 +943,7 @@ flex:0 0 auto;
 
 font-family:"Courier New",monospace;
 
-font-size:11px;
+font-size:10px;
 font-weight:900;
 
 letter-spacing:.12em;
@@ -992,7 +1014,7 @@ box-shadow:
 
 .nova-panel{
 
-min-height:188px;
+min-height:180px;
 
 display:flex;
 align-items:flex-end;
@@ -1068,7 +1090,7 @@ hudPulse 6s ease-in-out infinite;
 }
 
 .app-emoji{
-font-size:25px;
+font-size:30px;
 line-height:1;
 }@keyframes hudRotate{
 
@@ -1212,7 +1234,7 @@ color:#ffffff;
 
 font-family:"Courier New",monospace;
 
-font-size:13px;
+font-size:12px;
 font-weight:900;
 
 letter-spacing:.04em;
@@ -1447,18 +1469,999 @@ white-space:pre-wrap;
 width:0;
 }
 
+/* NOVA APPS */
+
+.nova-tools{
+min-height:46px;
+padding:4px 10px;
+display:flex;
+align-items:center;
+gap:6px;
+}
+
+.nova-tools-head{
+flex:0 0 auto;
+min-width:72px;
+}
+
+.nova-tools-title{
+font-family:"Courier New",monospace;
+font-size:9px;
+font-weight:900;
+letter-spacing:.14em;
+color:#8df6ff;
+text-shadow:0 0 10px rgba(0,240,255,.85);
+white-space:nowrap;
+}
+
+.nova-tools-sub{
+margin-top:1px;
+font-size:7px;
+font-weight:800;
+letter-spacing:.06em;
+color:rgba(220,250,255,.62);
+white-space:nowrap;
+}
+
+.nova-tool-grid{
+display:flex;
+gap:1px;
+align-items:center;
+overflow-x:auto;
+scrollbar-width:none;
+}
+
+.nova-tool-grid::-webkit-scrollbar{
+display:none;
+}
+
+.nova-tool-button{
+position:relative;
+width:58px;
+height:46px;
+flex:0 0 auto;
+border:none;
+background:transparent !important;
+box-shadow:none !important;
+outline:none;
+padding:0;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:0;
+color:white;
+overflow:visible;
+transition:
+transform .18s ease,
+filter .22s ease;
+}
+
+.nova-tool-button::before{
+content:none;
+}
+
+.nova-tool-button:active{
+transform:scale(.93);
+filter:brightness(1.18);
+}
+
+.nova-tool-img{
+position:relative;
+z-index:1;
+width:52px;
+height:52px;
+object-fit:contain;
+filter:none;
+}
+
+.nova-tool-label{
+display:none;
+}
+
+
+.nova-run-tool-img{
+transform:scale(1.38) translateX(-3px);
+transform-origin:center;
+}
+
+/* NOVA CALC */
+
+.calc-overlay{
+position:fixed;
+inset:0;
+z-index:8500;
+
+padding:
+calc(30px + env(safe-area-inset-top))
+12px
+calc(18px + env(safe-area-inset-bottom));
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:
+radial-gradient(circle at 78% 9%,rgba(0,220,255,.22) 0%,transparent 28%),
+radial-gradient(circle at 18% 20%,rgba(160,90,255,.18) 0%,transparent 35%),
+rgba(2,8,20,.64);
+
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+
+opacity:0;
+pointer-events:none;
+
+transition:
+opacity .28s ease;
+}
+
+.calc-overlay.show{
+opacity:1;
+pointer-events:auto;
+}
+
+.calc-shell{
+position:relative;
+width:min(420px,100%);
+height:100%;
+max-height:760px;
+
+border-radius:28px;
+
+padding:10px 12px 12px;
+
+background:
+linear-gradient(
+160deg,
+rgba(7,22,52,.78),
+rgba(10,8,34,.54)
+);
+
+border:1px solid rgba(160,235,255,.36);
+
+box-shadow:
+0 24px 62px rgba(0,0,0,.48),
+0 0 42px rgba(0,220,255,.22),
+inset 0 1px 0 rgba(255,255,255,.18),
+inset 0 0 28px rgba(0,220,255,.08);
+
+overflow:hidden;
+
+display:flex;
+flex-direction:column;
+
+transform:translateY(16px) scale(.96);
+transition:transform .32s cubic-bezier(.2,.9,.2,1);
+}
+
+.calc-overlay.show .calc-shell{
+transform:translateY(0) scale(1);
+}
+
+.calc-shell::before{
+content:"";
+position:absolute;
+inset:0;
+pointer-events:none;
+
+background:
+repeating-linear-gradient(
+to bottom,
+rgba(120,220,255,.07) 0px,
+rgba(120,220,255,.07) 1px,
+transparent 1px,
+transparent 16px
+),
+linear-gradient(
+90deg,
+transparent,
+rgba(120,240,255,.14),
+transparent
+);
+
+opacity:.22;
+animation:calcScan 3.6s linear infinite;
+}
+
+@keyframes calcScan{
+0%{transform:translateX(-80%);}
+100%{transform:translateX(80%);}
+}
+
+.calc-top{
+position:relative;
+z-index:2;
+height:48px;
+display:flex;
+align-items:flex-start;
+justify-content:space-between;
+gap:8px;
+}
+
+.calc-title-block{
+padding-top:1px;
+}
+
+.calc-title{
+font-family:"Courier New",monospace;
+font-size:11px;
+font-weight:900;
+letter-spacing:.16em;
+color:#8df6ff;
+text-shadow:0 0 12px rgba(0,240,255,.9);
+}
+
+.calc-mode{
+margin-top:2px;
+font-family:"Courier New",monospace;
+font-size:7px;
+font-weight:900;
+letter-spacing:.10em;
+color:rgba(220,250,255,.66);
+}
+
+.calc-nova-close{
+position:relative;
+border:none;
+background:transparent;
+padding:0;
+display:flex;
+align-items:flex-start;
+justify-content:flex-end;
+gap:8px;
+min-width:158px;
+color:white;
+}
+
+.calc-close-bubble{
+margin-top:3px;
+padding:8px 12px;
+border-radius:16px;
+background:
+linear-gradient(
+90deg,
+rgba(90,45,180,.66),
+rgba(45,120,220,.40)
+);
+border:1px solid rgba(210,180,255,.36);
+font-size:13px;
+font-weight:900;
+white-space:nowrap;
+text-shadow:
+0 0 7px rgba(255,255,255,.75),
+0 0 13px rgba(120,230,255,.48);
+box-shadow:
+0 0 18px rgba(155,95,255,.22),
+inset 0 1px 0 rgba(255,255,255,.13);
+}
+
+.calc-close-dot{
+width:48px;
+height:48px;
+object-fit:contain;
+filter:
+drop-shadow(0 0 14px rgba(0,220,255,.70))
+drop-shadow(0 0 24px rgba(160,90,255,.34));
+animation:calcNovaIdle 2.8s ease-in-out infinite;
+}
+
+@keyframes calcNovaIdle{
+0%{transform:translateY(0) scale(1);}
+50%{transform:translateY(-3px) scale(1.04);}
+100%{transform:translateY(0) scale(1);}
+}
+
+.calc-display{
+position:relative;
+z-index:2;
+
+height:74px;
+
+display:flex;
+align-items:flex-end;
+justify-content:flex-end;
+
+padding:0 4px 8px;
+
+font-family:"Courier New",monospace;
+font-size:52px;
+font-weight:900;
+letter-spacing:-.04em;
+line-height:1;
+
+color:white;
+
+text-shadow:
+0 0 14px rgba(255,255,255,.8),
+0 0 30px rgba(0,220,255,.50);
+
+overflow:hidden;
+white-space:nowrap;
+}
+
+.calc-keys{
+position:relative;
+z-index:2;
+
+flex:1;
+min-height:0;
+
+display:grid;
+grid-template-columns:repeat(4,1fr);
+grid-template-rows:repeat(5,auto);
+align-content:center;
+gap:7px;
+}
+
+.calc-key{
+position:relative;
+border:none;
+aspect-ratio:1.15 / 1;
+min-height:0;
+clip-path:polygon(15% 0%,85% 0%,100% 50%,85% 100%,15% 100%,0% 50%);
+
+background:
+linear-gradient(120deg,rgba(210,255,255,.72) 0%,rgba(0,238,255,.90) 12%,transparent 13%,transparent 87%,rgba(0,238,255,.78) 88%,rgba(126,100,255,.66) 100%),
+radial-gradient(circle at 34% 20%,rgba(255,255,255,.18),transparent 34%),
+linear-gradient(145deg,rgba(10,31,64,.88),rgba(3,10,30,.76));
+
+color:white;
+
+font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+font-size:25px;
+font-weight:850;
+
+box-shadow:
+0 6px 11px rgba(0,0,0,.24),
+0 0 18px rgba(0,220,255,.28),
+inset 0 0 14px rgba(0,220,255,.10),
+inset 0 1px 0 rgba(255,255,255,.20);
+
+transition:
+transform .08s ease,
+filter .12s ease,
+box-shadow .12s ease;
+}
+
+.calc-key::before{
+content:"";
+position:absolute;
+inset:3px;
+clip-path:polygon(15% 0%,85% 0%,100% 50%,85% 100%,15% 100%,0% 50%);
+background:
+linear-gradient(135deg,rgba(255,255,255,.90),rgba(0,238,255,.80),rgba(132,104,255,.66));
+-webkit-mask:
+linear-gradient(#000 0 0) content-box,
+linear-gradient(#000 0 0);
+-webkit-mask-composite:xor;
+mask-composite:exclude;
+padding:2px;
+opacity:.78;
+pointer-events:none;
+filter:drop-shadow(0 0 5px rgba(0,230,255,.64));
+}
+
+.calc-key::after{
+content:"";
+position:absolute;
+left:19%;
+right:19%;
+top:6px;
+height:2px;
+background:rgba(210,255,255,.76);
+box-shadow:0 0 9px rgba(0,238,255,.82);
+pointer-events:none;
+}
+
+.calc-key:active{
+transform:scale(.90);
+filter:brightness(1.28);
+box-shadow:
+0 0 28px rgba(0,220,255,.48),
+inset 0 0 16px rgba(255,255,255,.14);
+}
+
+.calc-key.util{
+background:
+linear-gradient(120deg,rgba(230,255,255,.60) 0%,rgba(102,226,255,.82) 12%,transparent 13%,transparent 87%,rgba(102,226,255,.72) 88%,rgba(168,122,255,.60) 100%),
+radial-gradient(circle at 34% 20%,rgba(255,255,255,.21),transparent 34%),
+linear-gradient(145deg,rgba(36,58,92,.82),rgba(7,15,42,.70));
+}
+
+.calc-key.op,
+.calc-key.eq{
+background:
+linear-gradient(120deg,rgba(255,255,255,.86) 0%,rgba(0,240,255,.96) 12%,transparent 13%,transparent 87%,rgba(0,240,255,.88) 88%,rgba(186,130,255,.78) 100%),
+radial-gradient(circle at 34% 20%,rgba(255,255,255,.26),transparent 34%),
+linear-gradient(145deg,rgba(0,176,255,.78),rgba(72,42,190,.70));
+box-shadow:
+0 9px 17px rgba(0,0,0,.28),
+0 0 28px rgba(0,220,255,.36),
+inset 0 0 18px rgba(255,255,255,.13),
+inset 0 1px 0 rgba(255,255,255,.22);
+}
+
+body.calc-open .nova-panel .nova{
+opacity:0;
+transform:translateY(16px) scale(.94);
+pointer-events:none;
+}
+
+body.calc-open .nova-panel .bubble{
+opacity:.10;
+transform:translateY(8px);
+}
+
+@media (max-height:720px){
+.nova-tools{
+min-height:44px;
+padding:2px 8px;
+}
+
+.nova-tools-head{
+min-width:66px;
+}
+
+.nova-tool-button{
+width:52px;
+height:38px;
+}
+
+.nova-tool-button::before{
+content:none;
+}
+
+.nova-tool-img{
+width:43px;
+height:43px;
+filter:none;
+}
+
+.calc-overlay{
+padding:
+calc(26px + env(safe-area-inset-top))
+10px
+calc(14px + env(safe-area-inset-bottom));
+}
+
+.calc-shell{
+width:min(400px,100%);
+padding:9px 10px 10px;
+border-radius:26px;
+}
+
+.calc-display{
+height:66px;
+font-size:46px;
+}
+
+.calc-top{
+height:44px;
+}
+
+.calc-close-dot{
+width:44px;
+height:44px;
+}
+
+.calc-close-bubble{
+font-size:11px;
+padding:7px 10px;
+}
+
+.calc-keys{
+height:auto;
+gap:6px;
+}
+
+.calc-key{
+font-size:22px;
+}
+}
+
+
+/* NOVA RUN */
+
+.run-overlay{
+position:fixed;
+inset:0;
+z-index:8600;
+
+padding:
+calc(30px + env(safe-area-inset-top))
+12px
+calc(18px + env(safe-area-inset-bottom));
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:
+radial-gradient(circle at 75% 8%,rgba(0,220,255,.22) 0%,transparent 30%),
+radial-gradient(circle at 18% 20%,rgba(160,90,255,.20) 0%,transparent 36%),
+rgba(2,8,20,.68);
+
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+
+opacity:0;
+pointer-events:none;
+transition:opacity .28s ease;
+}
+
+.run-overlay.show{
+opacity:1;
+pointer-events:auto;
+}
+
+.run-shell{
+position:relative;
+width:min(420px,100%);
+height:100%;
+max-height:760px;
+
+border-radius:28px;
+padding:10px 12px 12px;
+
+background:
+linear-gradient(160deg,rgba(7,22,52,.80),rgba(10,8,34,.56));
+
+border:1px solid rgba(160,235,255,.36);
+
+box-shadow:
+0 24px 62px rgba(0,0,0,.48),
+0 0 42px rgba(0,220,255,.22),
+inset 0 1px 0 rgba(255,255,255,.18),
+inset 0 0 28px rgba(0,220,255,.08);
+
+overflow:hidden;
+
+display:flex;
+flex-direction:column;
+gap:10px;
+
+transform:translateY(16px) scale(.96);
+transition:transform .32s cubic-bezier(.2,.9,.2,1);
+}
+
+.run-overlay.show .run-shell{
+transform:translateY(0) scale(1);
+}
+
+.run-shell::before{
+content:"";
+position:absolute;
+inset:0;
+pointer-events:none;
+
+background:
+repeating-linear-gradient(
+to bottom,
+rgba(120,220,255,.07) 0px,
+rgba(120,220,255,.07) 1px,
+transparent 1px,
+transparent 16px
+),
+linear-gradient(
+90deg,
+transparent,
+rgba(120,240,255,.14),
+transparent
+);
+
+opacity:.20;
+animation:calcScan 3.6s linear infinite;
+}
+
+.run-top{
+position:relative;
+z-index:2;
+height:42px;
+display:flex;
+align-items:flex-start;
+justify-content:space-between;
+gap:8px;
+}
+
+.run-title-block{
+padding-top:1px;
+}
+
+.run-title{
+font-family:"Courier New",monospace;
+font-size:11px;
+font-weight:900;
+letter-spacing:.16em;
+color:#8df6ff;
+text-shadow:0 0 12px rgba(0,240,255,.9);
+}
+
+.run-mode{
+margin-top:2px;
+font-family:"Courier New",monospace;
+font-size:7px;
+font-weight:900;
+letter-spacing:.10em;
+color:rgba(220,250,255,.66);
+}
+
+.run-status-pill{
+padding:7px 10px;
+border-radius:999px;
+background:
+linear-gradient(90deg,rgba(0,220,255,.20),rgba(160,90,255,.16));
+border:1px solid rgba(160,235,255,.28);
+font-family:"Courier New",monospace;
+font-size:8px;
+font-weight:900;
+letter-spacing:.12em;
+color:#dffbff;
+text-shadow:0 0 10px rgba(0,240,255,.8);
+}
+
+.run-screen{
+position:relative;
+z-index:2;
+
+height:46%;
+min-height:255px;
+
+border-radius:22px;
+padding:8px;
+
+background:
+linear-gradient(145deg,rgba(5,20,46,.86),rgba(2,7,21,.74));
+
+border:1px solid rgba(160,235,255,.42);
+
+box-shadow:
+0 0 26px rgba(0,220,255,.20),
+inset 0 0 22px rgba(0,220,255,.10),
+inset 0 1px 0 rgba(255,255,255,.14);
+
+overflow:hidden;
+}
+
+.run-hud{
+position:absolute;
+left:12px;
+right:12px;
+top:10px;
+z-index:3;
+
+height:26px;
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:8px;
+
+padding:0 10px;
+
+border-radius:12px;
+
+background:
+linear-gradient(90deg,rgba(2,8,20,.66),rgba(0,220,255,.12),rgba(2,8,20,.58));
+
+border:1px solid rgba(160,235,255,.25);
+
+font-family:"Courier New",monospace;
+font-size:9px;
+font-weight:900;
+letter-spacing:.08em;
+color:#e7fcff;
+
+text-shadow:
+0 0 8px rgba(255,255,255,.72),
+0 0 14px rgba(0,220,255,.7);
+}
+
+#runCanvas{
+position:absolute;
+inset:8px;
+width:calc(100% - 16px);
+height:calc(100% - 16px);
+border-radius:16px;
+background:#78dfff;
+image-rendering:pixelated;
+image-rendering:crisp-edges;
+}
+
+.run-screen::after{
+content:"";
+position:absolute;
+inset:8px;
+border-radius:16px;
+pointer-events:none;
+z-index:4;
+background:
+repeating-linear-gradient(
+to bottom,
+rgba(255,255,255,.10) 0px,
+rgba(255,255,255,.10) 1px,
+transparent 1px,
+transparent 5px
+);
+opacity:.16;
+mix-blend-mode:screen;
+}
+
+.run-message{
+position:absolute;
+left:50%;
+top:54%;
+z-index:5;
+transform:translate(-50%,-50%);
+
+padding:10px 15px;
+border-radius:16px;
+
+background:rgba(2,8,20,.62);
+border:1px solid rgba(160,235,255,.36);
+box-shadow:
+0 0 24px rgba(0,220,255,.22),
+inset 0 1px 0 rgba(255,255,255,.14);
+
+font-family:"Courier New",monospace;
+font-size:13px;
+font-weight:900;
+letter-spacing:.12em;
+white-space:nowrap;
+color:#dffbff;
+text-shadow:0 0 12px rgba(0,240,255,.92);
+
+opacity:1;
+transition:opacity .22s ease;
+}
+
+.run-message.hide{
+opacity:0;
+pointer-events:none;
+}
+
+.run-controls{
+position:relative;
+z-index:2;
+
+flex:1;
+min-height:0;
+
+border-radius:24px;
+padding:14px 14px 12px;
+
+background:
+linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
+
+border:1px solid rgba(160,235,255,.24);
+
+box-shadow:
+inset 0 1px 0 rgba(255,255,255,.12),
+0 12px 28px rgba(0,0,0,.22);
+
+display:grid;
+grid-template-columns:1fr 1.05fr;
+grid-template-rows:1fr auto;
+gap:10px 18px;
+align-items:center;
+}
+
+.dpad{
+width:130px;
+height:130px;
+position:relative;
+justify-self:center;
+align-self:center;
+}
+
+.run-btn{
+border:none;
+user-select:none;
+-webkit-user-select:none;
+-webkit-touch-callout:none;
+touch-action:none;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+color:#eaffff;
+
+font-family:"Courier New",monospace;
+font-weight:900;
+text-shadow:
+0 0 8px rgba(255,255,255,.8),
+0 0 14px rgba(0,220,255,.72);
+
+background:
+linear-gradient(145deg,rgba(12,38,80,.92),rgba(4,12,32,.78));
+
+border:1px solid rgba(160,235,255,.44);
+
+box-shadow:
+0 7px 16px rgba(0,0,0,.28),
+0 0 18px rgba(0,220,255,.20),
+inset 0 1px 0 rgba(255,255,255,.16),
+inset 0 0 16px rgba(0,220,255,.10);
+
+transition:
+transform .08s ease,
+filter .12s ease,
+box-shadow .12s ease;
+}
+
+.run-btn:active,
+.run-btn.pressed{
+transform:scale(.92);
+filter:brightness(1.24);
+box-shadow:
+0 0 28px rgba(0,220,255,.42),
+inset 0 0 18px rgba(255,255,255,.12);
+}
+
+.dpad-btn{
+position:absolute;
+width:44px;
+height:44px;
+border-radius:14px;
+font-size:18px;
+}
+
+.dpad-up{left:43px;top:0;}
+.dpad-left{left:0;top:43px;}
+.dpad-right{right:0;top:43px;}
+.dpad-down{left:43px;bottom:0;}
+
+.dpad-core{
+position:absolute;
+left:43px;
+top:43px;
+width:44px;
+height:44px;
+border-radius:14px;
+background:
+radial-gradient(circle at center,rgba(0,220,255,.32),rgba(10,20,48,.78));
+border:1px solid rgba(160,235,255,.32);
+box-shadow:
+inset 0 0 14px rgba(0,220,255,.18),
+0 0 18px rgba(0,220,255,.12);
+}
+
+.ab-buttons{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:18px;
+}
+
+.action-btn{
+width:70px;
+height:70px;
+border-radius:50%;
+font-size:24px;
+letter-spacing:.04em;
+background:
+radial-gradient(circle at 34% 22%,rgba(255,255,255,.22),transparent 32%),
+linear-gradient(145deg,rgba(0,176,255,.72),rgba(72,42,190,.72));
+}
+
+.system-buttons{
+grid-column:1 / 3;
+display:flex;
+justify-content:center;
+gap:20px;
+align-items:center;
+padding-top:2px;
+}
+
+.system-btn{
+width:92px;
+height:28px;
+border-radius:999px;
+font-size:10px;
+letter-spacing:.12em;
+background:
+linear-gradient(90deg,rgba(255,255,255,.10),rgba(0,220,255,.18),rgba(160,90,255,.12));
+}
+
+body.run-open .nova-panel .nova{
+opacity:0;
+transform:translateY(16px) scale(.94);
+pointer-events:none;
+}
+
+body.run-open .nova-panel .bubble{
+opacity:.10;
+transform:translateY(8px);
+}
+
+@media (max-height:720px){
+.run-overlay{
+padding:
+calc(26px + env(safe-area-inset-top))
+10px
+calc(14px + env(safe-area-inset-bottom));
+}
+
+.run-shell{
+width:min(400px,100%);
+padding:9px 10px 10px;
+border-radius:26px;
+gap:8px;
+}
+
+.run-top{
+height:38px;
+}
+
+.run-screen{
+height:45%;
+min-height:230px;
+padding:7px;
+}
+
+#runCanvas{
+inset:7px;
+width:calc(100% - 14px);
+height:calc(100% - 14px);
+}
+
+.run-controls{
+padding:11px 12px 10px;
+gap:8px 14px;
+}
+
+.dpad{
+width:116px;
+height:116px;
+}
+
+.dpad-btn{
+width:39px;
+height:39px;
+border-radius:13px;
+font-size:16px;
+}
+
+.dpad-up{left:38.5px;}
+.dpad-left{top:38.5px;}
+.dpad-right{top:38.5px;}
+.dpad-down{left:38.5px;}
+
+.dpad-core{
+left:38.5px;
+top:38.5px;
+width:39px;
+height:39px;
+}
+
+.action-btn{
+width:62px;
+height:62px;
+font-size:21px;
+}
+
+.system-btn{
+width:84px;
+height:26px;
+font-size:9px;
+}
+}
+
+
+
 .dock-wrap{
 
 position:fixed;
 
-left:10px;
-right:10px;
+left:8px;
+right:8px;
 
-bottom:calc(10px + env(safe-area-inset-bottom));
+bottom:calc(8px + env(safe-area-inset-bottom));
 
 z-index:5000;
 
-padding:8px;
+padding:9px;
 
 border-radius:26px;
 
@@ -1510,8 +2513,8 @@ flex:0 0 auto;
 border:none;
 cursor:pointer;
 
-width:64px;
-height:64px;
+width:68px;
+height:68px;
 
 border-radius:21px;
 
@@ -1556,8 +2559,8 @@ box-shadow:
 
 .app-img{
 
-width:32px;
-height:32px;
+width:37px;
+height:37px;
 
 object-fit:contain;
 
@@ -1637,94 +2640,6 @@ box-shadow:
 
 }
 
-/* Mode Transition */
-
-.mode-transition{
-position:fixed;
-inset:0;
-z-index:9500;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-gap:16px;
-background:
-radial-gradient(circle at center,rgba(0,220,255,.18),transparent 42%),
-linear-gradient(180deg,rgba(2,8,20,.92),rgba(2,8,20,.98));
-backdrop-filter:blur(18px);
--webkit-backdrop-filter:blur(18px);
-opacity:0;
-pointer-events:none;
-transition:opacity .26s ease;
-}
-
-.mode-transition.show{
-opacity:1;
-pointer-events:auto;
-}
-
-.mode-transition.local{
-background:
-radial-gradient(circle at center,rgba(255,60,40,.20),transparent 42%),
-linear-gradient(180deg,rgba(20,2,8,.92),rgba(2,8,20,.98));
-}
-
-.mode-transition-logo{
-width:118px;
-height:118px;
-object-fit:contain;
-filter:
-drop-shadow(0 0 20px rgba(0,220,255,.72))
-drop-shadow(0 0 48px rgba(255,255,255,.22));
-animation:modeTransitionSpin .86s cubic-bezier(.18,.78,.18,1) infinite;
-}
-
-.mode-transition.local .mode-transition-logo{
-filter:
-drop-shadow(0 0 22px rgba(255,70,40,.82))
-drop-shadow(0 0 54px rgba(255,160,120,.24));
-}
-
-.mode-transition-text{
-font-family:"Courier New",monospace;
-font-size:15px;
-font-weight:900;
-letter-spacing:.18em;
-color:#dffbff;
-text-shadow:
-0 0 10px rgba(255,255,255,.88),
-0 0 24px rgba(0,220,255,.86);
-}
-
-.mode-transition.local .mode-transition-text{
-text-shadow:
-0 0 10px rgba(255,255,255,.88),
-0 0 24px rgba(255,60,40,.88);
-}
-
-.mode-transition-sub{
-font-family:"Courier New",monospace;
-font-size:10px;
-font-weight:800;
-letter-spacing:.14em;
-color:rgba(210,245,255,.72);
-}
-
-@keyframes modeTransitionSpin{
-0%{
-transform:scale(.86) rotate(0deg);
-opacity:.62;
-}
-55%{
-transform:scale(1.04) rotate(520deg);
-opacity:1;
-}
-100%{
-transform:scale(.96) rotate(720deg);
-opacity:.72;
-}
-}
-
 </style>
 </head>
 
@@ -1773,10 +2688,96 @@ autocomplete="off">
 <button class="timer-stop-big" type="button" onclick="resetTimer()">STOP</button>
 </div>
 
-<div class="mode-transition" id="modeTransition">
-<img class="mode-transition-logo" id="modeTransitionLogo" src="icon.png">
-<div class="mode-transition-text" id="modeTransitionText">MODE CHANGE</div>
-<div class="mode-transition-sub" id="modeTransitionSub">NOVA SYSTEM LINK</div>
+
+<div class="calc-overlay" id="calcOverlay" aria-hidden="true">
+<div class="calc-shell">
+
+<div class="calc-top">
+<div class="calc-title-block">
+<div class="calc-title">NOVA CALC</div>
+<div class="calc-mode" id="calcModeLabel">SAFE / LOCAL READY</div>
+</div>
+
+<button class="calc-nova-close" type="button" onclick="closeNovaCalc()">
+<span class="calc-close-bubble">電卓閉じる？</span>
+<img class="calc-close-dot" src="nova_dot_small.png" alt="NOVA">
+</button>
+</div>
+
+<div class="calc-display" id="calcDisplay">0</div>
+
+<div class="calc-keys">
+<button class="calc-key util" type="button" onclick="pressCalc('back')">⌫</button>
+<button class="calc-key util" type="button" onclick="pressCalc('clear')">AC</button>
+<button class="calc-key util" type="button" onclick="pressCalc('%')">%</button>
+<button class="calc-key op" type="button" onclick="pressCalc('÷')">÷</button>
+
+<button class="calc-key" type="button" onclick="pressCalc('7')">7</button>
+<button class="calc-key" type="button" onclick="pressCalc('8')">8</button>
+<button class="calc-key" type="button" onclick="pressCalc('9')">9</button>
+<button class="calc-key op" type="button" onclick="pressCalc('×')">×</button>
+
+<button class="calc-key" type="button" onclick="pressCalc('4')">4</button>
+<button class="calc-key" type="button" onclick="pressCalc('5')">5</button>
+<button class="calc-key" type="button" onclick="pressCalc('6')">6</button>
+<button class="calc-key op" type="button" onclick="pressCalc('−')">−</button>
+
+<button class="calc-key" type="button" onclick="pressCalc('1')">1</button>
+<button class="calc-key" type="button" onclick="pressCalc('2')">2</button>
+<button class="calc-key" type="button" onclick="pressCalc('3')">3</button>
+<button class="calc-key op" type="button" onclick="pressCalc('+')">+</button>
+
+<button class="calc-key util" type="button" onclick="pressCalc('sign')">±</button>
+<button class="calc-key" type="button" onclick="pressCalc('0')">0</button>
+<button class="calc-key" type="button" onclick="pressCalc('.')">.</button>
+<button class="calc-key eq" type="button" onclick="pressCalc('=')">=</button>
+</div>
+
+</div>
+</div>
+
+
+<div class="run-overlay" id="runOverlay" aria-hidden="true">
+<div class="run-shell">
+
+<div class="run-top">
+<div class="run-title-block">
+<div class="run-title">NOVA RUN</div>
+<div class="run-mode" id="runModeLabel">VIRTUAL GAME SYSTEM</div>
+</div>
+<div class="run-status-pill" id="runStatusPill">STANDBY</div>
+</div>
+
+<div class="run-screen">
+<canvas id="runCanvas" width="640" height="360"></canvas>
+<div class="run-hud">
+<span id="runScoreLabel">SCORE 000000</span>
+<span id="runBestLabel">BEST 000000</span>
+</div>
+<div class="run-message" id="runMessage">PRESS START</div>
+</div>
+
+<div class="run-controls">
+<div class="dpad" aria-label="NOVA RUN D-PAD">
+<button class="run-btn dpad-btn dpad-up" type="button" data-run-control="up">▲</button>
+<button class="run-btn dpad-btn dpad-left" type="button" data-run-control="left">◀</button>
+<div class="dpad-core"></div>
+<button class="run-btn dpad-btn dpad-right" type="button" data-run-control="right">▶</button>
+<button class="run-btn dpad-btn dpad-down" type="button" data-run-control="down">▼</button>
+</div>
+
+<div class="ab-buttons">
+<button class="run-btn action-btn" type="button" data-run-control="b">B</button>
+<button class="run-btn action-btn" type="button" data-run-control="jump">A</button>
+</div>
+
+<div class="system-buttons">
+<button class="run-btn system-btn" type="button" onclick="closeNovaRun()">SELECT</button>
+<button class="run-btn system-btn" type="button" onclick="startNovaRun()">START</button>
+</div>
+</div>
+
+</div>
 </div>
 
 <main class="home">
@@ -1796,15 +2797,16 @@ autocomplete="off">
 
 <div class="weather-mini">
 
-<div class="weather-title">天気</div>
+<div class="weather-title"></div>
 
+<div class="weather-main">
+<img class="weather-icon" id="weatherIcon" src="nova-weather/kumori.png" alt="weather">
 <div class="weather-temp" id="weatherTemp">
 --
 </div>
-
-<div class="weather-desc" id="weatherDesc">
-取得中
 </div>
+
+<div class="weather-desc" id="weatherDesc"></div>
 
 </div>
 
@@ -1857,6 +2859,25 @@ src="./nova_normal.png">
 ワイはまだまだ元気や🙄
 </div>
 
+</div>
+
+</section>
+
+
+<section class="panel nova-tools">
+
+<div class="nova-tools-head">
+<div class="nova-tools-title">NOVA APPS</div>
+<div class="nova-tools-sub">LOCAL / SAFE</div>
+</div>
+
+<div class="nova-tool-grid">
+<button class="nova-tool-button" type="button" onclick="openNovaCalc()">
+<img class="nova-tool-img" src="Calculatoricon.png" alt="NOVA CALC">
+</button>
+<button class="nova-tool-button" type="button" onclick="openNovaRun()">
+<img class="nova-tool-img nova-run-tool-img" src="NOVARunicon.png" alt="NOVA RUN">
+</button>
 </div>
 
 </section>
@@ -1922,19 +2943,12 @@ const bootScreen = document.querySelector(".boot-screen");
 let bootStarted = false;
 
 const LOCAL_SERVER = "http://192.168.0.117:3000";
-const WEB_SERVER = "https://ruriteng-art.github.io/nova/";
+let novaMode = "web";
 
 const NOVA_ICON_LOCAL = "ICON_red.png";
 const NOVA_ICON_WEB = "icon.png";
 const NOVA_IMAGE_LOCAL = "./nova_normal.png";
 const NOVA_IMAGE_WEB = "./nova_dot_small.png";
-
-function isLocalPage(){
-const host = location.hostname;
-return host === "192.168.0.117" || host === "localhost" || host === "127.0.0.1";
-}
-
-let novaMode = isLocalPage() ? "local" : "web";
 
 function apiUrl(path){
 return `${LOCAL_SERVER}${path}`;
@@ -1964,83 +2978,1623 @@ novaButton.classList.toggle("web-mode", novaMode !== "local");
 
 }
 
-function applyNovaMode(){
 
-novaMode = isLocalPage() ? "local" : "web";
+const WEATHER_ICON_BASE = "nova-weather/";
 
-updateModeBadge();
-
-if(novaMode === "local"){
-setNovaImage(NOVA_IMAGE_LOCAL);
-}else{
-setNovaImage(NOVA_IMAGE_WEB);
+function normalizeWeatherText(text){
+return String(text || "").toLowerCase();
 }
 
+function pickNovaWeatherIcon(desc){
+const d = normalizeWeatherText(desc);
+
+if(d.includes("snow") || d.includes("sleet") || d.includes("雪")){
+return WEATHER_ICON_BASE + "yuki.png";
 }
 
-function showModeTransition(target){
+if(d.includes("rain") || d.includes("drizzle") || d.includes("shower") || d.includes("雨")){
+return WEATHER_ICON_BASE + "ame.png";
+}
 
-const overlay = document.getElementById("modeTransition");
-const logo = document.getElementById("modeTransitionLogo");
-const text = document.getElementById("modeTransitionText");
-const sub = document.getElementById("modeTransitionSub");
+if(d.includes("partly") || d.includes("few") || d.includes("scattered") || d.includes("晴れ時々") || d.includes("晴時々") || d.includes("晴れのち")){
+return WEATHER_ICON_BASE + "harekumori.png";
+}
 
-if(!overlay){
+if(d.includes("clear") || d.includes("晴")){
+return WEATHER_ICON_BASE + "hare.png";
+}
+
+if(
+d.includes("cloud") ||
+d.includes("mist") ||
+d.includes("fog") ||
+d.includes("haze") ||
+d.includes("曇") ||
+d.includes("くもり") ||
+d.includes("霧")
+){
+return WEATHER_ICON_BASE + "kumori.png";
+}
+
+return WEATHER_ICON_BASE + "kumori.png";
+}
+
+function updateNovaWeatherIcon(desc){
+const icon = document.getElementById("weatherIcon");
+if(!icon){
+return;
+}
+icon.src = pickNovaWeatherIcon(desc);
+icon.onerror = () => {
+icon.onerror = null;
+icon.src = WEATHER_ICON_BASE + "kumori.png";
+};
+}
+
+
+/* ===== NOVA CALC ===== */
+
+let calcExpression = "";
+let calcJustEvaluated = false;
+
+function openNovaCalc(){
+
+playSound("uiSound");
+
+const overlay = document.getElementById("calcOverlay");
+const modeLabel = document.getElementById("calcModeLabel");
+
+if(modeLabel){
+modeLabel.textContent =
+novaMode === "local"
+? "LOCAL MODE / OFFLINE CALC"
+: "SAFE MODE / OFFLINE CALC";
+}
+
+document.body.classList.add("calc-open");
+
+if(overlay){
+overlay.classList.add("show");
+overlay.setAttribute("aria-hidden","false");
+}
+
+setNovaText("NOVA CALC起動や🙄");
+
+}
+
+function closeNovaCalc(){
+
+playSound("uiSound");
+
+const overlay = document.getElementById("calcOverlay");
+
+if(overlay){
+overlay.classList.remove("show");
+overlay.setAttribute("aria-hidden","true");
+}
+
+document.body.classList.remove("calc-open");
+
+setNovaState(
+"normal",
+"計算終わったか？😌"
+);
+
+}
+
+function updateCalcDisplay(){
+
+const display = document.getElementById("calcDisplay");
+
+if(!display){
 return;
 }
 
-overlay.classList.remove("local","web");
-overlay.classList.add(target === "local" ? "local" : "web");
+display.textContent =
+calcExpression || "0";
 
-if(logo){
-logo.src = target === "local" ? NOVA_ICON_LOCAL : NOVA_ICON_WEB;
 }
 
-if(text){
-text.textContent = target === "local" ? "LOCAL CONNECT" : "SAFE MODE";
+function formatCalcResult(value){
+
+if(!Number.isFinite(value)){
+return "Error";
 }
 
-if(sub){
-sub.textContent = target === "local" ? "FULL POWER LINK" : "WEB SAFE SYSTEM";
+const rounded =
+Math.abs(value) < 1e12
+? Math.round((value + Number.EPSILON) * 100000000) / 100000000
+: value;
+
+return String(rounded);
+
 }
 
+function evaluateCalcExpression(){
+
+let expr =
+calcExpression
+.replace(/×/g,"*")
+.replace(/÷/g,"/")
+.replace(/−/g,"-")
+.replace(/％/g,"%");
+
+expr = expr.replace(/(\d+(?:\.\d+)?)%/g,"($1/100)");
+
+expr = expr.replace(/[+\-*/.]+$/,"");
+
+if(!expr){
+return;
+}
+
+if(!/^[0-9+\-*/().\s]+$/.test(expr)){
+calcExpression = "Error";
+return;
+}
+
+try{
+
+const result =
+Function(`"use strict";return (${expr})`)();
+
+calcExpression =
+formatCalcResult(result);
+
+calcJustEvaluated = true;
+
+}catch(e){
+
+calcExpression = "Error";
+calcJustEvaluated = true;
+
+}
+
+}
+
+function toggleCalcSign(){
+
+if(!calcExpression || calcExpression === "Error"){
+return;
+}
+
+const match =
+calcExpression.match(/(-?\d+(?:\.\d+)?)$/);
+
+if(!match){
+return;
+}
+
+const numberText = match[1];
+const start = calcExpression.length - numberText.length;
+
+let replacement = "";
+
+if(numberText.startsWith("-")){
+replacement = numberText.slice(1);
+}else{
+replacement = "-" + numberText;
+}
+
+calcExpression =
+calcExpression.slice(0,start) + replacement;
+
+}
+
+function pressCalc(value){
+
+playSound("uiSound");
+
+if(value === "clear"){
+calcExpression = "";
+calcJustEvaluated = false;
+updateCalcDisplay();
+return;
+}
+
+if(value === "back"){
+if(calcJustEvaluated || calcExpression === "Error"){
+calcExpression = "";
+calcJustEvaluated = false;
+}else{
+calcExpression = calcExpression.slice(0,-1);
+}
+updateCalcDisplay();
+return;
+}
+
+if(value === "sign"){
+toggleCalcSign();
+updateCalcDisplay();
+return;
+}
+
+if(value === "="){
+evaluateCalcExpression();
+updateCalcDisplay();
+return;
+}
+
+if(calcExpression === "Error"){
+calcExpression = "";
+}
+
+const operators = ["+","−","×","÷"];
+
+if(calcJustEvaluated){
+if(operators.includes(value)){
+calcJustEvaluated = false;
+}else{
+calcExpression = "";
+calcJustEvaluated = false;
+}
+}
+
+if(operators.includes(value)){
+if(!calcExpression){
+if(value === "−"){
+calcExpression = "−";
+}
+updateCalcDisplay();
+return;
+}
+
+if(operators.includes(calcExpression.slice(-1))){
+calcExpression =
+calcExpression.slice(0,-1) + value;
+}else{
+calcExpression += value;
+}
+
+updateCalcDisplay();
+return;
+}
+
+if(value === "."){
+const parts =
+calcExpression.split(/[+−×÷]/);
+const last = parts[parts.length - 1];
+
+if(last.includes(".")){
+return;
+}
+
+calcExpression += last ? "." : "0.";
+updateCalcDisplay();
+return;
+}
+
+if(value === "%"){
+if(!calcExpression || /[+−×÷.]$/.test(calcExpression)){
+return;
+}
+calcExpression += "%";
+updateCalcDisplay();
+return;
+}
+
+calcExpression += value;
+updateCalcDisplay();
+
+}
+
+window.addEventListener("keydown",(e) => {
+
+const overlay =
+document.getElementById("calcOverlay");
+
+if(!overlay || !overlay.classList.contains("show")){
+return;
+}
+
+const key = e.key;
+
+if(/[0-9]/.test(key)){
+pressCalc(key);
+return;
+}
+
+if(key === "."){
+pressCalc(".");
+return;
+}
+
+if(key === "+"){
+pressCalc("+");
+return;
+}
+
+if(key === "-"){
+pressCalc("−");
+return;
+}
+
+if(key === "*"){
+pressCalc("×");
+return;
+}
+
+if(key === "/"){
+e.preventDefault();
+pressCalc("÷");
+return;
+}
+
+if(key === "Enter" || key === "="){
+pressCalc("=");
+return;
+}
+
+if(key === "Backspace"){
+pressCalc("back");
+return;
+}
+
+if(key === "Escape"){
+closeNovaCalc();
+}
+
+});
+
+
+/* ===== NOVA RUN ===== */
+
+const RUN_ASSET_BASE = "nova-run/";
+
+const RUN_ITEM_BASE = RUN_ASSET_BASE + "item/";
+const RUN_BOSS_BASE = RUN_ASSET_BASE + "enemy/";
+
+const runAssets = {
+bg: RUN_ASSET_BASE + "bg/haikei.png",
+walk: RUN_ASSET_BASE + "player/novaaruki.png",
+jump: RUN_ASSET_BASE + "player/novajump.png",
+crouch: RUN_ASSET_BASE + "player/novacrouch.png",
+enemy: RUN_ASSET_BASE + "enemy/tekinoko.png",
+enemyL: RUN_ASSET_BASE + "enemy/tekinokoL.png",
+enemyR: RUN_ASSET_BASE + "enemy/tekinokoR.png",
+wood: RUN_ASSET_BASE + "bg/wood.png",
+cloud: RUN_ASSET_BASE + "bg/cloud.png"
+};
+
+const runImages = {};
+Object.keys(runAssets).forEach((key)=>{
+const img = new Image();
+img.onerror = () => { img.dataset.failed = "1"; };
+img.src = runAssets[key];
+runImages[key] = img;
+});
+
+/* 分割PNG版スプライト。
+   サーバー側には clean name 推奨:
+   novaaruki1.png〜novaaruki9.png / novajump1.png〜novajump6.png
+   旧スプライトシート novaaruki.png / novajump.png も fallback として残す。 */
+const runFrameSources = {
+walk:[
+RUN_ASSET_BASE + "player/novaaruki1.png",RUN_ASSET_BASE + "player/novaaruki2.png",RUN_ASSET_BASE + "player/novaaruki3.png",
+RUN_ASSET_BASE + "player/novaaruki4.png",RUN_ASSET_BASE + "player/novaaruki5.png",RUN_ASSET_BASE + "player/novaaruki6.png",
+RUN_ASSET_BASE + "player/novaaruki7.png",RUN_ASSET_BASE + "player/novaaruki8.png",RUN_ASSET_BASE + "player/novaaruki9.png"
+],
+jump:[
+RUN_ASSET_BASE + "player/novajump1.png",RUN_ASSET_BASE + "player/novajump2.png",RUN_ASSET_BASE + "player/novajump3.png",
+RUN_ASSET_BASE + "player/novajump4.png",RUN_ASSET_BASE + "player/novajump5.png",RUN_ASSET_BASE + "player/novajump6.png"
+]
+};
+
+
+const runWoodSources = [
+RUN_ASSET_BASE + "bg/wood1.png",
+RUN_ASSET_BASE + "bg/wood2.png",
+RUN_ASSET_BASE + "bg/wood3.png",
+RUN_ASSET_BASE + "bg/wood4.png",
+RUN_ASSET_BASE + "bg/wood5.png",
+RUN_ASSET_BASE + "bg/wood6.png",
+RUN_ASSET_BASE + "bg/wood7.png",
+RUN_ASSET_BASE + "bg/wood8.png"
+];
+
+const runWoodImages = runWoodSources.map((src)=>{
+const img = new Image();
+img.onerror = () => { img.dataset.failed = "1"; };
+img.src = src;
+return img;
+});
+
+
+const runCloudSources = [
+RUN_ASSET_BASE + "bg/cloud1.png",
+RUN_ASSET_BASE + "bg/cloud2.png",
+RUN_ASSET_BASE + "bg/cloud3.png",
+RUN_ASSET_BASE + "bg/cloud4.png",
+RUN_ASSET_BASE + "bg/cloud5.png"
+];
+
+const runCloudImages = runCloudSources.map((src)=>{
+const img = new Image();
+img.onerror = () => { img.dataset.failed = "1"; };
+img.src = src;
+return img;
+});
+
+const runItemImages = {
+milktea:(()=>{
+const img = new Image();
+img.onerror = () => { img.dataset.failed = "1"; };
+img.src = RUN_ITEM_BASE + "MILKtea.png";
+return img;
+})()
+};
+
+const runBossImages = {
+normal:(()=>{
+const img = new Image();
+img.onerror = () => { img.dataset.failed = "1"; };
+img.src = RUN_BOSS_BASE + "tentyo.png";
+return img;
+})(),
+sleep:(()=>{
+const img = new Image();
+img.onerror = () => { img.dataset.failed = "1"; };
+img.src = RUN_BOSS_BASE + "tentyonemuri.png";
+return img;
+})()
+};
+
+const runFrameImages = {};
+
+Object.keys(runFrameSources).forEach((key)=>{
+runFrameImages[key] = runFrameSources[key].map((src)=>{
+const img = new Image();
+img.onerror = () => { img.dataset.failed = "1"; };
+img.src = src;
+return img;
+});
+});
+
+const runWalkLoop = [0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1];
+const runCrouchFrames = [0,3,4,5];
+const runJumpFrames = [0,1,2,3,4,5,4,3,0];
+
+const runState = {
+open:false,
+running:false,
+gameOver:false,
+lastTime:0,
+score:0,
+best:Number(localStorage.getItem("novaRunBest") || 0),
+speed:220,
+bgX:0,
+cloudX:0,
+woodX:0,
+spawnTimer:0,
+itemTimer:0,
+animTime:0,
+bossMode:false,
+bossCleared:false,
+bossWarning:0,
+items:[],
+enemies:[],
+trees:[
+{x:110,frame:0,w:48,h:86,groundOffset:7},
+{x:420,frame:4,w:86,h:48,groundOffset:7},
+{x:760,frame:2,w:44,h:58,groundOffset:7},
+{x:980,frame:6,w:72,h:52,groundOffset:7}
+],
+clouds:[
+{x:92,y:52,frame:0,w:48,h:23,speed:.30,alpha:.90},
+{x:350,y:28,frame:2,w:112,h:34,speed:.18,alpha:.92},
+{x:610,y:66,frame:4,w:96,h:30,speed:.24,alpha:.88}
+],
+player:{
+x:130,
+y:0,
+w:48,
+h:64,
+vy:0,
+grounded:true,
+crouch:false,
+dir:0,
+jumpTime:0,
+landingTime:0
+},
+boss:{
+x:500,
+y:0,
+w:92,
+h:92,
+vy:0,
+hp:3,
+grounded:true,
+stompCooldown:0,
+invincibleTime:0,
+moveDir:-1,
+sleep:true
+},
+keys:{
+left:false,
+right:false,
+up:false,
+down:false,
+jump:false
+}
+};
+
+function padRunScore(value){
+return String(Math.floor(value)).padStart(6,"0");
+}
+
+function updateRunLabels(){
+const score = document.getElementById("runScoreLabel");
+const best = document.getElementById("runBestLabel");
+
+if(score){
+score.textContent = "SCORE " + padRunScore(runState.score);
+}
+if(best){
+best.textContent = "BEST " + padRunScore(runState.best);
+}
+}
+
+function setRunMessage(text,show=true){
+const msg = document.getElementById("runMessage");
+if(!msg){
+return;
+}
+msg.textContent = text;
+msg.classList.toggle("hide",!show);
+}
+
+function openNovaRun(){
+
+playSound("uiSound");
+
+const overlay = document.getElementById("runOverlay");
+const modeLabel = document.getElementById("runModeLabel");
+const status = document.getElementById("runStatusPill");
+
+if(modeLabel){
+modeLabel.textContent =
+novaMode === "local"
+? "LOCAL MODE / PIXEL RUN"
+: "SAFE MODE / PIXEL RUN";
+}
+
+if(status){
+status.textContent = "STANDBY";
+}
+
+document.body.classList.add("run-open");
+
+if(overlay){
 overlay.classList.add("show");
+overlay.setAttribute("aria-hidden","false");
+}
+
+runState.open = true;
+
+setNovaText("NOVA RUN起動や🙄");
+updateRunLabels();
+drawNovaRun();
+setRunMessage("PRESS START",true);
 
 }
 
-function toggleNovaMode(){
+function closeNovaRun(){
+
+playSound("uiSound");
+
+const overlay = document.getElementById("runOverlay");
+
+if(overlay){
+overlay.classList.remove("show");
+overlay.setAttribute("aria-hidden","true");
+}
+
+document.body.classList.remove("run-open");
+
+runState.open = false;
+runState.running = false;
+
+setNovaState(
+"normal",
+"ゲーム終了や😌"
+);
+
+}
+
+function startNovaRun(){
+
+playSound("uiSound");
+
+runState.running = true;
+runState.gameOver = false;
+runState.lastTime = performance.now();
+runState.score = 0;
+runState.speed = 220;
+runState.bgX = 0;
+runState.cloudX = 0;
+runState.woodX = 0;
+runState.spawnTimer = .8;
+runState.itemTimer = 1.8;
+runState.animTime = 0;
+runState.bossMode = false;
+runState.bossCleared = false;
+runState.bossWarning = 0;
+runState.items = [];
+runState.enemies = [];
+
+runState.player.x = 130;
+runState.player.vy = 0;
+runState.player.grounded = true;
+runState.player.crouch = false;
+runState.player.jumpTime = 0;
+runState.player.landingTime = 0;
+
+runState.boss = {
+x:500,
+y:0,
+w:92,
+h:92,
+vy:0,
+hp:3,
+grounded:true,
+stompCooldown:0,
+invincibleTime:0,
+moveDir:-1,
+sleep:true
+};
+
+runState.trees = [
+{x:110,frame:0,w:48,h:86,groundOffset:7},
+{x:420,frame:4,w:86,h:48,groundOffset:7},
+{x:760,frame:2,w:44,h:58,groundOffset:7},
+{x:980,frame:6,w:72,h:52,groundOffset:7}
+];
+
+const status = document.getElementById("runStatusPill");
+if(status){
+status.textContent = "RUNNING";
+}
+
+setRunMessage("",false);
+updateRunLabels();
+requestAnimationFrame(novaRunLoop);
+
+}
+
+function endNovaRun(){
+
+if(runState.gameOver){
+return;
+}
+
+runState.running = false;
+runState.gameOver = true;
+
+if(runState.score > runState.best){
+runState.best = Math.floor(runState.score);
+localStorage.setItem("novaRunBest",String(runState.best));
+}
+
+const status = document.getElementById("runStatusPill");
+if(status){
+status.textContent = "ERROR";
+}
+
+updateRunLabels();
+setRunMessage("GAME OVER",true);
+playSound("errorSound");
+
+}
+
+function novaRunLoop(now){
+
+if(!runState.open){
+return;
+}
+
+const dt = Math.min((now - runState.lastTime) / 1000,.033);
+runState.lastTime = now;
+
+if(runState.running){
+updateNovaRun(dt);
+}
+
+drawNovaRun();
+
+if(runState.running){
+requestAnimationFrame(novaRunLoop);
+}
+
+}
+
+function updateNovaRun(dt){
+
+const gravity = 1700;
+const groundY = 274;
+
+runState.animTime += dt;
+
+if(!runState.bossMode && !runState.bossCleared){
+runState.score += dt * 80;
+}
+
+runState.speed = Math.min(360,220 + runState.score * .035);
+
+if(!runState.bossMode && !runState.bossCleared && runState.score >= 10000){
+runState.bossMode = true;
+runState.bossWarning = 1.2;
+runState.enemies = [];
+runState.items = [];
+runState.boss.x = 500;
+runState.boss.y = 0;
+runState.boss.vy = 0;
+runState.boss.hp = 3;
+runState.boss.grounded = true;
+runState.boss.stompCooldown = 0;
+runState.boss.invincibleTime = 0;
+runState.boss.moveDir = -1;
+runState.boss.sleep = true;
+setRunMessage("TENCHO APPEARS",true);
+playSound("readySound");
+}
+
+if(!runState.bossMode && !runState.bossCleared){
+runState.bgX = (runState.bgX + runState.speed * .22 * dt) % 640;
+runState.cloudX = (runState.cloudX + runState.speed * .10 * dt) % 640;
+runState.woodX = (runState.woodX + runState.speed * .58 * dt) % 640;
+
+/* 木はループ幅でワープさせず、画面外に出たら右端へ再配置 */
+runState.trees.forEach((tree)=>{
+tree.x -= runState.speed * .58 * dt;
+});
+
+runState.trees.forEach((tree)=>{
+if(tree.x + (tree.w || 54) < -40){
+const rightMost = Math.max(...runState.trees.map(t => t.x + (t.w || 54)));
+tree.x = rightMost + 170 + Math.random() * 130;
+tree.frame = Math.floor(Math.random() * 8);
+}
+});
+}
+
+const p = runState.player;
+p.crouch = runState.keys.down && p.grounded;
+
+if((runState.keys.jump || runState.keys.up) && p.grounded){
+p.vy = -680;
+p.grounded = false;
+p.jumpTime = 0;
+p.landingTime = 0;
+playSound("uiSound");
+}
+
+const move = (runState.keys.right ? 1 : 0) - (runState.keys.left ? 1 : 0);
+p.x += move * 170 * dt;
+p.x = runState.bossMode
+? Math.max(42,Math.min(598,p.x))
+: Math.max(42,Math.min(250,p.x));
+
+if(!p.grounded){
+p.jumpTime = (p.jumpTime || 0) + dt;
+}
+
+if(p.landingTime > 0){
+p.landingTime = Math.max(0,p.landingTime - dt);
+}
+
+const wasGrounded = p.grounded;
+
+p.vy += gravity * dt;
+p.y += p.vy * dt;
+
+if(p.y >= 0){
+p.y = 0;
+p.vy = 0;
+
+if(!wasGrounded){
+/* 地面に触れた瞬間だけ着地モーション開始 */
+p.landingTime = .16;
+}
+
+p.grounded = true;
+p.jumpTime = 0;
+}
+
+if(!runState.bossMode && !runState.bossCleared){
+
+runState.spawnTimer -= dt;
+if(runState.spawnTimer <= 0){
+const walking = Math.random() < .45;
+runState.enemies.push({
+x:680,
+y:groundY,
+w:42,
+h:42,
+dir:-1,
+groundOffset:6,
+dead:false,
+walk:walking,
+stepTime:Math.random() * 10,
+speedMul:walking ? (.72 + Math.random() * .55) : 1
+});
+
+/* ゆるランダム。最低間隔は確保して理不尽化を防ぐ */
+runState.spawnTimer = .95 + Math.random() * 1.85;
+}
+
+runState.itemTimer -= dt;
+if(runState.itemTimer <= 0){
+runState.items.push({
+x:690,
+y:groundY - 86 - Math.random() * 42,
+w:48,
+h:48,
+taken:false,
+floatSeed:Math.random() * 10
+});
+runState.itemTimer = 2.0 + Math.random() * 3.2;
+}
+
+runState.enemies.forEach((enemy)=>{
+enemy.stepTime += dt;
+const walkPulse = enemy.walk ? (1 + Math.sin(enemy.stepTime * 8) * .10) : 1;
+enemy.x -= runState.speed * enemy.speedMul * walkPulse * dt;
+});
+
+runState.items.forEach((item)=>{
+item.x -= runState.speed * .78 * dt;
+});
+
+runState.enemies = runState.enemies.filter((enemy)=> enemy.x > -90 && !enemy.dead);
+runState.items = runState.items.filter((item)=> item.x > -80 && !item.taken);
+
+}else{
+
+runState.bossWarning = Math.max(0,runState.bossWarning - dt);
+if(runState.bossWarning <= 0){
+setRunMessage("",false);
+runState.boss.sleep = false;
+}
+
+const b = runState.boss;
+b.stompCooldown = Math.max(0,b.stompCooldown - dt);
+b.invincibleTime = Math.max(0,(b.invincibleTime || 0) - dt);
+
+if(!b.sleep && b.hp > 0){
+b.x += b.moveDir * (70 + (3 - b.hp) * 25) * dt;
+if(b.x < 92){
+b.x = 92;
+b.moveDir = 1;
+}
+if(b.x > 548){
+b.x = 548;
+b.moveDir = -1;
+}
+
+if(b.grounded){
+b.vy = -520 - (3 - b.hp) * 55;
+b.grounded = false;
+
+/* プレイヤー方向へ寄る */
+b.moveDir = b.x > p.x ? -1 : 1;
+}
+
+b.vy += gravity * dt;
+b.y += b.vy * dt;
+
+if(b.y >= 0){
+b.y = 0;
+b.vy = 0;
+b.grounded = true;
+}
+}
+
+}
+
+ /* 見た目のしゃがみフレームが一瞬伸びても、判定は常に低いまま固定 */
+const playerBox = {
+x:p.x - 20,
+y:p.crouch ? groundY - 46 : groundY - 70 + p.y,
+w:40,
+h:p.crouch ? 46 : 70
+};
+
+runState.items.forEach((item)=>{
+const itemBox = {
+x:item.x - item.w/2,
+y:item.y - item.h/2,
+w:item.w,
+h:item.h
+};
+
+const hitItem =
+playerBox.x < itemBox.x + itemBox.w &&
+playerBox.x + playerBox.w > itemBox.x &&
+playerBox.y < itemBox.y + itemBox.h &&
+playerBox.y + playerBox.h > itemBox.y;
+
+if(hitItem){
+item.taken = true;
+runState.score += 500;
+playSound("readySound");
+}
+});
+
+runState.enemies.forEach((enemy)=>{
+const enemyBox = {
+x:enemy.x - enemy.w/2,
+y:enemy.y - enemy.h,
+w:enemy.w,
+h:enemy.h
+};
+
+const hit =
+playerBox.x < enemyBox.x + enemyBox.w &&
+playerBox.x + playerBox.w > enemyBox.x &&
+playerBox.y < enemyBox.y + enemyBox.h &&
+playerBox.y + playerBox.h > enemyBox.y;
+
+if(hit){
+const stomping =
+p.vy > 120 &&
+(playerBox.y + playerBox.h - enemyBox.y) < 24;
+
+if(stomping){
+enemy.dead = true;
+p.vy = -420;
+p.grounded = false;
+p.jumpTime = 0;
+p.landingTime = 0;
+runState.score += 120;
+playSound("readySound");
+}else{
+endNovaRun();
+}
+}
+});
+
+if(runState.bossMode && runState.boss.hp > 0 && !runState.boss.sleep){
+const b = runState.boss;
+const bossBox = {
+x:b.x - b.w/2 + 8,
+y:groundY - b.h + b.y + 8,
+w:b.w - 16,
+h:b.h - 10
+};
+
+const hitBoss =
+playerBox.x < bossBox.x + bossBox.w &&
+playerBox.x + playerBox.w > bossBox.x &&
+playerBox.y < bossBox.y + bossBox.h &&
+playerBox.y + playerBox.h > bossBox.y;
+
+if(hitBoss && (b.invincibleTime || 0) <= 0){
+/* 店長の頭上を踏んだ時だけ成功。踏んだ直後は数秒接触無効 */
+const playerBottom = playerBox.y + playerBox.h;
+const bossHeadLine = bossBox.y + 30;
+
+const stompingBoss =
+b.stompCooldown <= 0 &&
+p.vy > 60 &&
+playerBottom <= bossHeadLine;
+
+if(stompingBoss){
+b.hp -= 1;
+b.stompCooldown = .65;
+b.invincibleTime = 1.45;
+
+p.vy = -520;
+p.grounded = false;
+p.jumpTime = 0;
+p.landingTime = 0;
+
+/* 踏んだ瞬間に少し横へ逃がして、重なり死亡を防ぐ */
+p.x += (p.x < b.x ? -24 : 24);
+p.x = Math.max(42,Math.min(598,p.x));
+
+runState.score += 1000;
+playSound("readySound");
+
+if(b.hp <= 0){
+runState.bossCleared = true;
+runState.bossMode = false;
+runState.running = false;
+setRunMessage("CLEAR!",true);
+const status = document.getElementById("runStatusPill");
+if(status){
+status.textContent = "CLEAR";
+}
+}
+}else{
+endNovaRun();
+}
+}
+}
+
+updateRunLabels();
+
+}
+
+function drawImageCover(ctx,img,x,y,w,h){
+
+if(img && img.complete && img.naturalWidth){
+ctx.drawImage(img,x,y,w,h);
+return true;
+}
+
+return false;
+
+}
+
+
+const runSpriteConfig = {
+walk:{image:"walk",cols:3,rows:3,frames:9,start:0,fps:12},
+jump:{image:"jump",cols:3,rows:2,frames:3,start:0,fps:8},
+crouch:{image:"crouch",cols:3,rows:1,frames:3,start:0,fps:6,fallback:"jump",fallbackCols:3,fallbackRows:2,fallbackStart:3},
+cloud:{image:"cloud",cols:3,rows:3,frames:9,start:0},
+wood:{image:"wood",cols:4,rows:3,frames:12,start:0}
+};
+
+function isRunImageReady(img){
+return !!(img && img.complete && img.naturalWidth && img.dataset.failed !== "1");
+}
+
+function drawRunSheetFrame(ctx,img,cols,rows,frame,x,y,w,h){
+if(!isRunImageReady(img)){
+return false;
+}
+
+const sw = img.naturalWidth / cols;
+const sh = img.naturalHeight / rows;
+const sx = (frame % cols) * sw;
+const sy = Math.floor(frame / cols) * sh;
+
+ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);
+return true;
+}
+
+
+function drawRunFrameSprite(ctx,key,frame,x,y,w,h){
+const frames = runFrameImages[key];
+
+if(frames && frames.length){
+const img = frames[((frame % frames.length) + frames.length) % frames.length];
+if(isRunImageReady(img)){
+ctx.drawImage(img,x,y,w,h);
+return true;
+}
+}
+
+return false;
+}
+
+function drawRunCrouchSprite(ctx,frame,x,y,w,h){
+const frames = runFrameImages.jump;
+
+if(frames && frames.length){
+const jumpIndex = runCrouchFrames[frame % runCrouchFrames.length] || 1;
+const img = frames[jumpIndex];
+
+if(isRunImageReady(img)){
+ctx.drawImage(img,x,y,w,h);
+return true;
+}
+}
+
+return false;
+}
+
+function drawRunSprite(ctx,key,frame,x,y,w,h){
+if(key === "walk" && runFrameImages.walk){
+const img = runFrameImages.walk[frame % runFrameImages.walk.length];
+if(isRunImageReady(img)){
+ctx.drawImage(img,x,y,w,h);
+return true;
+}
+}
+
+if(key === "jump" && runFrameImages.jump){
+const img = runFrameImages.jump[frame % runFrameImages.jump.length];
+if(isRunImageReady(img)){
+ctx.drawImage(img,x,y,w,h);
+return true;
+}
+}
+
+const cfg = runSpriteConfig[key];
+if(!cfg){
+return false;
+}
+
+let img = runImages[cfg.image];
+let cols = cfg.cols;
+let rows = cfg.rows;
+let start = cfg.start || 0;
+
+if(!isRunImageReady(img) && cfg.fallback){
+img = runImages[cfg.fallback];
+cols = cfg.fallbackCols || cfg.cols;
+rows = cfg.fallbackRows || cfg.rows;
+start = cfg.fallbackStart || 0;
+}
+
+return drawRunSheetFrame(ctx,img,cols,rows,start + (frame % cfg.frames),x,y,w,h);
+}
+
+function drawRunEnemy(ctx,enemy){
+const t = runState.animTime || 0;
+const breathe = Math.sin(t * 6 + enemy.x * .02);
+const sxScale = 1 + breathe * .018;
+const syScale = 1 - breathe * .012;
+
+const img =
+(enemy.dir && enemy.dir < 0 && isRunImageReady(runImages.enemyL))
+? runImages.enemyL
+: (isRunImageReady(runImages.enemyR) ? runImages.enemyR : runImages.enemy);
+
+const baseW = 48;
+const baseH = 48;
+const w = baseW * sxScale;
+const h = baseH * syScale;
+
+/* enemy.yは地面ライン。少し下げて浮きを消す */
+const yOffset = enemy.groundOffset ?? 6;
+
+if(isRunImageReady(img)){
+ctx.save();
+ctx.translate(enemy.x, enemy.y + yOffset);
+ctx.drawImage(img,-w/2,-h,w,h);
+ctx.restore();
+return;
+}
+
+ctx.fillStyle = "#613b2a";
+ctx.fillRect(enemy.x - 21, enemy.y - 42 + yOffset, 42, 42);
+}
+
+function drawRunCloud(ctx,cloud,index){
+let x = cloud.x - (runState.cloudX * cloud.speed);
+
+while(x < -220) x += 860;
+while(x > 780) x -= 860;
+
+const frame = cloud.frame ?? (index % 5);
+const w = cloud.w || 118;
+const h = cloud.h || 46;
+
+const img = runCloudImages && runCloudImages.length ? runCloudImages[frame % runCloudImages.length] : null;
+
+if(isRunImageReady(img)){
+ctx.save();
+ctx.globalAlpha = cloud.alpha ?? .92;
+ctx.drawImage(img,x,cloud.y,w,h);
+ctx.restore();
+return;
+}
+
+drawRunSheetFrame(ctx,runImages.cloud,3,3,frame,x,cloud.y,w,h);
+}
+
+function drawRunTree(ctx,tree,index){
+const x = tree.x;
+const frame = tree.frame ?? (index % 8);
+const w = tree.w || 54;
+const h = tree.h || 72;
+
+const img = runWoodImages && runWoodImages.length ? runWoodImages[frame % runWoodImages.length] : null;
+
+/* 木はupdate側で画面外再配置。draw側ではワープさせない */
+const y = 274 - h + (tree.groundOffset ?? 6);
+
+if(isRunImageReady(img)){
+ctx.drawImage(img,x,y,w,h);
+return;
+}
+
+drawRunSheetFrame(ctx,runImages.wood,4,3,frame,x,y,w,h);
+}
+
+
+function drawRunMilkTea(ctx,item){
+const img = runItemImages.milktea;
+const floatY = Math.sin(runState.animTime * 5 + (item.floatSeed || 0)) * 4;
+const x = item.x - item.w / 2;
+const y = item.y - item.h / 2 + floatY;
+
+if(isRunImageReady(img)){
+ctx.save();
+ctx.shadowColor = "rgba(255,230,120,.75)";
+ctx.shadowBlur = 10;
+ctx.drawImage(img,x,y,item.w,item.h);
+ctx.restore();
+return;
+}
+
+ctx.save();
+ctx.fillStyle = "#f4d08a";
+ctx.fillRect(x,y,item.w,item.h);
+ctx.restore();
+}
+
+function drawRunBoss(ctx){
+const b = runState.boss;
+if(!runState.bossMode && !runState.bossCleared){
+return;
+}
+if(b.hp <= 0){
+return;
+}
+
+const img = b.sleep ? runBossImages.sleep : runBossImages.normal;
+const squash = b.grounded && !b.sleep ? 1 + Math.sin(runState.animTime * 18) * .035 : 1;
+const w = b.w * (b.sleep ? 1.05 : 1);
+const h = b.h * squash;
+const x = b.x - w / 2;
+const y = 274 - h + b.y + 5;
+
+if(isRunImageReady(img)){
+ctx.save();
+const blink = (b.invincibleTime || 0) > 0 && Math.floor(runState.animTime * 18) % 2 === 0;
+ctx.globalAlpha = blink ? .38 : 1;
+ctx.drawImage(img,x,y,w,h);
+ctx.restore();
+}else{
+ctx.save();
+ctx.fillStyle = "#ffd85b";
+ctx.beginPath();
+ctx.arc(b.x,274 - h/2 + b.y,h/2,0,Math.PI*2);
+ctx.fill();
+ctx.restore();
+}
+
+/* HP表示 */
+for(let i=0;i<b.hp;i++){
+ctx.fillStyle = "rgba(255,230,120,.95)";
+ctx.fillRect(18 + i * 18,44,12,5);
+}
+}
+
+function drawNovaRun(){
+
+const canvas = document.getElementById("runCanvas");
+if(!canvas){
+return;
+}
+
+const ctx = canvas.getContext("2d");
+ctx.imageSmoothingEnabled = false;
+const W = canvas.width;
+const H = canvas.height;
+
+ctx.clearRect(0,0,W,H);
+
+const bg = runImages.bg;
+
+if(bg && bg.complete && bg.naturalWidth){
+const scale = H / bg.naturalHeight;
+const bw = bg.naturalWidth * scale;
+const x = -runState.bgX % bw;
+ctx.drawImage(bg,x,0,bw,H);
+ctx.drawImage(bg,x + bw,0,bw,H);
+ctx.drawImage(bg,x + bw * 2,0,bw,H);
+}else{
+ctx.fillStyle = "#74dfff";
+ctx.fillRect(0,0,W,H);
+}
+
+runState.clouds.forEach((cloud,index)=>{
+drawRunCloud(ctx,cloud,index);
+});
+
+runState.trees.forEach((tree,index)=>{
+drawRunTree(ctx,tree,index);
+});
+
+ctx.fillStyle = "rgba(18,105,74,.95)";
+ctx.fillRect(0,278,W,82);
+ctx.fillStyle = "rgba(9,65,50,.98)";
+ctx.fillRect(0,300,W,60);
+ctx.fillStyle = "rgba(210,255,255,.28)";
+for(let x = -((runState.woodX*1.8)%32); x < W; x += 32){
+ctx.fillRect(x,282,18,3);
+}
+
+runState.items.forEach((item)=>{
+drawRunMilkTea(ctx,item);
+});
+
+runState.enemies.forEach((enemy)=>{
+drawRunEnemy(ctx,enemy);
+});
+
+drawRunBoss(ctx);
+
+const p = runState.player;
+
+let spriteKey = "walk";
+let frame = runWalkLoop[Math.floor(runState.animTime * 12) % runWalkLoop.length];
+
+if(p.crouch){
+spriteKey = "crouch";
+frame = Math.floor(runState.animTime * 8) % runCrouchFrames.length;
+}else if(!p.grounded || p.vy < -20 || p.y < -4){
+spriteKey = "jump";
+
+/* 空中は速度と地面距離でフレーム決定。
+   着地戻りは地面接触後にだけ再生するので、空中でしゃがみ着地絵まで進まない */
+if(p.vy < -420){
+frame = 0;      // novajump1: 踏み切り/上昇
+}else if(p.vy < -120){
+frame = 1;      // novajump2: 上昇中
+}else if(p.vy < 120){
+frame = 2;      // novajump3: 頂点付近
+}else if(p.y > -54){
+frame = 4;      // novajump5: 着地直前
+}else{
+frame = 3;      // novajump4: 落下中
+}
+}else if(p.landingTime > 0){
+spriteKey = "jump";
+
+/* 接地した瞬間だけ 5→4→1→歩き1 */
+if(p.landingTime > .105){
+frame = 4;      // novajump5
+}else if(p.landingTime > .045){
+frame = 3;      // novajump4
+}else{
+frame = 0;      // novajump1
+}
+}
+
+const playerW = p.crouch ? 68 : 72;
+const playerH = p.crouch ? 58 : 82;
+const playerY = 274 - playerH + p.y + (p.crouch ? 12 : 0) + 3;
+
+let drewPlayer = false;
+
+if(spriteKey === "walk"){
+drewPlayer = drawRunFrameSprite(ctx,"walk",frame,p.x - playerW/2,playerY,playerW,playerH);
+}else if(spriteKey === "jump"){
+drewPlayer = drawRunFrameSprite(ctx,"jump",frame,p.x - playerW/2,playerY,playerW,playerH);
+}else if(spriteKey === "crouch"){
+drewPlayer = drawRunCrouchSprite(ctx,frame,p.x - playerW/2,playerY,playerW,playerH);
+}
+
+if(!drewPlayer && !drawRunSprite(ctx,spriteKey,frame,p.x - playerW/2,playerY,playerW,playerH)){
+ctx.fillStyle = "#d94a8c";
+ctx.fillRect(p.x - 20,playerY,40,playerH);
+}
+
+if(!runState.running && !runState.gameOver){
+ctx.fillStyle = "rgba(2,8,20,.25)";
+ctx.fillRect(0,0,W,H);
+}
+
+}
+
+function setRunControl(control,pressed,button){
+
+if(control === "b"){
+control = "jump";
+}
+
+if(control === "up"){
+runState.keys.up = pressed;
+}
+if(control === "down"){
+runState.keys.down = pressed;
+}
+if(control === "left"){
+runState.keys.left = pressed;
+}
+if(control === "right"){
+runState.keys.right = pressed;
+}
+if(control === "jump"){
+runState.keys.jump = pressed;
+}
+
+if(button){
+button.classList.toggle("pressed",pressed);
+}
+
+}
+
+document.addEventListener("pointerdown",(e)=>{
+const btn = e.target.closest("[data-run-control]");
+if(!btn){
+return;
+}
+e.preventDefault();
+setRunControl(btn.dataset.runControl,true,btn);
+},{passive:false});
+
+document.addEventListener("pointerup",(e)=>{
+const btn = e.target.closest("[data-run-control]");
+if(!btn){
+return;
+}
+e.preventDefault();
+setRunControl(btn.dataset.runControl,false,btn);
+},{passive:false});
+
+document.addEventListener("pointercancel",(e)=>{
+const btn = e.target.closest("[data-run-control]");
+if(!btn){
+return;
+}
+setRunControl(btn.dataset.runControl,false,btn);
+});
+
+document.addEventListener("keydown",(e)=>{
+const overlay = document.getElementById("runOverlay");
+if(!overlay || !overlay.classList.contains("show")){
+return;
+}
+
+if(e.key === "ArrowLeft"){
+setRunControl("left",true);
+}
+if(e.key === "ArrowRight"){
+setRunControl("right",true);
+}
+if(e.key === "ArrowUp"){
+setRunControl("up",true);
+}
+if(e.key === "ArrowDown"){
+setRunControl("down",true);
+}
+if(e.key === " " || e.key.toLowerCase() === "z"){
+setRunControl("jump",true);
+}
+if(e.key === "Enter"){
+startNovaRun();
+}
+if(e.key === "Escape"){
+closeNovaRun();
+}
+});
+
+document.addEventListener("keyup",(e)=>{
+const overlay = document.getElementById("runOverlay");
+if(!overlay || !overlay.classList.contains("show")){
+return;
+}
+
+if(e.key === "ArrowLeft"){
+setRunControl("left",false);
+}
+if(e.key === "ArrowRight"){
+setRunControl("right",false);
+}
+if(e.key === "ArrowUp"){
+setRunControl("up",false);
+}
+if(e.key === "ArrowDown"){
+setRunControl("down",false);
+}
+if(e.key === " " || e.key.toLowerCase() === "z"){
+setRunControl("jump",false);
+}
+});
+
+
+
+async function fetchWithTimeout(url,options={},timeout=900){
+
+const controller = new AbortController();
+const timer = setTimeout(() => controller.abort(),timeout);
+
+try{
+
+const res =
+await fetch(url,{
+...options,
+signal:controller.signal,
+cache:"no-store"
+});
+
+clearTimeout(timer);
+return res;
+
+}catch(e){
+
+clearTimeout(timer);
+throw e;
+
+}
+
+}
+
+async function canReachLocal(){
+
+try{
+
+const res =
+await fetchWithTimeout(apiUrl("/reply"),{},900);
+
+return res.ok;
+
+}catch(e){
+
+return false;
+
+}
+
+}
+
+async function detectNovaMode(){
+
+const ok =
+await canReachLocal();
+
+novaMode =
+ok ? "local" : "web";
+
+updateModeBadge();
+updateNovaWeatherIcon(document.getElementById('weatherDesc')?.textContent || 'cloud');
+
+}
+
+async function toggleNovaMode(){
 
 playSound("uiSound");
 
 if(novaMode === "local"){
 
-showModeTransition("web");
+novaMode = "web";
+waitingReply = false;
+updateModeBadge();
+
+setNovaImage(NOVA_IMAGE_WEB);
 
 setNovaState(
 "normal",
-"セーフモードへ移行するで🙄"
+"セーフモードや🙄"
 );
-
-setTimeout(() => {
-location.href = WEB_SERVER;
-},720);
 
 return;
 
 }
 
-showModeTransition("local");
+const ok =
+await canReachLocal();
+
+if(ok){
+
+novaMode = "local";
+updateModeBadge();
+
+setNovaImage(NOVA_IMAGE_LOCAL);
 
 setNovaState(
-"normal",
-"LOCALへ接続するで😌"
+"happy",
+"LOCAL同期完了や😌"
 );
 
-setTimeout(() => {
-location.href = LOCAL_SERVER;
-},720);
+initializeReplyCache();
+
+}else{
+
+novaMode = "web";
+waitingReply = false;
+updateModeBadge();
+
+setNovaImage(NOVA_IMAGE_WEB);
+
+setNovaState(
+"confused",
+"家のPCが見つからん🙄"
+);
 
 }
+
+}
+
+detectNovaMode().then(() => {
+if(novaMode !== "local"){
+setNovaImage(NOVA_IMAGE_WEB);
+}
+});
 
 
 function playSound(id){
@@ -2565,8 +5119,74 @@ const novaStateImages = {
 normal:"./nova_normal.png",
 thinking:"./nova_thinking.png",
 happy:"./nova_happy.png",
-confused:"./nova_confused.png"
+confused:"./nova_confused.png",
+sleepy:"./nova_sleepy.png",
+analysis:"./nova_analysis.png"
 };
+
+
+function detectNovaMood(text){
+
+if(!text){
+return "normal";
+}
+
+if(
+text.includes("寝") ||
+text.includes("夜更かし") ||
+text.includes("早朝") ||
+text.includes("休憩")
+){
+return "sleepy";
+}
+
+if(
+text.includes("考") ||
+text.includes("作戦") ||
+text.includes("分析") ||
+text.includes("CTR") ||
+text.includes("サムネ") ||
+text.includes("タイトル") ||
+text.includes("進捗")
+){
+return "thinking";
+}
+
+if(
+text.includes("ええ") ||
+text.includes("好き") ||
+text.includes("伸び") ||
+text.includes("完了") ||
+text.includes("信じ") ||
+text.includes("アリ")
+){
+return "happy";
+}
+
+if(
+text.includes("見つからん") ||
+text.includes("失敗") ||
+text.includes("エラー") ||
+text.includes("頭働かん") ||
+text.includes("ボーッ")
+){
+return "confused";
+}
+
+return "normal";
+
+}
+
+function getNovaImageForMood(mood){
+
+if(novaMode !== "local"){
+return NOVA_IMAGE_WEB;
+}
+
+return novaStateImages[mood] || NOVA_IMAGE_LOCAL;
+
+}
+
 
 const thinkingMessages = [
 "Nova考え中や…🌀",
@@ -2634,8 +5254,6 @@ image.classList.remove("switching");
 }
 
 }
-
-applyNovaMode();
 
 function getTimeBucket(){
 
@@ -2850,14 +5468,16 @@ image.classList.add("switching");
 
 setTimeout(() => {
 
-image.src =
-novaMode === "local"
-? novaImages[Math.floor(Math.random()*novaImages.length)]
-: NOVA_IMAGE_WEB;
+const nextText =
+randomFrom(getIdleMessages());
 
-setNovaText(
-randomFrom(getIdleMessages())
-);
+const nextMood =
+detectNovaMood(nextText);
+
+image.src =
+getNovaImageForMood(nextMood);
+
+setNovaText(nextText);
 
 bubble.classList.remove("fade");
 image.classList.remove("switching");
@@ -2869,16 +5489,7 @@ image.classList.remove("switching");
 setInterval(updateNova,15000);
 
 function weatherIcon(desc){
-
-const text = desc.toLowerCase();
-
-if(text.includes("rain")) return "🌧️";
-if(text.includes("cloud")) return "☁️";
-if(text.includes("snow")) return "❄️";
-if(text.includes("clear") || text.includes("sun")) return "☀️";
-if(text.includes("mist") || text.includes("fog")) return "🌫️";
-
-return "🌤️";
+return "";
 }
 
 async function loadWeather(){
@@ -2898,10 +5509,12 @@ const desc =
 data.current_condition[0].weatherDesc[0].value;
 
 document.getElementById("weatherTemp").textContent =
-`${weatherIcon(desc)} ${temp}°`;
+`${temp}°`;
 
 document.getElementById("weatherDesc").textContent =
 desc;
+
+updateNovaWeatherIcon(desc);
 
 }catch(e){
 
@@ -2910,6 +5523,8 @@ document.getElementById("weatherTemp").textContent =
 
 document.getElementById("weatherDesc").textContent =
 "APIエラー";
+
+updateNovaWeatherIcon("cloud");
 
 }
 
