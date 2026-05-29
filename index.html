@@ -2640,6 +2640,85 @@ box-shadow:
 
 }
 
+
+
+/* SAFE MODE / ECO RENDER */
+body.safe-mode,
+body.safe-mode *{
+animation:none !important;
+transition:none !important;
+}
+
+body.safe-mode{
+filter:none !important;
+background:
+linear-gradient(180deg,#06142d 0%,#020814 100%) !important;
+}
+
+body.safe-mode .panel,
+body.safe-mode .dock-wrap,
+body.safe-mode .weather-mini,
+body.safe-mode .search-input,
+body.safe-mode .app-icon,
+body.safe-mode .timer-modal,
+body.safe-mode .timer-card,
+body.safe-mode .timer-finish,
+body.safe-mode .calc-overlay,
+body.safe-mode .calc-shell,
+body.safe-mode .reader-panel{
+backdrop-filter:none !important;
+-webkit-backdrop-filter:none !important;
+box-shadow:none !important;
+}
+
+body.safe-mode .nova-panel::before,
+body.safe-mode .nova-panel::after,
+body.safe-mode .search-box::before,
+body.safe-mode .calc-shell::before,
+body.safe-mode .run-shell::before{
+display:none !important;
+}
+
+body.safe-mode .clock,
+body.safe-mode .date,
+body.safe-mode .search-label,
+body.safe-mode .nova-tools-title,
+body.safe-mode .timer-title,
+body.safe-mode .reader-title,
+body.safe-mode .run-title,
+body.safe-mode .run-status-pill{
+text-shadow:none !important;
+}
+
+body.safe-mode .weather-icon,
+body.safe-mode .nova,
+body.safe-mode .boot-logo,
+body.safe-mode .boot-dot-small,
+body.safe-mode .boot-dot-big,
+body.safe-mode .reader-dot,
+body.safe-mode .calc-close-dot{
+filter:none !important;
+}
+
+body.safe-mode .nova{
+animation:none !important;
+transform:none !important;
+}
+
+body.safe-mode .nova-app{
+animation:none !important;
+box-shadow:none !important;
+}
+
+body.safe-mode .nova-tools-sub::after{
+content:" / ECO";
+}
+
+body.safe-mode .nova-run-tool-img{
+opacity:.38;
+filter:grayscale(1) !important;
+}
+
 </style>
 </head>
 
@@ -2950,6 +3029,24 @@ const NOVA_ICON_WEB = "icon.png";
 const NOVA_IMAGE_LOCAL = "./nova_normal.png";
 const NOVA_IMAGE_WEB = "./nova_dot_small.png";
 
+function isSafeMode(){
+return novaMode !== "local";
+}
+
+function updateSafeModeClass(){
+document.body.classList.toggle("safe-mode",isSafeMode());
+
+if(isSafeMode()){
+["bootSound","uiSound","readySound","errorSound","timerSound"].forEach((id)=>{
+const audio = document.getElementById(id);
+if(audio){
+audio.pause();
+audio.currentTime = 0;
+}
+});
+}
+}
+
 function apiUrl(path){
 return `${LOCAL_SERVER}${path}`;
 }
@@ -2976,10 +3073,35 @@ novaButton.classList.toggle("local-mode", novaMode === "local");
 novaButton.classList.toggle("web-mode", novaMode !== "local");
 }
 
+updateSafeModeClass();
+
+if(typeof startClockLoop === "function"){
+startClockLoop();
+}
+
+if(typeof runState !== "undefined" && isSafeMode() && runState.open){
+closeNovaRun();
+}
+
 }
 
 
 const WEATHER_ICON_BASE = "nova-weather/";
+let novaWeatherLastSafeSlot = null;
+
+function shouldUpdateWeatherNow(){
+if(!isSafeMode()){
+return true;
+}
+const now = new Date();
+const slot = Math.floor(now.getHours() / 5);
+const key = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}-${slot}`;
+if(novaWeatherLastSafeSlot === key){
+return false;
+}
+novaWeatherLastSafeSlot = key;
+return true;
+}
 
 function normalizeWeatherText(text){
 return String(text || "").toLowerCase();
@@ -3543,6 +3665,11 @@ msg.classList.toggle("hide",!show);
 }
 
 function openNovaRun(){
+if(isSafeMode()){
+setNovaState("normal","SAFE MODE中はNOVA RUN停止中や😌");
+setRunMessage("SAFE MODE",true);
+return;
+}
 
 playSound("uiSound");
 
@@ -3688,6 +3815,18 @@ playSound("errorSound");
 function novaRunLoop(now){
 
 if(!runState.open){
+return;
+}
+
+if(isSafeMode() && runState.running){
+runState.running = false;
+setRunMessage("SAFE MODE",true);
+return;
+}
+
+const minFrameMs = isSafeMode() ? 33 : 0;
+if(minFrameMs && now - runState.lastTime < minFrameMs){
+requestAnimationFrame(novaRunLoop);
 return;
 }
 
@@ -4598,6 +4737,9 @@ setNovaImage(NOVA_IMAGE_WEB);
 
 
 function playSound(id){
+if(isSafeMode()){
+return;
+}
 
 const audio = document.getElementById(id);
 
@@ -4752,6 +4894,16 @@ let timerPaused = false;
 let timerEndTime = 0;
 let timerRemainingMs = 0;
 let timerInterval = null;
+
+let clockLoopTimer = null;
+
+function startClockLoop(){
+if(clockLoopTimer){
+clearInterval(clockLoopTimer);
+}
+updateClock();
+clockLoopTimer = setInterval(updateClock,isSafeMode() ? 60000 : 1000);
+}
 
 function updateClock(){
 
@@ -5633,6 +5785,9 @@ searchInput.placeholder =
 
 });
 
+
+updateSafeModeClass();
+if(typeof startClockLoop === "function"){ startClockLoop(); }
 </script>
 
 </body>
